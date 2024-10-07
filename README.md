@@ -1,3 +1,3 @@
-# Udemy Clon App
+# Devvy App
 
-Udemy Clone App es una plataforma educativa en línea diseñada para replicar las características clave de Udemy. Los usuarios pueden crear, subir, y gestionar cursos de diversas categorías, mientras que los estudiantes pueden registrarse, navegar y acceder a esos cursos
+Devvy App es una aplicación similar a "Udemy" donde los usuarios registrados como clientes pueden agregar saldo, comprar cursos, devolverlos, etc. Y los usuarios registrados como "publishers" puedan crear, editar y remover sus cursos de la página de venta e incluso poner sus cursos en oferta.
