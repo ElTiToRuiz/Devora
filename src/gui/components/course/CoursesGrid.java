@@ -10,9 +10,9 @@ public class CoursesGrid extends JPanel {
         this.setLayout(new GridLayout(0, 3, 10, 10));
         this.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         this.setBackground(Pallette.SECCIONES.getColor());
-
+        String imgPath = "src/media/react.png";
         for (int i = 0; i < 9; i++) {
-            this.add(new Course("Course " + (i + 1)));
+            this.add(new Course("Course " + (i + 1), imgPath));
         }
     }
 }
