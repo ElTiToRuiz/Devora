@@ -18,14 +18,21 @@ public class Header extends JPanel {
 
         this.add(Box.createHorizontalGlue());
 
-        JButton homeButton = new JButton("Home");
-        JButton settingsButton = new JButton("Settings");
-        JButton helpButton = new JButton("Help");
+        JButton homeButton = createHeaderButton("Home");
+        JButton settingsButton = createHeaderButton("Settings");
+        JButton helpButton = createHeaderButton("Help");
 
         this.add(homeButton);
-        this.add(Box.createHorizontalStrut(10)); // Spacing
+        this.add(Box.createHorizontalStrut(10));
         this.add(settingsButton);
-        this.add(Box.createHorizontalStrut(10)); // Spacing
+        this.add(Box.createHorizontalStrut(10));
         this.add(helpButton);
+    }
+
+    private JButton createHeaderButton(String text) {
+        JButton button = new JButton(text);
+        button.setMaximumSize(new Dimension(100, 50));
+        button.setBackground(Pallette.BOTONES.getColor());
+        return button;
     }
 }

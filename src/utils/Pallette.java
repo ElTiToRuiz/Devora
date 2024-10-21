@@ -4,11 +4,18 @@ import java.awt.*;
 
 public enum Pallette {
     FONDO("#FFFFFF"),
-    ENCABEZADOS("#003366"),
-    BOTONES("#A4D65E"),
+    ENCABEZADOS("#1E1E2F"),
+    BOTONES("#FF6B6B"),
     TEXTO("#333333"),
     ALERTAS("#FF6600"),
-    SECCIONES("#F2F2F2");
+    SECCIONES("#F4F4F4"),
+    BARRA_BUSQUEDA("#F4F4F4"),
+    SIDEBAR_FONDO("#FFFFFF"),
+    TARJETAS_CURSOS("#E7E7E7"),
+    TEXTO_SECUNDARIO("#666666"),
+    BORDES_TARJETAS("#CCCCCC"),
+    BOTONES_HOVER("#FF4C4C");
+
 
     private final String colorHex;
 

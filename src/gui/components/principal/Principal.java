@@ -1,6 +1,7 @@
 package src.gui.components.principal;
 
 import src.gui.components.course.CoursesGrid;
+import src.utils.Pallette;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,7 @@ public class Principal extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 600);
         this.setVisible(true);
-        this.setBackground(Color.LIGHT_GRAY);
+        this.setBackground(Pallette.FONDO.getColor());
     }
 
 
