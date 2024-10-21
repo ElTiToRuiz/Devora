@@ -1,12 +1,11 @@
 package src.gui;
 
-import src.gui.components.Principal;
-
+import src.gui.components.principal.Principal;
 import javax.swing.*;
 
-// This is the principal page of the application.
 public class App {
     public void createRoot(){
-        Principal.createPrincipal();
+       JFrame main = Principal.createPrincipal();
+       main.revalidate();
     }
 }
