@@ -5,28 +5,75 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Header extends JPanel {
-    public Header() {
+    private boolean isLogged;
+
+    public Header(){
+        this.isLogged = false;
+        setupHeader();
+    }
+    private void setupHeader() {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setBackground(Pallette.ENCABEZADOS.getColor());
         this.setBorder(BorderFactory.createEmptyBorder(20, 15, 20, 15));
+        leftSideHeader();
+        updateBtns();
+    }
+
+    private void updateBtns(){
+        this.removeAll();
+        leftSideHeader();
+        if (isLogged) {
+            System.out.println("Logged");
+            userLoged();
+        } else {
+            System.out.println("Not logged");
+            notUserLoged();
+        }
+        this.revalidate();
+        this.repaint();
+    }
 
 
+    private void leftSideHeader(){
         JLabel titleLabel = new JLabel("Devora");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         this.add(titleLabel);
-
-
         this.add(Box.createHorizontalGlue());
+    }
 
-        JButton homeButton = createHeaderButton("Home");
-        JButton settingsButton = createHeaderButton("Settings");
-        JButton helpButton = createHeaderButton("Help");
 
-        this.add(homeButton);
+    private void userLoged(){
+        JButton profileButton = createHeaderButton("Profile");
+        JButton logoutButton = createHeaderButton("Logout");
+
+        logoutButton.addActionListener(e -> {
+            System.out.println("Loged out");
+            this.isLogged = false;
+            updateBtns();
+        });
+
+        this.add(profileButton);
         this.add(Box.createHorizontalStrut(10));
-        this.add(settingsButton);
+        this.add(logoutButton);
+    }
+
+    private void notUserLoged(){
+        JButton loginButton = createHeaderButton("Login");
+        JButton registerButton = createHeaderButton("Register");
+
+        loginButton.addActionListener(e -> {
+            this.isLogged = true;
+            updateBtns();
+        });
+
+        registerButton.addActionListener(e-> {
+            this.isLogged = true;
+            updateBtns();
+        });
+
+        this.add(loginButton);
         this.add(Box.createHorizontalStrut(10));
-        this.add(helpButton);
+        this.add(registerButton);
     }
 
     private JButton createHeaderButton(String text) {
