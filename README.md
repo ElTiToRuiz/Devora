@@ -3,7 +3,7 @@
 ## La clase con la que se inicia el programa es Devora.java 
 
 ### ESTA ES LA ESTRUCTURA DE DIRECTORIOS QUE SE VA A SEGUIR
-- El directorio GUI es para las interfaces donde hay un directorio components que el objito es dividir la interfaz en diferentes partes para que tenga mejor escalabilidad y poder reutilizar codigo
+- El directorio GUI es para las interfaces donde hay un directorio components en el que el objetivo es dividir la interfaz en diferentes partes para que tenga mejor escalabilidad y poder reutilizar codigo
 
 - El directorio domain es para las clases que representan los objetos que se van a utilizar en el programa
 
