@@ -11,9 +11,9 @@ public class CourseFront extends JPanel {
     private String courseName;
     private String imgPath;
 
-    public CourseFront(Course newCourse) {
-        this.courseName = newCourse.name;
-        this.imgPath = newCourse.imgPath;
+    public CourseFront(String name, String imgPath) {
+        this.courseName = name;
+        this.imgPath = imgPath;
         setupCourse();
         addCourseName();
         addCourse();

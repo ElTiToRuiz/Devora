@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-public class CourseDetail {
+public class CourseDetail extends JFrame {
     private HashMap<String, Object> courseInfo;
     private final String courseName;
 
@@ -14,16 +14,15 @@ public class CourseDetail {
     }
 
     private void openCourseDetails(){
-        JFrame courseDetails = new JFrame();
-        courseDetails.setSize(800, 600);
-        courseDetails.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        courseDetails.setLocationRelativeTo(null);
+        this.setSize(800, 600);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
 
 
         JLabel detailsLabel = new JLabel("Details about " + this.courseName);
         detailsLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        courseDetails.add(detailsLabel);
+        this.add(detailsLabel);
 
-        courseDetails.setVisible(true);
+        this.setVisible(true);
     }
 }

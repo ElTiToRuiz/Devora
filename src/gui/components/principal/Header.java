@@ -1,5 +1,7 @@
 package src.gui.components.principal;
 
+import src.gui.components.authentication.AuthView;
+import src.gui.components.authentication.Login;
 import src.utils.Pallette;
 import javax.swing.*;
 import java.awt.*;
@@ -63,11 +65,13 @@ public class Header extends JPanel {
 
         loginButton.addActionListener(e -> {
             this.isLogged = true;
+            new AuthView(true);
             updateBtns();
         });
 
         registerButton.addActionListener(e-> {
             this.isLogged = true;
+            new AuthView(false);
             updateBtns();
         });
 
