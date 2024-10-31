@@ -9,6 +9,7 @@ public enum Pallette {
     TEXTO("#333333"),
     ALERTAS("#FF6600"),
     SECCIONES("#F4F4F4"),
+    TITULOS("#1C1A27"),
     BARRA_BUSQUEDA("#F4F4F4"),
     SIDEBAR_FONDO("#FFFFFF"),
     TARJETAS_CURSOS("#E7E7E7"),

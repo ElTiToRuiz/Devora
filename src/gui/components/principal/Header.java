@@ -1,7 +1,6 @@
 package src.gui.components.principal;
 
 import src.gui.components.authentication.AuthView;
-import src.gui.components.authentication.Login;
 import src.utils.Pallette;
 import javax.swing.*;
 import java.awt.*;
@@ -9,81 +8,105 @@ import java.awt.*;
 public class Header extends JPanel {
     private boolean isLogged;
 
-    public Header(){
+    public Header() {
         this.isLogged = false;
         setupHeader();
     }
+
+    // Configuración inicial del header
     private void setupHeader() {
-        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        this.setBackground(Pallette.ENCABEZADOS.getColor());
+        this.setLayout(new BorderLayout());
+        this.setBackground(new Color(3,252,207));
         this.setBorder(BorderFactory.createEmptyBorder(20, 15, 20, 15));
-        leftSideHeader();
-        updateBtns();
+
+        JPanel panelLogo = new JPanel();
+        JPanel panelBusqueda = new JPanel();
+        JPanel panelBotones = new JPanel();
+
+        panelLogo.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelBusqueda.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panelBotones.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+        panelLogo.setOpaque(false);
+        panelBusqueda.setOpaque(false);
+        panelBotones.setOpaque(false);
+
+        leftSideHeader(panelLogo);
+        barraBusqueda(panelBusqueda);
+        //TODO redondear las esquinas de los botones con la clase graphics
+        updateBtns(panelBotones);
+
+        this.add(panelLogo, BorderLayout.WEST);
+        this.add(panelBusqueda, BorderLayout.CENTER);
+        this.add(panelBotones, BorderLayout.EAST);
     }
 
-    private void updateBtns(){
-        this.removeAll();
-        leftSideHeader();
+    private void updateBtns(JPanel panel) {
+        panel.removeAll();
         if (isLogged) {
             System.out.println("Logged");
-            userLoged();
+            userLoged(panel);
         } else {
             System.out.println("Not logged");
-            notUserLoged();
+            notUserLoged(panel);
         }
-        this.revalidate();
-        this.repaint();
+        panel.revalidate();
+        panel.repaint();
     }
 
-
-    private void leftSideHeader(){
+    private void leftSideHeader(JPanel panel) {
         JLabel titleLabel = new JLabel("Devora");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        this.add(titleLabel);
-        this.add(Box.createHorizontalGlue());
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        titleLabel.setForeground(Pallette.TITULOS.getColor());
+        panel.add(titleLabel);
     }
 
+    private void barraBusqueda(JPanel panel) {
+        JTextField tfBusqueda = new JTextField(100);
+        tfBusqueda.setPreferredSize(new Dimension(900, 30));
+        tfBusqueda.setBorder(BorderFactory.createEmptyBorder());
+        panel.add(tfBusqueda);
+    }
 
-    private void userLoged(){
+    private void userLoged(JPanel panel) {
         JButton profileButton = createHeaderButton("Profile");
         JButton logoutButton = createHeaderButton("Logout");
 
         logoutButton.addActionListener(e -> {
-            System.out.println("Loged out");
+            System.out.println("Logged out");
             this.isLogged = false;
-            updateBtns();
+            updateBtns(panel);
         });
 
-        this.add(profileButton);
-        this.add(Box.createHorizontalStrut(10));
-        this.add(logoutButton);
+        panel.add(profileButton);
+        panel.add(logoutButton);
     }
 
-    private void notUserLoged(){
+    private void notUserLoged(JPanel panel) {
         JButton loginButton = createHeaderButton("Login");
         JButton registerButton = createHeaderButton("Register");
 
         loginButton.addActionListener(e -> {
             this.isLogged = true;
             new AuthView(true);
-            updateBtns();
+            updateBtns(panel);
         });
 
-        registerButton.addActionListener(e-> {
+        registerButton.addActionListener(e -> {
             this.isLogged = true;
             new AuthView(false);
-            updateBtns();
+            updateBtns(panel);
         });
 
-        this.add(loginButton);
-        this.add(Box.createHorizontalStrut(10));
-        this.add(registerButton);
+        panel.add(loginButton);
+        panel.add(registerButton);
     }
 
     private JButton createHeaderButton(String text) {
         JButton button = new JButton(text);
-        button.setMaximumSize(new Dimension(100, 50));
+        button.setPreferredSize(new Dimension(100, 30));
         button.setBackground(Pallette.BOTONES.getColor());
         return button;
     }
+    
 }

@@ -21,7 +21,7 @@ public class AuthView extends JFrame {
         setTitle("Devora App");
         
 
-        // Inicializamos el CardLayout y el panel contenedor
+        // Inicializamos el CardLayout y el panel contenedor (Ya no hace falta realmente el cardlayout)
         cardlayout = new CardLayout();
         panelPrincipal = new JPanel(cardlayout);
 

@@ -2,6 +2,7 @@ package src.gui.components.authentication;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -22,7 +23,7 @@ public class Login extends JPanel{
 
         // Panel para el logo 
         JPanel panelLogo = new JPanel();
-        panelLogo.setPreferredSize(new Dimension(325, 0)); // Ajustar el tamaño del logo
+        panelLogo.setPreferredSize(new Dimension(325, 0)); 
         panelLogo.setBackground(new Color(3,252,207));
 
         // Panel que creamos para los componentes necesarios para el login
@@ -42,7 +43,9 @@ public class Login extends JPanel{
         JLabel lblPassword = new JLabel("Password:");
         JPasswordField tfPassword = new JPasswordField();
         JButton btnLogin = new JButton("Iniciar Sesión");
-        JButton btnRegister = new JButton("Registrarse");
+        JButton btnRegister = new JButton("Volver");
+        JLabel lblAvisoCuenta = new JLabel("¿Aún no tienes cuenta? ");
+        JLabel lblCrearCuenta = new JLabel("Crear cuenta");
         JLabel lblSlogan = new JLabel("©Devora todo lo que necesitas en un sitio");
 
         //Ajustes de dimensiones de los inputs y botones
@@ -62,6 +65,12 @@ public class Login extends JPanel{
         panelBotones.add(btnLogin);
         panelBotones.add(btnRegister);
         panelBotones.setOpaque(false); 
+        
+        //Panel para el texto de crear cuenta
+        JPanel panelTexto = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelTexto.setOpaque(false);
+        panelTexto.add(lblAvisoCuenta);
+        panelTexto.add(lblCrearCuenta);
 
         //Fuentes personalizacion (Pasar a un archivo diferente global)
         Font fuenteTitulos = new Font("Arial", Font.BOLD, 40);
@@ -77,6 +86,8 @@ public class Login extends JPanel{
         Font fuenteBotones = new Font("Arial",Font.BOLD,16);
         btnLogin.setFont(fuenteBotones);
         btnRegister.setFont(fuenteBotones);
+        lblAvisoCuenta.setFont(fuenteBotones);
+        lblCrearCuenta.setFont(fuenteBotones);
         
         //Editar Bordes de los botones
         btnLogin.setBorder(BorderFactory.createEmptyBorder());
@@ -89,6 +100,7 @@ public class Login extends JPanel{
         lblPassword.setAlignmentX(CENTER_ALIGNMENT);
         tfPassword.setAlignmentX(CENTER_ALIGNMENT);
         panelBotones.setAlignmentX(CENTER_ALIGNMENT);
+        panelTexto.setAlignmentX(CENTER_ALIGNMENT);
         lblSlogan.setAlignmentX(CENTER_ALIGNMENT);
 
         // Añadimos los componentes al BoxLayout
@@ -104,6 +116,8 @@ public class Login extends JPanel{
         panelComponentes.add(tfPassword);
         panelComponentes.add(Box.createVerticalStrut(30));
         panelComponentes.add(panelBotones); 
+        panelComponentes.add(Box.createVerticalStrut(30));
+        panelComponentes.add(panelTexto);
         panelComponentes.add(Box.createVerticalStrut(60));
         panelComponentes.add(lblSlogan);
         panelComponentes.add(Box.createVerticalGlue()); 
@@ -120,6 +134,7 @@ public class Login extends JPanel{
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				btnRegister.setBackground(new Color(104,255,226));
+				btnRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
@@ -154,6 +169,7 @@ public class Login extends JPanel{
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnLogin.setBackground(new Color(82,232,255));
+				btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
@@ -172,6 +188,7 @@ public class Login extends JPanel{
 				// TODO Auto-generated method stub
 				
 			}
+			
         	
         });
         
@@ -183,6 +200,40 @@ public class Login extends JPanel{
 			}
         	
         });;
+        
+        lblCrearCuenta.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				lblCrearCuenta.setForeground(Color.cyan);;
+				lblCrearCuenta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				lblCrearCuenta.setForeground(lblAvisoCuenta.getForeground());
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+        	
+        });
     }
 
 }

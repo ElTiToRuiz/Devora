@@ -1,21 +1,28 @@
 package src.gui.components.course;
 
-import src.domain.Course;
 import src.utils.Pallette;
 
 import javax.swing.*;
 import java.awt.*;
 
-
 public class CoursesGrid extends JPanel {
+    
     public CoursesGrid() {
-        this.setLayout(new GridLayout(0, 3, 10, 10));
-        this.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        this.setBackground(Pallette.SECCIONES.getColor());
+        JPanel panelCursos = new JPanel();
+        panelCursos.setLayout(new GridLayout(0, 3, 10, 10)); 
+        panelCursos.setBackground(Pallette.SECCIONES.getColor());
 
-        for (int i = 0; i < 6; i++) {
-            this.add(new CourseFront("Curso " + i, "src/media/react.png"));
+        for (int i = 0; i < 20; i++) {
+            panelCursos.add(new CourseFront("Curso " + i, "src/media/react.png"));
         }
+
+        //Añadir scroll para los cursos
+        JScrollPane scrollPane = new JScrollPane(panelCursos);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
+
+        this.setLayout(new BorderLayout());
+        this.add(scrollPane, BorderLayout.CENTER);
+        this.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 0));
 
 //        for (Course course : getAllCourses()){
 //            this.add(new CourseFront(course));

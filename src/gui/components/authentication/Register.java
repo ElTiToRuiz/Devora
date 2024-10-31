@@ -2,6 +2,7 @@ package src.gui.components.authentication;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -48,10 +49,10 @@ public class Register extends JPanel{
         JRadioButton rbEstudiante = new JRadioButton("Estudiante");
         JRadioButton rbEmpresa = new JRadioButton("Empresa");
         JButton btnRegister = new JButton("Registrarme");
-        JButton btnLogin = new JButton("Iniciar Sesión");
+        JButton btnLogin = new JButton("Volver");
         
-        
-        //Ajustes de dimensiones de los inputs y botones
+        //TODO Crear función que automatice la creación del botón + el tamaño de los mismo
+        //Ajustes de dimensiones de los inputs y botones 
         Dimension fieldSize = new Dimension(600, 60); //Tamaño de los inputs
         tfUsuario.setPreferredSize(fieldSize);
         tfUsuario.setMaximumSize(fieldSize); 
@@ -61,7 +62,7 @@ public class Register extends JPanel{
         tfPassword.setMaximumSize(fieldSize);
         
         //Ajustes de dimensiones de los botones
-        Dimension buttonSize = new Dimension(230, 45); // Tamaño de los botones
+        Dimension buttonSize = new Dimension(230, 45); 
         btnLogin.setPreferredSize(buttonSize);
         btnRegister.setPreferredSize(buttonSize);
         btnRegister.setBackground(new Color(3,252,207));
@@ -168,6 +169,7 @@ public class Register extends JPanel{
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				btnRegister.setBackground(new Color(104,255,226));
+				btnRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
@@ -202,6 +204,7 @@ public class Register extends JPanel{
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnLogin.setBackground(new Color(82,232,255));
+				btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
@@ -234,4 +237,4 @@ public class Register extends JPanel{
         });
         
 	}
-}
+}}
