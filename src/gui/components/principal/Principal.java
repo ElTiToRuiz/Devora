@@ -7,22 +7,40 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Principal extends JFrame {
-    private Principal() {
+
+    boolean showFilter;
+
+    public Principal() {
         super("Devora");
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setUpPrincipal();
+    }
+
+    private void setUpPrincipal() {
+        this.setExtendedState(this.MAXIMIZED_BOTH);
+        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setSize(800, 600);
         this.setVisible(true);
         this.setBackground(Color.white);
+        showFilter = false;
     }
 
+    public JFrame createRoot() {
+        this.add(new Header(), BorderLayout.NORTH);
+        this.add(createContainer(), BorderLayout.CENTER);
+        return this;
+    }
 
-    public static JFrame createPrincipal() {
-        JFrame principal = new Principal();
-        principal.add(new Header(), BorderLayout.NORTH);
-        principal.add(new Sidebar(), BorderLayout.EAST);
-        principal.add(new CoursesGrid(), BorderLayout.CENTER);
-        return principal;
+    JPanel createContainer(){
+        JPanel container = new JPanel();
+        container.setLayout(new BorderLayout());
+        container.setBackground(Pallette.FONDO.getColor());
+        if (showFilter) {
+            container.add(new Filter(), BorderLayout.NORTH);
+        } else {
+            container.add(new Filter.FilterHidden(), BorderLayout.NORTH);
+        }
+        container.add(new CoursesGrid(), BorderLayout.CENTER);
+        return container;
     }
 }
 

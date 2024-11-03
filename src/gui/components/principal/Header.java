@@ -246,7 +246,6 @@ public class Header extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				registerButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				
 			}
 
 			@Override

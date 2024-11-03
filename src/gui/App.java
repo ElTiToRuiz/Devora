@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class App {
     public void createRoot(){
-       JFrame main = Principal.createPrincipal();
+       JFrame main = new Principal().createRoot();
        main.revalidate();
     }
 }
