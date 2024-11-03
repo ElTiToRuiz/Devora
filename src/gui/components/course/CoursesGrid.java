@@ -10,7 +10,7 @@ public class CoursesGrid extends JPanel {
     public CoursesGrid() {
         JPanel panelCursos = new JPanel();
         panelCursos.setLayout(new GridLayout(0, 3, 10, 10)); 
-        panelCursos.setBackground(Pallette.SECCIONES.getColor());
+        panelCursos.setBackground(Color.white);
 
         for (int i = 0; i < 20; i++) {
             panelCursos.add(new CourseFront("Curso " + i, "src/media/react.png"));
@@ -22,7 +22,7 @@ public class CoursesGrid extends JPanel {
 
         this.setLayout(new BorderLayout());
         this.add(scrollPane, BorderLayout.CENTER);
-        this.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 0));
+        this.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
 //        for (Course course : getAllCourses()){
 //            this.add(new CourseFront(course));

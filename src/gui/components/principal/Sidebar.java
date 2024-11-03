@@ -1,7 +1,6 @@
 package src.gui.components.principal;
 
 import src.utils.Pallette;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -36,9 +35,10 @@ public class Sidebar extends JPanel {
         filters.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         filters.setBackground(Pallette.SIDEBAR_FONDO.getColor());
 
-        JLabel filtersLabel = new JLabel("Filters");
+        JLabel filtersLabel = new JLabel("Filtrar");
         filtersLabel.setFont(new Font("Arial", Font.BOLD, 24));
         filters.add(filtersLabel);
+        
 
         filters.add(Box.createVerticalStrut(10));
 

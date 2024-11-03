@@ -13,7 +13,7 @@ public class Principal extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 600);
         this.setVisible(true);
-        this.setBackground(Pallette.FONDO.getColor());
+        this.setBackground(Color.white);
     }
 
 

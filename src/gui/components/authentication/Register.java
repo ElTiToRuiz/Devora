@@ -237,4 +237,4 @@ public class Register extends JPanel{
         });
         
 	}
-}}
+}
