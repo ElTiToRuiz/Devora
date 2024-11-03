@@ -1,7 +1,7 @@
 package src.gui.components.principal;
 
-import src.gui.Carrito;
 import src.gui.components.authentication.AuthView;
+import src.gui.components.cart.Cart;
 import src.utils.Pallette;
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 public class Header extends JPanel {
     private boolean isLogged;
@@ -85,7 +84,6 @@ public class Header extends JPanel {
         tfBusqueda.setText("Busca cualquier cosa");
         
         tfBusqueda.addFocusListener(new FocusListener() {
-
 			@Override
 			public void focusGained(FocusEvent e) {
 				if (tfBusqueda.getText().equals("Busca cualquier cosa")){
@@ -93,15 +91,12 @@ public class Header extends JPanel {
 				};
 				
 			}
-
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (tfBusqueda.getText().isEmpty()) {
 					tfBusqueda.setText("Busca cualquier cosa");
 				};
-				
 			}
-        	
         });
         
         //Agregar logo
@@ -142,82 +137,49 @@ public class Header extends JPanel {
         
         //Crear hovers para los labels
         labelPerfil.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
 
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+            @Override
+            public void mousePressed(MouseEvent e) {}
 
-			@Override
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
 			public void mouseEntered(MouseEvent arg0) {
 				labelPerfil.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				
 			}
 
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-        	
+            @Override
+            public void mouseExited(MouseEvent e) {}
         });
         
         labelCarrito.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-		        new Carrito();
-				
+		        new Cart();
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				labelCarrito.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				
 			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseExited(MouseEvent e) {}
 
 			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mousePressed(MouseEvent e) {}
 
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseReleased(MouseEvent e) {}
         	
         });
         
         panel.add(labelCarrito);
         panel.add(labelPerfil);
-        
-        /*logoutButton.addActionListener(e -> {
-            System.out.println("Logged out");
-            this.isLogged = false;
-            updateBtns(panel);
-        });*/
-
     }
 
     
@@ -254,10 +216,7 @@ public class Header extends JPanel {
         loginButton.addMouseListener(new MouseListener() {
 
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseClicked(MouseEvent arg0) {}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -273,26 +232,16 @@ public class Header extends JPanel {
 			}
 
 			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mousePressed(MouseEvent arg0) {}
 
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseReleased(MouseEvent arg0) {}
         	
         });
         
         registerButton.addMouseListener(new MouseListener() {
-
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseClicked(MouseEvent arg0) {}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -301,21 +250,13 @@ public class Header extends JPanel {
 			}
 
 			@Override
-			public void mouseExited(MouseEvent arg0) {
-				
-			}
+			public void mouseExited(MouseEvent arg0) {}
 
 			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mousePressed(MouseEvent arg0) {}
 
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseReleased(MouseEvent arg0) {}
         });
 
         panel.add(loginButton);
@@ -328,5 +269,4 @@ public class Header extends JPanel {
         button.setBackground(Pallette.BOTONES.getColor());
         return button;
     }
-    
 }
