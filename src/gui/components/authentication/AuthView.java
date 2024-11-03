@@ -1,6 +1,7 @@
 package src.gui.components.authentication;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.CardLayout;
 
 import javax.swing.*;
@@ -15,7 +16,9 @@ public class AuthView extends JFrame {
         this.isLogged = isLogged;
 
         // Configuración básica del JFrame
-        setSize(new Dimension(1000, 680));
+        setExtendedState(this.MAXIMIZED_BOTH);
+        Dimension tamañoPantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(new Dimension(tamañoPantalla.width, tamañoPantalla.height));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         setTitle("Devora App");

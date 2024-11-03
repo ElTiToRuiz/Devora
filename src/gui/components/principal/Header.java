@@ -80,6 +80,9 @@ public class Header extends JPanel {
         tfBusqueda.setPreferredSize(new Dimension(900, 50));
         tfBusqueda.setBorder(BorderFactory.createEmptyBorder());
         
+        //Fuente tamaño
+        tfBusqueda.setFont(new Font("Arial",Font.PLAIN,18));
+        
         //Se agrega el PlaceHolder puede ser que haya que cambiar esto, ya que lo coge como default
         tfBusqueda.setText("Busca cualquier cosa");
         

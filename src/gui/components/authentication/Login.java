@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -23,7 +24,18 @@ public class Login extends JPanel{
 
         // Panel para el logo 
         JPanel panelLogo = new JPanel();
-        panelLogo.setPreferredSize(new Dimension(325, 0)); 
+        panelLogo.setPreferredSize(new Dimension(1125,0)); 
+        
+        //Poner imagen en el panel
+        
+        ImageIcon jadeFondo = new ImageIcon("src/media/jade-fondo.jpg");
+        Image img = jadeFondo.getImage();
+        Image imgEscalada = img.getScaledInstance(1500, 1500, Image.SCALE_SMOOTH);
+        
+        JLabel lblJadeFondo = new JLabel(new ImageIcon(imgEscalada));
+        
+        panelLogo.add(lblJadeFondo);
+        
         panelLogo.setBackground(new Color(3,252,207));
 
         // Panel que creamos para los componentes necesarios para el login
@@ -37,7 +49,7 @@ public class Login extends JPanel{
         add(panelComponentes, BorderLayout.CENTER);
 
         // Creación de los componentes
-        JLabel lblBienvenido = new JLabel("¡Bienvenido de vuelta!");
+        JLabel lblBienvenido = new JLabel("Inicio de sesión");
         JLabel lblUsername = new JLabel("Usuario o Email:");
         JTextField tfUsername = new JTextField();
         JLabel lblPassword = new JLabel("Password:");
@@ -46,7 +58,6 @@ public class Login extends JPanel{
         JButton btnRegister = new JButton("Volver");
         JLabel lblAvisoCuenta = new JLabel("¿Aún no tienes cuenta? ");
         JLabel lblCrearCuenta = new JLabel("Crear cuenta");
-        JLabel lblSlogan = new JLabel("©Devora todo lo que necesitas en un sitio");
 
         //Ajustes de dimensiones de los inputs y botones
         Dimension fieldSize = new Dimension(325, 60); //Tamaño de los inputs
@@ -54,6 +65,11 @@ public class Login extends JPanel{
         tfUsername.setMaximumSize(fieldSize); 
         tfPassword.setPreferredSize(fieldSize);
         tfPassword.setMaximumSize(fieldSize);
+        
+        //Ajuste estilo inputs
+        tfUsername.setBackground(new Color(245,245,245));
+        tfUsername.setBorder(BorderFactory.createEmptyBorder());
+        tfPassword.setBorder(BorderFactory.createEmptyBorder());
 
         // Panel para los botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0)); 
@@ -69,6 +85,7 @@ public class Login extends JPanel{
         //Panel para el texto de crear cuenta
         JPanel panelTexto = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelTexto.setOpaque(false);
+        panelTexto.setBorder(BorderFactory.createEmptyBorder(90,0,0,0));
         panelTexto.add(lblAvisoCuenta);
         panelTexto.add(lblCrearCuenta);
 
@@ -76,7 +93,6 @@ public class Login extends JPanel{
         Font fuenteTitulos = new Font("Arial", Font.BOLD, 40);
         lblBienvenido.setFont(fuenteTitulos);
         Font fuenteSubtitulos = new Font("Arial",Font.BOLD,18);
-        lblSlogan.setFont(fuenteSubtitulos);
         Font fuenteLabels = new Font("Arial", Font.BOLD,20);
         lblUsername.setFont(fuenteLabels);
         lblPassword.setFont(fuenteLabels);
@@ -101,7 +117,6 @@ public class Login extends JPanel{
         tfPassword.setAlignmentX(CENTER_ALIGNMENT);
         panelBotones.setAlignmentX(CENTER_ALIGNMENT);
         panelTexto.setAlignmentX(CENTER_ALIGNMENT);
-        lblSlogan.setAlignmentX(CENTER_ALIGNMENT);
 
         // Añadimos los componentes al BoxLayout
         panelComponentes.add(Box.createVerticalGlue()); 
@@ -116,10 +131,8 @@ public class Login extends JPanel{
         panelComponentes.add(tfPassword);
         panelComponentes.add(Box.createVerticalStrut(30));
         panelComponentes.add(panelBotones); 
-        panelComponentes.add(Box.createVerticalStrut(30));
+        panelComponentes.add(Box.createVerticalStrut(90));
         panelComponentes.add(panelTexto);
-        panelComponentes.add(Box.createVerticalStrut(60));
-        panelComponentes.add(lblSlogan);
         panelComponentes.add(Box.createVerticalGlue()); 
         
         //Efecto hover para el botón de register

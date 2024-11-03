@@ -11,8 +11,9 @@ public class Cart extends JFrame {
 
     public Cart() {
         setTitle("Tu Cart - Devora");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(new Dimension(1920, 1080));
+        setExtendedState(this.MAXIMIZED_BOTH);
         
         // Personalizar Layout
         JPanel mainPanel = new JPanel(new BorderLayout());

@@ -62,13 +62,13 @@ public class Filter extends JPanel {
 
     private JPanel createCategoryPanel() {
         JPanel panel = createVerticalPanelWithLabel("Categories");
-        String[] categories = {"Electronics", "Clothing", "Home Goods", "Books"};
+        String[] categories = {"Programación", "Emprendimiento", "Trading", "Psicología"};
         addCheckBoxesToPanel(panel, categories);
         return panel;
     }
 
     private JPanel createRatingPanel() {
-        JPanel panel = createVerticalPanelWithLabel("Rating");
+        JPanel panel = createVerticalPanelWithLabel("Estrellas");
         String[] ratings = {"+4⭐", "+3⭐", "+2⭐", "+1⭐"};
         addCheckBoxesToPanel(panel, ratings);
         return panel;
@@ -143,15 +143,18 @@ public class Filter extends JPanel {
         public FilterHidden() {
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             setBackground(Pallette.SIDEBAR_FONDO.getColor());
-            JButton showFiltersButton = new JButton("Show Filters");
-            showFiltersButton.addActionListener(e -> {
+            JButton btnFiltros = new JButton("Mostrar Filtros");
+            
+            btnFiltros.setBorder(BorderFactory.createEmptyBorder(10,10,0,0));
+            
+            btnFiltros.addActionListener(e -> {
                 Principal principal = (Principal) SwingUtilities.getWindowAncestor(this);
                 principal.showFilter = true;
                 principal.getContentPane().remove(1);
                 principal.getContentPane().add(principal.createContainer(), BorderLayout.CENTER);
                 principal.revalidate();
             });
-            add(showFiltersButton);
+            add(btnFiltros);
             add(Box.createVerticalStrut(20));
         }
     }
