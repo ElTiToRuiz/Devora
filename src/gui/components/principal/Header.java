@@ -123,6 +123,7 @@ public class Header extends JPanel {
 
         ImageIcon iconoPerfil = new ImageIcon("src/media/user-icon.png");
         ImageIcon iconoCarrito = new ImageIcon("src/media/cart-icon.png");
+        ImageIcon iconoCursos = new ImageIcon("src/media/lapiz.png");
         
         //Reescalar la imagen para que quede bien en el header
         Image img = iconoPerfil.getImage();
@@ -131,12 +132,18 @@ public class Header extends JPanel {
         Image img1 = iconoCarrito.getImage();
         Image iconoCarritoEscalado = img1.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         
+        Image img2 = iconoCursos.getImage();
+        Image iconoCursosEscalado = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        
         //Creación de los labels
         JLabel labelPerfil = new JLabel(new ImageIcon(iconoPerfilEscalado));
         JLabel labelCarrito = new JLabel(new ImageIcon(iconoCarritoEscalado));
+        JLabel labelCursos = new JLabel(new ImageIcon(iconoCursosEscalado));
         
         labelPerfil.setBorder(BorderFactory.createEmptyBorder(10,10,10,20));
         labelCarrito.setBorder(BorderFactory.createEmptyBorder(10,10,10,20));
+        labelCursos.setBorder(BorderFactory.createEmptyBorder(10,10,10,20));
+        
         
         //Crear hovers para los labels
         labelPerfil.addMouseListener(new MouseListener() {
