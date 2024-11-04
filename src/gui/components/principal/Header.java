@@ -3,6 +3,7 @@ package src.gui.components.principal;
 import src.gui.components.authentication.AuthView;
 import src.gui.components.cart.Cart;
 import src.gui.components.editarCursos.CourseEditorPanel;
+import src.gui.components.editor.PerfilUsuario;
 import src.utils.Pallette;
 import javax.swing.*;
 import java.awt.*;
@@ -149,7 +150,10 @@ public class Header extends JPanel {
         //Crear hovers para los labels
         labelPerfil.addMouseListener(new MouseListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {}
+            public void mouseClicked(MouseEvent e) {
+                PerfilUsuario perfil = new PerfilUsuario();
+                perfil.setVisible(true);
+            }
 
             @Override
             public void mousePressed(MouseEvent e) {}
