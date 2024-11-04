@@ -6,7 +6,7 @@ public class Course {
     private String name;
     private String description;
     private int duration;
-    private List<String> categiries;
+    private List<String> categories;
     private double price;
     private String instructor;
     private String language;

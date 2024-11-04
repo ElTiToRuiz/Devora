@@ -84,7 +84,7 @@ public class Register extends JPanel{
         JPanel panelUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER,50,0));
         panelUsuario.add(lblUsuario);
         panelUsuario.add(tfUsuario);
-        panelUsuario.setOpaque(false);
+        panelUsuario.setOpaque(true);
         JPanel panelEmail = new JPanel(new FlowLayout(FlowLayout.CENTER,50,0));
         panelEmail.add(lblEmail);
         panelEmail.add(tfEmail);
