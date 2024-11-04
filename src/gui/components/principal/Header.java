@@ -2,6 +2,7 @@ package src.gui.components.principal;
 
 import src.gui.components.authentication.AuthView;
 import src.gui.components.cart.Cart;
+import src.gui.components.editarCursos.CourseEditorPanel;
 import src.utils.Pallette;
 import javax.swing.*;
 import java.awt.*;
@@ -187,6 +188,30 @@ public class Header extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
         	
         });
+        
+        labelCursos.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	CourseEditorPanel editor = new CourseEditorPanel();
+            	editor.setVisible(true);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                labelCursos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+        });
+
+            
         
         panel.add(labelCursos);
         panel.add(labelCarrito);
