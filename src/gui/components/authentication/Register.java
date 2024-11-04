@@ -18,7 +18,7 @@ import javax.swing.*;
 public class Register extends JPanel{
 	
 	private AuthView auth;
-	
+	//TODO Abstraer código
 	public Register(AuthView auth) {
 		setLayout(new BorderLayout());
 		
@@ -208,7 +208,7 @@ public class Register extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
+				auth.dispose();
 				
 			}
 

@@ -107,8 +107,8 @@ public class Header extends JPanel {
         ImageIcon iconoLupa = new ImageIcon("src/media/search-icon.png");
         
         Image img = iconoLupa.getImage();
-        Image scaledImg = img.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        JLabel labelLupa = new JLabel(new ImageIcon(scaledImg));
+        Image imagenEscalada = img.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        JLabel labelLupa = new JLabel(new ImageIcon(imagenEscalada));
         
         labelLupa.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         

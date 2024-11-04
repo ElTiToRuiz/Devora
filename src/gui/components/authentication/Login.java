@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -18,7 +20,7 @@ import javax.swing.*;
 public class Login extends JPanel{
 	
 	private AuthView auth;
-	
+	//TODO Abstraer código y dejarlo claro
     public Login(AuthView auth) {
         setLayout(new BorderLayout());
 
@@ -50,6 +52,7 @@ public class Login extends JPanel{
 
         // Creación de los componentes
         JLabel lblBienvenido = new JLabel("Inicio de sesión");
+        JLabel lblInstrucciones = new JLabel("Incia sesión en una de tus cuenta para poder comprar en Devora.");
         JLabel lblUsername = new JLabel("Usuario o Email:");
         JTextField tfUsername = new JTextField();
         JLabel lblPassword = new JLabel("Password:");
@@ -58,18 +61,59 @@ public class Login extends JPanel{
         JButton btnRegister = new JButton("Volver");
         JLabel lblAvisoCuenta = new JLabel("¿Aún no tienes cuenta? ");
         JLabel lblCrearCuenta = new JLabel("Crear cuenta");
-
+        
+        //Creación Wraps (Paneles) para los inputs usuario y password
+        JPanel panelUsuarioGrande = new JPanel(new FlowLayout());
+        JPanel panelPasswordGrande = new JPanel(new FlowLayout());
+        JPanel panelUsuario = new JPanel(new FlowLayout());
+        JPanel panelPassword = new JPanel(new FlowLayout());
+        
+        //Ajustes de los paneles
+        panelUsuario.setSize(new Dimension(550, 50));
+        panelPassword.setSize(new Dimension(500, 50));
+        
+        panelUsuario.setBackground(new Color(221,221,221));
+        panelPassword.setBackground(new Color(221,221,221));
+        
+        
+        //Creación logos input
+        ImageIcon iconoUsuario = new ImageIcon("src/media/user-icon.png");
+        
+        Image imgUsuario = iconoUsuario.getImage();
+        Image escaladaUsuario = imgUsuario.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        JLabel labelUsuario = new JLabel(new ImageIcon(escaladaUsuario));
+        
+        ImageIcon iconoLock = new ImageIcon("src/media/lock-icon.png");
+        
+        Image imgLock = iconoLock.getImage();
+        Image imagenEscalada = imgLock.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        JLabel labelLock = new JLabel(new ImageIcon(imagenEscalada));
+        
+        
         //Ajustes de dimensiones de los inputs y botones
-        Dimension fieldSize = new Dimension(325, 60); //Tamaño de los inputs
+        Dimension fieldSize = new Dimension(400, 50); //Tamaño de los inputs
         tfUsername.setPreferredSize(fieldSize);
         tfUsername.setMaximumSize(fieldSize); 
         tfPassword.setPreferredSize(fieldSize);
         tfPassword.setMaximumSize(fieldSize);
         
         //Ajuste estilo inputs
-        tfUsername.setBackground(new Color(245,245,245));
+        tfUsername.setBackground(new Color(221,221,221));
         tfUsername.setBorder(BorderFactory.createEmptyBorder());
+        tfPassword.setBackground(new Color(221,221,221));
         tfPassword.setBorder(BorderFactory.createEmptyBorder());
+        
+        //Añadir los tf a los paneles
+        panelUsuario.add(tfUsername);
+        panelUsuario.add(labelUsuario);
+        panelPassword.add(tfPassword);
+        panelPassword.add(labelLock);
+        
+        panelUsuarioGrande.add(panelUsuario);
+        panelPasswordGrande.add(panelPassword);
+        
+        panelUsuarioGrande.setOpaque(false);
+        panelPasswordGrande.setOpaque(false);
 
         // Panel para los botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0)); 
@@ -89,6 +133,9 @@ public class Login extends JPanel{
         panelTexto.add(lblAvisoCuenta);
         panelTexto.add(lblCrearCuenta);
 
+        //Ajsutes label Instrucciones
+        lblInstrucciones.setForeground(new Color(93,93,93));
+        
         //Fuentes personalizacion (Pasar a un archivo diferente global)
         Font fuenteTitulos = new Font("Arial", Font.BOLD, 40);
         lblBienvenido.setFont(fuenteTitulos);
@@ -97,6 +144,7 @@ public class Login extends JPanel{
         lblUsername.setFont(fuenteLabels);
         lblPassword.setFont(fuenteLabels);
         Font fuenteInputs = new Font("Arial",Font.PLAIN,20);
+        lblInstrucciones.setFont(fuenteInputs);
         tfUsername.setFont(fuenteInputs);
         tfPassword.setFont(fuenteInputs);
         Font fuenteBotones = new Font("Arial",Font.BOLD,16);
@@ -111,10 +159,11 @@ public class Login extends JPanel{
         
         // Centramos los componentes
         lblBienvenido.setAlignmentX(CENTER_ALIGNMENT);
+        lblInstrucciones.setAlignmentX(CENTER_ALIGNMENT);
         lblUsername.setAlignmentX(CENTER_ALIGNMENT);
-        tfUsername.setAlignmentX(CENTER_ALIGNMENT);
+        panelUsuarioGrande.setAlignmentX(CENTER_ALIGNMENT);
         lblPassword.setAlignmentX(CENTER_ALIGNMENT);
-        tfPassword.setAlignmentX(CENTER_ALIGNMENT);
+        panelPasswordGrande.setAlignmentX(CENTER_ALIGNMENT);
         panelBotones.setAlignmentX(CENTER_ALIGNMENT);
         panelTexto.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -122,25 +171,58 @@ public class Login extends JPanel{
         panelComponentes.add(Box.createVerticalGlue()); 
         panelComponentes.add(lblBienvenido);
         panelComponentes.add(Box.createVerticalStrut(120));
-        panelComponentes.add(lblUsername);
-        panelComponentes.add(Box.createVerticalStrut(15)); 
-        panelComponentes.add(tfUsername);
-        panelComponentes.add(Box.createVerticalStrut(30));
-        panelComponentes.add(lblPassword);
+        panelComponentes.add(lblInstrucciones);
         panelComponentes.add(Box.createVerticalStrut(15));
-        panelComponentes.add(tfPassword);
+        panelComponentes.add(panelUsuarioGrande);
+        panelComponentes.add(Box.createVerticalStrut(0));
+        panelComponentes.add(panelPasswordGrande);
         panelComponentes.add(Box.createVerticalStrut(30));
         panelComponentes.add(panelBotones); 
         panelComponentes.add(Box.createVerticalStrut(90));
         panelComponentes.add(panelTexto);
         panelComponentes.add(Box.createVerticalGlue()); 
         
+        //Listener para los placeholder
+        tfUsername.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (tfUsername.getText().equals("Usuario o email")){
+					tfUsername.setText("");
+					tfUsername.setForeground(Color.black);
+				};
+				
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (tfUsername.getText().isEmpty()) {
+					tfUsername.setText("Usuario o email");
+					tfUsername.setForeground(new Color(174,176,177));
+				};
+			}
+        });
+        
+        tfPassword.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (tfPassword.getText().equals("Contraseña")){
+					tfPassword.setText("");
+					tfPassword.setForeground(Color.black);
+				};
+				
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (tfPassword.getText().isEmpty()) {
+					tfPassword.setText("Contraseña");
+					tfPassword.setForeground(new Color(174,176,177));
+				};
+			}
+        });
         //Efecto hover para el botón de register
         btnRegister.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-	
 				
 			}
 
@@ -209,7 +291,7 @@ public class Login extends JPanel{
         btnRegister.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				auth.mostrarPanel("registerPanel");
+				auth.dispose();
 			}
         	
         });;
@@ -231,6 +313,41 @@ public class Login extends JPanel{
 			@Override
 			public void mouseExited(MouseEvent arg0) {
 				lblCrearCuenta.setForeground(lblAvisoCuenta.getForeground());
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+        	
+        });
+        
+        lblCrearCuenta.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				auth.dispose();
+				new AuthView(false);
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
 				
 			}
 
