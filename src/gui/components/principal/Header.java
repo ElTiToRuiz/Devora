@@ -143,7 +143,7 @@ public class Header extends JPanel {
         labelPerfil.setBorder(BorderFactory.createEmptyBorder(10,10,10,20));
         labelCarrito.setBorder(BorderFactory.createEmptyBorder(10,10,10,20));
         labelCursos.setBorder(BorderFactory.createEmptyBorder(10,10,10,20));
-        
+
         
         //Crear hovers para los labels
         labelPerfil.addMouseListener(new MouseListener() {
@@ -188,6 +188,7 @@ public class Header extends JPanel {
         	
         });
         
+        panel.add(labelCursos);
         panel.add(labelCarrito);
         panel.add(labelPerfil);
     }
