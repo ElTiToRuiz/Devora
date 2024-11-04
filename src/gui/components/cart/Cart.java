@@ -41,11 +41,11 @@ public class Cart extends JFrame {
         mainPanel.add(panelCentro, BorderLayout.CENTER);
         
         // Crear la tabla del carrito
-        String[] columnas = {"Producto", "Precio", "Subtotal"};
+        String[] columnas = {"Producto", "Precio", "Elimnar"};
         Object[][] datos = {
-            {new ProductPanel("Producto A", "Desc A", "⭐⭐⭐", new Color(240,240,255)), "$10", "$20"},
-            {new ProductPanel("Producto B", "Desc B", "⭐⭐⭐⭐", new Color(255,240,240)), "$15", "$15"},
-            {new ProductPanel("Producto C", "Desc C", "⭐⭐", new Color(240,255,240)), "$7", "$21"}
+            {new PanelProducto("Producto A", "Desc A", "⭐⭐⭐", new Color(240,240,255)), "9,99€", false},
+            {new PanelProducto("Producto B", "Desc B", "⭐⭐⭐⭐", new Color(255,240,240)), "14,99€", false},
+            {new PanelProducto("Producto C", "Desc C", "⭐⭐", new Color(240,255,240)), "7,99€", false}
         };
         
         modelo = new DefaultTableModel(datos, columnas) {
@@ -159,9 +159,9 @@ public class Cart extends JFrame {
         setVisible(true);
     }
 
-    // Clase interna para crear un JPanel de Producto personalizado
-    private class ProductPanel extends JPanel {
-        public ProductPanel(String title, String description, String rating, Color bgColor) {
+    // Clase interna para crear un JPanel del producto
+    private class PanelProducto extends JPanel {
+        public PanelProducto(String title, String description, String rating, Color bgColor) {
             setLayout(new BorderLayout());
             setBackground(bgColor);
             setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
