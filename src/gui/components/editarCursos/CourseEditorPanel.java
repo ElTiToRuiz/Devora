@@ -15,7 +15,7 @@ public class CourseEditorPanel extends JFrame {
     public CourseEditorPanel() {
         setTitle("Editar Cursos");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         // Cambiar fondo ventana
