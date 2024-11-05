@@ -26,7 +26,7 @@ public class PerfilUsuario extends JFrame {
         // Configuración de la ventana principal con tamaño más grande
         setTitle("Editar Perfil de Usuario");
         setSize(700, 500); // Cambiamos el tamaño de la ventana a 700x500
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
