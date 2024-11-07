@@ -62,7 +62,7 @@ public class Database {
         }
     }
 
-    public void createTable(String query) {
+    private void executeQuery(String query) {
         try {
             // TODO - CHECK QUERY FOR POSIBLE INYECCTION SQL
             connect().createStatement().execute(query);
@@ -71,5 +71,34 @@ public class Database {
         } finally {
             closeConnection();
         }
+    }
+
+    private void createTable(String tableName, String columns) {
+        String query = "CREATE TABLE IF NOT EXISTS " + tableName + " (" + columns + ")";
+        executeQuery(query);
+    }
+
+    private void dropTable(String tableName) {
+        String query = "DROP TABLE IF EXISTS " + tableName;
+        executeQuery(query);
+    }
+
+    private void insertData(String tableName, String columns, String values) {
+        String query = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + values + ")";
+        executeQuery(query);
+    }
+
+    private void updateData(String tableName, String columns, String values, String condition) {
+        String query = "UPDATE " + tableName + " SET " + columns + " = " + values + " WHERE " + condition;
+        executeQuery(query);
+    }
+
+    private void deleteData(String tableName, String condition) {
+        String query = "DELETE FROM " + tableName + " WHERE " + condition;
+        executeQuery(query);
+    }
+
+    public static void main(String[] args){
+        Database db = new Database();
     }
 }
