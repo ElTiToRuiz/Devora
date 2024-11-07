@@ -1,204 +1,405 @@
 package src.gui.components.cart;
 
-import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import src.domain.Course;
+import src.utils.Pallette;
 
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-public class Cart extends JFrame {
-    
-    private DefaultTableModel modelo;
+import java.util.ArrayList;
+import java.util.EventObject;
+import java.util.List;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-    public Cart() {
+public class Cart extends JFrame {
+
+    public Cart(List<Course> listaCursos) {
         setTitle("Tu Cart - Devora");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(new Dimension(1920, 1080));
-        setExtendedState(this.MAXIMIZED_BOTH);
-        
-        // Personalizar Layout
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.white); 
-        
-        JLabel lblCart = new JLabel("Tu pedido actual", JLabel.LEFT);
-        lblCart.setFont(new Font("Arial", Font.BOLD, 30)); 
-        lblCart.setForeground(new Color(0, 102, 51)); // Color verde
-        lblCart.setBorder(BorderFactory.createEmptyBorder(30,10,20,0));
-        mainPanel.add(lblCart, BorderLayout.NORTH);
-        
-        // Panel central que tendrá la tabla y el checkout
-        JPanel panelCentro = new JPanel(new BorderLayout());
-        
-        JSeparator separator = new JSeparator();
-        separator.setOrientation(SwingConstants.HORIZONTAL);
-        separator.setPreferredSize(new Dimension(400,2));
-        separator.setBackground(Color.black);
-        
-        panelCentro.setBackground(Color.white); 
-        mainPanel.add(panelCentro, BorderLayout.CENTER);
-        
-        // Crear la tabla del carrito
-        String[] columnas = {"Producto", "Precio", "Elimnar"};
-        Object[][] datos = {
-            {new PanelProducto("Producto A", "Desc A", "⭐⭐⭐", new Color(240,240,255)), "9,99€", false},
-            {new PanelProducto("Producto B", "Desc B", "⭐⭐⭐⭐", new Color(255,240,240)), "14,99€", false},
-            {new PanelProducto("Producto C", "Desc C", "⭐⭐", new Color(240,255,240)), "7,99€", false}
-        };
-        
-        modelo = new DefaultTableModel(datos, columnas) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 2; 
-            }
-        };
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        JTable tablaResumen = new JTable(modelo) {
-            @Override
-            public TableCellRenderer getCellRenderer(int row, int column) {
-                if (column == 0) {
-                    return new ProductCellRenderer();
-                }
-                return super.getCellRenderer(row, column);
-            }
-        };
-        
-        tablaResumen.setFont(new Font("SansSerif", Font.PLAIN, 18)); 
-        tablaResumen.setRowHeight(80); // Mayor altura para mostrar el panel completo
-        
-        DefaultTableCellRenderer alineacionDerecha = new DefaultTableCellRenderer();
-        alineacionDerecha.setHorizontalAlignment(SwingConstants.RIGHT);
-        tablaResumen.getColumnModel().getColumn(1).setCellRenderer(alineacionDerecha);
-        tablaResumen.getColumnModel().getColumn(2).setCellRenderer(alineacionDerecha);
+        JPanel panelMain = new JPanel(new BorderLayout());
 
-        JScrollPane scrollPane = new JScrollPane(tablaResumen);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder()); 
-
+        JPanel panelProductos = new JPanel(new BorderLayout());
         JPanel panelTabla = new JPanel(new BorderLayout());
-        panelTabla.add(scrollPane, BorderLayout.CENTER);
-        panelTabla.setBackground(Color.white);
+        JPanel panelTextoProducto = new JPanel();
 
-        JPanel panelCheckout = new JPanel();
-        panelCheckout.setLayout(new BoxLayout(panelCheckout, BoxLayout.Y_AXIS));
-        panelCheckout.setBackground(new Color(255, 255, 255));
-        panelCheckout.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); 
-        panelCheckout.setPreferredSize(new Dimension(600, 0)); 
+        JPanel panelTotal = new JPanel(new BorderLayout());
+        JPanel panelPromocion = new JPanel();
+        JPanel panelPagar = new JPanel();
 
-        // Texto Coste Total
-        JLabel lblTotal = new JLabel("Coste Total:");
-        lblTotal.setFont(new Font("Arial", Font.BOLD, 48));
-        panelCheckout.add(lblTotal);
+        // Añadimos los paneles principales al panel main
+        panelMain.add(panelProductos, BorderLayout.WEST);
+        panelMain.add(panelTotal, BorderLayout.EAST);
 
-        panelCheckout.add(Box.createVerticalStrut(10)); 
+        panelProductos.setPreferredSize(new Dimension(1310, 0));
+        panelTotal.setPreferredSize(new Dimension(610, 500));
 
-        // Texto Precio
-        JLabel lblPrecio = new JLabel("9,99€");
-        lblPrecio.setFont(new Font("Arial", Font.BOLD, 48));
-        panelCheckout.add(lblPrecio);
+        panelProductos.setBackground(Color.white);
+        panelTotal.setBackground(Color.black); //Sirve como separador
 
-        panelCheckout.add(Box.createVerticalStrut(20)); 
+        // Ajustes panelProductos (Panel Izquierda)
+        // Panel texto
+        panelProductos.add(panelTextoProducto, BorderLayout.NORTH);
+        panelProductos.add(panelTabla, BorderLayout.SOUTH);
 
-        // Panel código promocional
-        JPanel panelPromo = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        panelPromo.setOpaque(false);
-        JTextField tfPromo = new JTextField();
-        JButton btnPromo = new JButton("Aplicar");
+        panelTextoProducto.setLayout(new BoxLayout(panelTextoProducto, BoxLayout.Y_AXIS));
+        panelTextoProducto.setPreferredSize(new Dimension(1310, 200));
+        panelTextoProducto.setBackground(Color.white);
 
-        btnPromo.setBorder(BorderFactory.createEmptyBorder());
-        tfPromo.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        tfPromo.setFont(new Font("Arial", Font.PLAIN, 20));
-        tfPromo.setBackground(new Color(221,221,221));
+        JLabel textoCarrito = new JLabel("Cesta");
+        textoCarrito.setBorder(BorderFactory.createEmptyBorder(50, 125, 0, 0));
+        textoCarrito.setFont(new Font("Arial", Font.BOLD, 58));
+        textoCarrito.setAlignmentX(LEFT_ALIGNMENT);
+        panelTextoProducto.add(textoCarrito);
 
-        btnPromo.setBackground(new Color(3, 252, 207));
-        tfPromo.setPreferredSize(new Dimension(300, 40));
-        btnPromo.setPreferredSize(new Dimension(80, 40)); 
+        JLabel textoCursos = new JLabel("X cursos en la cesta");
+        textoCursos.setFont(new Font("Arial", Font.BOLD, 28));
+        textoCursos.setBorder(BorderFactory.createEmptyBorder(25, 130, 0, 0));
+        textoCursos.setAlignmentX(LEFT_ALIGNMENT);
+        panelTextoProducto.add(textoCursos);
+        
+        //Panel Tabla Cursos
+        panelTabla.setPreferredSize(new Dimension(900,900));
+        panelTabla.setOpaque(false);
+        // Datos temporales para la previsualización
+        Object[][] data = {
+            {new panelCurso("Machine Learning y Data Science: Curso Completo con Python", "Por Paco Jimenez", 4.7, 2572, 31, 121), new lblPrecio(55.99),new lblEliminar()},
+            {new panelCurso("Curso Completo de IA Generativa: ChatGPT, Midjourney y más!", "Por Santiago Hernández", 4.7, 2368, 18, 137), new lblPrecio(34.99),new lblEliminar()},
+            {new panelCurso("Inteligencia Artificial & ChatGPT: De Cero a Avanzado 2024", "Por Julián Mac Loughlin", 4.5, 3396, 29.5, 356), new lblPrecio(14.99),new lblEliminar()}
+        };
 
-        panelPromo.setBorder(BorderFactory.createEmptyBorder(0,40,0,0));
-        panelPromo.add(tfPromo);
-        panelPromo.add(btnPromo);
-        panelCheckout.add(panelPromo);
+        // Definir nombres de columnas
+        String[] nombresColumnas = {"Producto", "Acción", "Precio"};
 
-        panelCheckout.add(Box.createVerticalStrut(0)); 
+        // Crear el modelo de la tabla
+        DefaultTableModel model = new DefaultTableModel(data, nombresColumnas) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 0) return panelCurso.class; 
+                if (columnIndex == 2) return lblEliminar.class;
+                return String.class;
+            }
+        };
+        
+        JTable table = new JTable(model);
+        table.setRowHeight(120); // Ajusta la altura de las filas para que los paneles se muestren completamente
 
-        // Botón pagar
+        // Configurar renderizador para la primera columna
+        table.getColumnModel().getColumn(0).setCellRenderer(new PanelRenderer());
+        table.getColumnModel().getColumn(0).setMinWidth(700);
+        table.getColumnModel().getColumn(1).setMinWidth(100);
+        table.getColumnModel().getColumn(1).setCellRenderer(new lblPrecioRenderer());
+        table.getColumnModel().getColumn(2).setMinWidth(100);
+        table.getColumnModel().getColumn(2).setCellRenderer(new lblEliminarRenderer());
+        
+        table.setOpaque(false);
+        table.setShowGrid(false);
+        table.setIntercellSpacing(new Dimension(0,0));
+        
+        JPanel contenedorConMargen = new JPanel(new BorderLayout());
+        contenedorConMargen.setBorder(BorderFactory.createEmptyBorder(0, 125, 0, 80)); // Margen izquierdo de 125 px
+
+        table.setTableHeader(null);
+        
+        // Crear el JScrollPane sin borde y añadirlo al contenedor
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Sin borde en el JScrollPane
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        
+        // Añadir el JScrollPane al contenedor con margen
+        contenedorConMargen.add(scrollPane, BorderLayout.CENTER);
+        contenedorConMargen.setOpaque(false);
+
+        // Añadir el contenedor con margen al panelTabla
+        panelTabla.add(contenedorConMargen, BorderLayout.CENTER);
+        
+        
+        // Configuración de panelTotal (Panel Derecha)
+        //Panel Pagar
+        panelPagar.setLayout(new BoxLayout(panelPagar, BoxLayout.Y_AXIS)); 
+        panelPagar.setBackground(Color.white); 
+        panelPagar.setBorder(BorderFactory.createEmptyBorder(170, 100, 20, 20));
+
+        
+        panelPagar.setPreferredSize(new Dimension(300, 360));
+        panelPagar.setMaximumSize(new Dimension(300, 360));
+        panelPagar.setMinimumSize(new Dimension(300, 360));
+
+        // Añadiendo etiquetas y botón
+        JLabel lblTotal = new JLabel("Total: ");
+        lblTotal.setFont(new Font("Arial",Font.BOLD,22));
+        lblTotal.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
+        
+        JLabel lblPrecioTotal = new JLabel("184,97€");
+        lblPrecioTotal.setFont(new Font("Arial",Font.BOLD,52));
+        lblPrecioTotal.setBorder(BorderFactory.createEmptyBorder(0,0,20,0));
+        
         JButton btnPagar = new JButton("Pagar");
-        btnPagar.setBorder(BorderFactory.createEmptyBorder());
-        btnPagar.setPreferredSize(new Dimension(300,50));
-        btnPagar.setFont(new Font("Arial", Font.BOLD, 20));
-        btnPagar.setBackground(new Color(3, 252, 207));
+        btnPagar.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
+        btnPagar.setForeground(Color.white);
+        btnPagar.setFont(new Font("Arial",Font.BOLD,20));
+        btnPagar.setBorder(BorderFactory.createEmptyBorder(10,175,10,175));
         
-        panelCheckout.add(btnPagar);
+        //Hover
+        btnPagar.addMouseListener(new MouseListener() {
 
-        // Placeholder en tfPromo
-        tfPromo.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (tfPromo.getText().equals("Código Promocional")){
-                    tfPromo.setText("");
-                    tfPromo.setForeground(Color.black);
-                }
-            }
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (tfPromo.getText().isEmpty()) {
-                    tfPromo.setText("Código Promocional");
-                    tfPromo.setForeground(new Color(93,93,93));
-                }
-            }
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnPagar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				btnPagar.setBackground(Pallette.COLOR_HOVER_PRINCIPAL.getColor());
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnPagar.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+        	
         });
-
-        // Añadir los paneles al panel central
-        panelCentro.add(separator, BorderLayout.CENTER);
-        panelCentro.add(panelTabla, BorderLayout.CENTER);
-        panelCentro.add(panelCheckout, BorderLayout.EAST); 
         
-        add(mainPanel);
+        // Configurar alineación y bordes
+        lblTotal.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lblPrecioTotal.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btnPagar.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        panelPagar.add(lblTotal);
+        panelPagar.add(lblPrecioTotal);
+        panelPagar.add(Box.createRigidArea(new Dimension(0, 10))); // Espacio entre etiquetas y botón
+        panelPagar.add(btnPagar);
+        
+        //Panel Promoción
+        panelPromocion.setLayout(new BoxLayout(panelPromocion, BoxLayout.Y_AXIS)); 
+        panelPromocion.setBackground(Color.white); 
+        panelPromocion.setBorder(BorderFactory.createEmptyBorder(30, 100, 20, 20));
+        
+        panelPromocion.setPreferredSize(new Dimension(300, 750));
+        panelPromocion.setMaximumSize(new Dimension(300, 750));
+        panelPromocion.setMinimumSize(new Dimension(300, 750));
+        
+        JPanel panelLabel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
+        panelLabel.setPreferredSize(new Dimension(300,0));
+        panelLabel.setOpaque(false);
+        
+        JLabel lblPromo = new JLabel("Promociones");
+        lblPromo.setFont(new Font("Arial",Font.BOLD,22));
+        lblPromo.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        lblPromo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        panelLabel.add(lblPromo);
+        panelPromocion.add(panelLabel);
+        
+        JPanel panelInputPromo = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
+        panelInputPromo.setPreferredSize(new Dimension(300,610));
+        panelInputPromo.setOpaque(false);
+        
+        JTextField tfPromo = new JTextField();
+        tfPromo.setPreferredSize(new Dimension(300,38));
+        
+        JButton btnPromo = new JButton("Aplicar");
+        btnPromo.setPreferredSize(new Dimension(104,38));
+        btnPromo.setFont(new Font("Arial",Font.BOLD,16));
+        btnPromo.setBorder(BorderFactory.createEmptyBorder());
+        btnPromo.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
+        btnPromo.setForeground(Color.white);
+        
+        //Hover
+        btnPromo.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnPromo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				btnPromo.setBackground(Pallette.COLOR_HOVER_PRINCIPAL.getColor());
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnPromo.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+        	
+        });
+        panelInputPromo.add(tfPromo); panelInputPromo.add(btnPromo);
+        
+        panelPromocion.add(panelInputPromo);
+        
+        // Añadir panelPagar al panelTotal
+        panelTotal.add(panelPagar, BorderLayout.NORTH);
+        panelTotal.add(panelPromocion, BorderLayout.SOUTH);
+
+        add(panelMain);
         setVisible(true);
-    }
-
-    // Clase interna para crear un JPanel del producto
-    private class PanelProducto extends JPanel {
-        public PanelProducto(String title, String description, String rating, Color bgColor) {
-            setLayout(new BorderLayout());
-            setBackground(bgColor);
-            setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-
-            JLabel lblTitle = new JLabel(title);
-            lblTitle.setFont(new Font("SansSerif", Font.BOLD, 14));
-            
-            JLabel lblDescription = new JLabel(description);
-            lblDescription.setFont(new Font("SansSerif", Font.PLAIN, 12));
-            
-            JLabel lblRating = new JLabel(rating);
-            lblRating.setFont(new Font("SansSerif", Font.PLAIN, 12));
-
-            add(lblTitle, BorderLayout.NORTH);
-            add(lblDescription, BorderLayout.CENTER);
-            add(lblRating, BorderLayout.SOUTH);
-        }
-    }
-    
-    // Renderer para mostrar el JPanel de producto en la tabla
-    private class ProductCellRenderer implements TableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if (value instanceof JPanel) {
-                return (JPanel) value;
-            }
-            return new JLabel("No data");
-        }
     }
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Cart();
-            }
+
+			@Override
+			public void run() {
+				new Cart(null);
+			}
+        	
         });
+    }
+    
+    @SuppressWarnings("serial")
+	public class panelCurso extends JPanel {
+    	
+    	public panelCurso(String titulo, String instructor, double rating, int valoraciones, double horas, int clases) {
+    		//
+    		String imgPath = "src/media/default.png";
+    		
+            setLayout(new BorderLayout(5, 5));
+            setBackground(Color.WHITE);
+            setBorder(BorderFactory.createEmptyBorder());
+            
+            // Título del curso
+            JLabel lblTitulo = new JLabel(titulo);
+            lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+            
+            // Nombre del instructor
+            JLabel lblInstructor = new JLabel(instructor);
+            lblInstructor.setFont(new Font("Arial", Font.PLAIN, 12));
+            lblInstructor.setForeground(Color.DARK_GRAY);
+
+            // Calificación y número de valoraciones
+            JLabel lblRating = new JLabel("⭐ " + rating + " (" + valoraciones + " valoraciones)");
+            lblRating.setFont(new Font("Arial", Font.PLAIN, 12));
+            lblRating.setForeground(Color.GRAY);
+
+            // Horas y número de clases
+            JLabel lblDetalles = new JLabel(horas + " horas en total - " + clases + " clases");
+            lblDetalles.setFont(new Font("Arial", Font.PLAIN, 12));
+            lblDetalles.setForeground(Color.GRAY);
+
+            ImageIcon jadeFondo = new ImageIcon(imgPath);
+            Image img = jadeFondo.getImage();
+            Image imgEscalada = img.getScaledInstance(170, 100, Image.SCALE_SMOOTH);
+            
+            JLabel lblLogo = new JLabel(new ImageIcon(imgEscalada));
+            
+            // Agregar los componentes al panel
+            JPanel infoPanel = new JPanel();
+            infoPanel.setBorder(BorderFactory.createEmptyBorder(10,10,0,0));
+            infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+            infoPanel.setBackground(Color.WHITE);
+            infoPanel.add(lblTitulo);
+            infoPanel.add(lblInstructor);
+            infoPanel.add(lblRating);
+            infoPanel.add(lblDetalles);
+            
+            add(lblLogo, BorderLayout.WEST);
+            add(infoPanel, BorderLayout.CENTER);
+        }
+    }
+    
+    @SuppressWarnings("serial")
+	class lblEliminar extends JLabel {
+    	public lblEliminar() {
+    		ImageIcon deleteIcon = new ImageIcon("src/media/delete-icon.png");
+            Image img = deleteIcon.getImage();
+            Image deleteIconEscalada = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            
+            deleteIcon.setImage(deleteIconEscalada);
+            setIcon(deleteIcon);
+            setBorder(BorderFactory.createEmptyBorder(0,80,0,0));
+            
+    	}
+    }
+    
+    class lblPrecio extends JLabel{
+    	
+    	public lblPrecio(Double precio) {
+    		setFont(new Font("Arial",Font.BOLD,20));
+    		setAlignmentX(RIGHT_ALIGNMENT);
+    		setText(precio + "€");
+    		setOpaque(false);
+    		setBorder(BorderFactory.createEmptyBorder(0,70,00,0));
+    	}
+    }
+    
+    class PanelRenderer implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value instanceof panelCurso) {
+                return (panelCurso) value;
+            }
+			return table;
+        }
+    }
+    
+    class lblEliminarRenderer implements TableCellRenderer{
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			if (value instanceof lblEliminar) {
+				return (lblEliminar) value;
+			}
+			return null;
+		}
+    }
+    
+    class lblPrecioRenderer implements TableCellRenderer{
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean arg2, boolean arg3, int arg4,
+				int arg5) {
+			if (value instanceof lblPrecio) {
+				return (lblPrecio) value;
+			}
+			return null;
+		}
+    	
     }
 }
 

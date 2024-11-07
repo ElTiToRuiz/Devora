@@ -5,6 +5,8 @@ import java.awt.*;
 public enum Pallette {
     FONDO("#FFFFFF"),
     ENCABEZADOS("#1E1E2F"),
+    COLOR_PRINCIPAL("#03fcce"),
+    COLOR_HOVER_PRINCIPAL("#68ffe1"),
     BOTONES("#FF6B6B"),
     TEXTO("#333333"),
     ALERTAS("#FF6600"),

@@ -16,6 +16,8 @@ import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
+import src.utils.Pallette;
+
 @SuppressWarnings("serial")
 public class Login extends JPanel{
 	
@@ -120,7 +122,7 @@ public class Login extends JPanel{
         Dimension buttonSize = new Dimension(230, 45); // Tamaño de los botones
         btnLogin.setPreferredSize(buttonSize);
         btnRegister.setPreferredSize(buttonSize);
-        btnRegister.setBackground(new Color(3,252,207));
+        btnRegister.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
         btnLogin.setBackground(new Color(3,219,252));
         panelBotones.add(btnLogin);
         panelBotones.add(btnRegister);
@@ -228,13 +230,13 @@ public class Login extends JPanel{
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				btnRegister.setBackground(new Color(104,255,226));
+				btnRegister.setBackground(Pallette.COLOR_HOVER_PRINCIPAL.getColor());
 				btnRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				btnRegister.setBackground(new Color(3,252,207));
+				btnRegister.setBackground(Pallette.COLOR_HOVER_PRINCIPAL.getColor());
 			}
 
 			@Override
