@@ -1,5 +1,7 @@
 package src.gui.components.authentication;
 
+import src.utils.Pallette;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
