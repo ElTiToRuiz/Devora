@@ -149,48 +149,28 @@ public class Header extends JPanel {
         
         //Crear hovers para los labels
         labelPerfil.addMouseListener(new MouseListener() {
-            @Override
             public void mouseClicked(MouseEvent e) {
                 PerfilUsuario perfil = new PerfilUsuario();
                 perfil.setVisible(true);
             }
-
-            @Override
             public void mousePressed(MouseEvent e) {}
-
-            @Override
             public void mouseReleased(MouseEvent e) {}
-
-            @Override
 			public void mouseEntered(MouseEvent arg0) {
 				labelPerfil.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
-
-            @Override
             public void mouseExited(MouseEvent e) {}
         });
         
         labelCarrito.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-		        new Cart();
+            public void mouseClicked(MouseEvent e) {
+		        new Cart(null);
 			}
-
-			@Override
 			public void mouseEntered(MouseEvent e) {
 				labelCarrito.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
-
-			@Override
 			public void mouseExited(MouseEvent e) {}
-
-			@Override
-			public void mousePressed(MouseEvent e) {}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-        	
+            public void mousePressed(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {}
         });
         
         labelCursos.addMouseListener(new MouseListener() {

@@ -4,22 +4,12 @@ import src.domain.Course;
 import src.utils.Pallette;
 
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-
-import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.List;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 public class Cart extends JFrame {
 
@@ -75,9 +65,9 @@ public class Cart extends JFrame {
         panelTabla.setOpaque(false);
         // Datos temporales para la previsualización
         Object[][] data = {
-            {new panelCurso("Machine Learning y Data Science: Curso Completo con Python", "Por Paco Jimenez", 4.7, 2572, 31, 121), new lblPrecio(55.99),new lblEliminar()},
-            {new panelCurso("Curso Completo de IA Generativa: ChatGPT, Midjourney y más!", "Por Santiago Hernández", 4.7, 2368, 18, 137), new lblPrecio(34.99),new lblEliminar()},
-            {new panelCurso("Inteligencia Artificial & ChatGPT: De Cero a Avanzado 2024", "Por Julián Mac Loughlin", 4.5, 3396, 29.5, 356), new lblPrecio(14.99),new lblEliminar()}
+            {new PanelCurso("Machine Learning y Data Science: Curso Completo con Python", "Por Paco Jimenez", 4.7, 2572, 31, 121), new lblPrecio(55.99),new lblEliminar()},
+            {new PanelCurso("Curso Completo de IA Generativa: ChatGPT, Midjourney y más!", "Por Santiago Hernández", 4.7, 2368, 18, 137), new lblPrecio(34.99),new lblEliminar()},
+            {new PanelCurso("Inteligencia Artificial & ChatGPT: De Cero a Avanzado 2024", "Por Julián Mac Loughlin", 4.5, 3396, 29.5, 356), new lblPrecio(14.99),new lblEliminar()}
         };
 
         // Definir nombres de columnas
@@ -87,12 +77,12 @@ public class Cart extends JFrame {
         DefaultTableModel model = new DefaultTableModel(data, nombresColumnas) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 0) return panelCurso.class; 
+                if (columnIndex == 0) return PanelCurso.class;
                 if (columnIndex == 2) return lblEliminar.class;
                 return String.class;
             }
         };
-        
+
         JTable table = new JTable(model);
         table.setRowHeight(120); // Ajusta la altura de las filas para que los paneles se muestren completamente
 
@@ -226,21 +216,21 @@ public class Cart extends JFrame {
         
         JTextField tfPromo = new JTextField();
         tfPromo.setPreferredSize(new Dimension(300,38));
-        
+
         JButton btnPromo = new JButton("Aplicar");
         btnPromo.setPreferredSize(new Dimension(104,38));
         btnPromo.setFont(new Font("Arial",Font.BOLD,16));
         btnPromo.setBorder(BorderFactory.createEmptyBorder());
         btnPromo.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
         btnPromo.setForeground(Color.white);
-        
+
         //Hover
         btnPromo.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -252,21 +242,21 @@ public class Cart extends JFrame {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnPromo.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
-				
+
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-        	
+
         });
         panelInputPromo.add(tfPromo); panelInputPromo.add(btnPromo);
         
@@ -279,71 +269,12 @@ public class Cart extends JFrame {
         add(panelMain);
         setVisible(true);
     }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
 
-			@Override
-			public void run() {
-				new Cart(null);
-			}
-        	
-        });
-    }
-    
-    @SuppressWarnings("serial")
-	public class panelCurso extends JPanel {
-    	
-    	public panelCurso(String titulo, String instructor, double rating, int valoraciones, double horas, int clases) {
-    		//
-    		String imgPath = "src/media/default.png";
-    		
-            setLayout(new BorderLayout(5, 5));
-            setBackground(Color.WHITE);
-            setBorder(BorderFactory.createEmptyBorder());
-            
-            // Título del curso
-            JLabel lblTitulo = new JLabel(titulo);
-            lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-            
-            // Nombre del instructor
-            JLabel lblInstructor = new JLabel(instructor);
-            lblInstructor.setFont(new Font("Arial", Font.PLAIN, 12));
-            lblInstructor.setForeground(Color.DARK_GRAY);
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> new Cart(null));
+//    }
 
-            // Calificación y número de valoraciones
-            JLabel lblRating = new JLabel("⭐ " + rating + " (" + valoraciones + " valoraciones)");
-            lblRating.setFont(new Font("Arial", Font.PLAIN, 12));
-            lblRating.setForeground(Color.GRAY);
-
-            // Horas y número de clases
-            JLabel lblDetalles = new JLabel(horas + " horas en total - " + clases + " clases");
-            lblDetalles.setFont(new Font("Arial", Font.PLAIN, 12));
-            lblDetalles.setForeground(Color.GRAY);
-
-            ImageIcon jadeFondo = new ImageIcon(imgPath);
-            Image img = jadeFondo.getImage();
-            Image imgEscalada = img.getScaledInstance(170, 100, Image.SCALE_SMOOTH);
-            
-            JLabel lblLogo = new JLabel(new ImageIcon(imgEscalada));
-            
-            // Agregar los componentes al panel
-            JPanel infoPanel = new JPanel();
-            infoPanel.setBorder(BorderFactory.createEmptyBorder(10,10,0,0));
-            infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-            infoPanel.setBackground(Color.WHITE);
-            infoPanel.add(lblTitulo);
-            infoPanel.add(lblInstructor);
-            infoPanel.add(lblRating);
-            infoPanel.add(lblDetalles);
-            
-            add(lblLogo, BorderLayout.WEST);
-            add(infoPanel, BorderLayout.CENTER);
-        }
-    }
-    
-    @SuppressWarnings("serial")
-	class lblEliminar extends JLabel {
+    class lblEliminar extends JLabel {
     	public lblEliminar() {
     		ImageIcon deleteIcon = new ImageIcon("src/media/delete-icon.png");
             Image img = deleteIcon.getImage();
@@ -363,15 +294,15 @@ public class Cart extends JFrame {
     		setAlignmentX(RIGHT_ALIGNMENT);
     		setText(precio + "€");
     		setOpaque(false);
-    		setBorder(BorderFactory.createEmptyBorder(0,70,00,0));
+    		setBorder(BorderFactory.createEmptyBorder(0,70,0,0));
     	}
     }
     
     class PanelRenderer implements TableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if (value instanceof panelCurso) {
-                return (panelCurso) value;
+            if (value instanceof PanelCurso) {
+                return (PanelCurso) value;
             }
 			return table;
         }

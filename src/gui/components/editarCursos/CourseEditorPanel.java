@@ -48,9 +48,7 @@ public class CourseEditorPanel extends JFrame {
         tableScrollPane.setOpaque(true);
         
         // Agregar cursos de ejemplo
-        tableModel.addRow(new Object[]{1, "Matemáticas", "Curso de matemáticas básicas", "Inglés", 9.99});
-        tableModel.addRow(new Object[]{2, "Historia", "Historia universal", "Castellano", 18.99});
-        tableModel.addRow(new Object[]{3, "Programación", "Curso de introducción a Java", "Euskera", 7.99});
+        loadExaple();
 
         // Panel de botones
         JPanel buttonPanel = new JPanel();
@@ -101,6 +99,12 @@ public class CourseEditorPanel extends JFrame {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         return button;
+    }
+
+    private void loadExaple(){
+        tableModel.addRow(new Object[]{1, "Matemáticas", "Curso de matemáticas básicas", "Inglés", 9.99});
+        tableModel.addRow(new Object[]{2, "Historia", "Historia universal", "Castellano", 18.99});
+        tableModel.addRow(new Object[]{3, "Programación", "Curso de introducción a Java", "Euskera", 7.99});
     }
 
     private void agregarCurso() {
