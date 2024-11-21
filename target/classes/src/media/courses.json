@@ -1,0 +1,325 @@
+[
+  {
+    "name": "Introduction to Python Programming",
+    "description": "Learn the fundamentals of Python programming, including data types, control structures, functions, and more.",
+    "duration_hours": 30,
+    "level": "Beginner",
+    "categories": ["Programming", "Computer Science", "Technology"],
+    "price": 99.99,
+    "instructor": "Jane Doe",
+    "language": "English",
+    "rating": 4.5,
+    "students": 10000,
+    "imgUrl": "https://example.com/course-image1.jpg",
+    "lessons": [
+      {
+        "name": "Introduction to Python",
+        "duration_minutes": 30,
+        "description": "Learn about the history of Python and its uses."
+      },
+      {
+        "name": "Data Types",
+        "duration_minutes": 60,
+        "description": "Explore the different data types in Python."
+      },
+      {
+        "name": "Control Structures",
+        "duration_minutes": 90,
+        "description": "Understand control structures like loops and conditionals."
+      },
+      {
+        "name": "Functions",
+        "duration_minutes": 120,
+        "description": "Learn how to define and call functions in Python."
+      }
+    ]
+  },
+
+  {
+    "name": "Web Development Bootcamp",
+    "description": "Master the basics of web development using HTML, CSS, and JavaScript.",
+    "duration_hours": 40,
+    "level": "Beginner",
+    "categories": ["Web Development", "Programming", "Technology"],
+    "price": 149.99,
+    "instructor": "John Smith",
+    "language": "English",
+    "rating": 4.8,
+    "students": 20000,
+    "imgUrl": "https://example.com/course-image2.jpg",
+    "lessons": [
+      {
+        "name": "HTML Basics",
+        "duration_minutes": 45,
+        "description": "Learn the structure of web pages using HTML."
+      },
+      {
+        "name": "CSS Fundamentals",
+        "duration_minutes": 60,
+        "description": "Style your web pages with CSS."
+      },
+      {
+        "name": "JavaScript Introduction",
+        "duration_minutes": 90,
+        "description": "Add interactivity to your web pages with JavaScript."
+      },
+      {
+        "name": "Building a Website",
+        "duration_minutes": 120,
+        "description": "Create a complete website from scratch."
+      }
+    ]
+  },
+
+  {
+    "name": "Data Science Essentials",
+    "description": "Learn data analysis, visualization, and machine learning using Python.",
+    "duration_hours": 50,
+    "level": "Intermediate",
+    "categories": ["Data Science", "Machine Learning", "Programming"],
+    "price": 199.99,
+    "instructor": "Alice Johnson",
+    "language": "English",
+    "rating": 4.7,
+    "students": 15000,
+    "imgUrl": "https://example.com/course-image3.jpg",
+    "lessons": [
+      {
+        "name": "Data Analysis with Pandas",
+        "duration_minutes": 90,
+        "description": "Use Pandas for data manipulation and analysis."
+      },
+      {
+        "name": "Data Visualization with Matplotlib",
+        "duration_minutes": 60,
+        "description": "Create insightful visualizations using Matplotlib."
+      },
+      {
+        "name": "Introduction to Machine Learning",
+        "duration_minutes": 120,
+        "description": "Understand the basics of machine learning."
+      },
+      {
+        "name": "Project: Data Science Case Study",
+        "duration_minutes": 120,
+        "description": "Apply your knowledge in a real-world data science project."
+      }
+    ]
+  },
+
+  {
+    "name": "Mobile App Development with Flutter",
+    "description": "Build beautiful and high-performing mobile apps for iOS and Android using Flutter.",
+    "duration_hours": 45,
+    "level": "Beginner",
+    "categories": ["Mobile Development", "Flutter", "Programming"],
+    "price": 179.99,
+    "instructor": "Michael Brown",
+    "language": "English",
+    "rating": 4.6,
+    "students": 8000,
+    "imgUrl": "https://example.com/course-image4.jpg",
+    "lessons": [
+      {
+        "name": "Getting Started with Flutter",
+        "duration_minutes": 60,
+        "description": "Install Flutter and set up your development environment."
+      },
+      {
+        "name": "Building User Interfaces",
+        "duration_minutes": 90,
+        "description": "Design beautiful UIs with Flutter widgets."
+      },
+      {
+        "name": "State Management",
+        "duration_minutes": 90,
+        "description": "Manage the state of your applications."
+      },
+      {
+        "name": "Publishing Your App",
+        "duration_minutes": 120,
+        "description": "Learn how to publish your app to app stores."
+      }
+    ]
+  },
+
+  {
+    "name": "Cybersecurity Fundamentals",
+    "description": "Understand the principles of cybersecurity and learn how to protect information systems.",
+    "duration_hours": 35,
+    "level": "Beginner",
+    "categories": ["Cybersecurity", "Technology", "Computer Science"],
+    "price": 129.99,
+    "instructor": "Sarah Lee",
+    "language": "English",
+    "rating": 4.5,
+    "students": 5000,
+    "imgUrl": "https://example.com/course-image5.jpg",
+    "lessons": [
+      {
+        "name": "Introduction to Cybersecurity",
+        "duration_minutes": 60,
+        "description": "Learn about the importance of cybersecurity."
+      },
+      {
+        "name": "Network Security Basics",
+        "duration_minutes": 90,
+        "description": "Understand the fundamentals of network security."
+      },
+      {
+        "name": "Cryptography Essentials",
+        "duration_minutes": 90,
+        "description": "Learn about encryption and decryption methods."
+      },
+      {
+        "name": "Threat Analysis",
+        "duration_minutes": 120,
+        "description": "Analyze potential threats and vulnerabilities."
+      }
+    ]
+  },
+
+  {
+    "name": "Digital Marketing Strategies",
+    "description": "Explore the latest digital marketing techniques and tools to enhance your business.",
+    "duration_hours": 40,
+    "level": "Intermediate",
+    "categories": ["Marketing", "Business", "Technology"],
+    "price": 149.99,
+    "instructor": "Emma White",
+    "language": "English",
+    "rating": 4.4,
+    "students": 6000,
+    "imgUrl": "https://example.com/course-image6.jpg",
+    "lessons": [
+      {
+        "name": "SEO Fundamentals",
+        "duration_minutes": 60,
+        "description": "Learn the basics of search engine optimization."
+      },
+      {
+        "name": "Social Media Marketing",
+        "duration_minutes": 90,
+        "description": "Utilize social media platforms for marketing."
+      },
+      {
+        "name": "Email Marketing Techniques",
+        "duration_minutes": 60,
+        "description": "Discover effective email marketing strategies."
+      },
+      {
+        "name": "Analytics and Reporting",
+        "duration_minutes": 90,
+        "description": "Learn how to measure and analyze marketing campaigns."
+      }
+    ]
+  },
+
+  {
+    "name": "Game Development with Unity",
+    "description": "Create engaging 2D and 3D games using the Unity game engine.",
+    "duration_hours": 60,
+    "level": "Intermediate",
+    "categories": ["Game Development", "Programming", "Technology"],
+    "price": 199.99,
+    "instructor": "Chris Green",
+    "language": "English",
+    "rating": 4.7,
+    "students": 7000,
+    "imgUrl": "https://example.com/course-image7.jpg",
+    "lessons": [
+      {
+        "name": "Introduction to Unity",
+        "duration_minutes": 90,
+        "description": "Get familiar with the Unity interface and features."
+      },
+      {
+        "name": "2D Game Development",
+        "duration_minutes": 120,
+        "description": "Create a complete 2D game using Unity."
+      },
+      {
+        "name": "3D Game Development",
+        "duration_minutes": 120,
+        "description": "Learn how to build immersive 3D games."
+      },
+      {
+        "name": "Game Publishing",
+        "duration_minutes": 90,
+        "description": "Understand the process of publishing your game."
+      }
+    ]
+  },
+
+  {
+    "name": "Machine Learning A-Z",
+    "description": "Learn how to create Machine Learning models using Python and R.",
+    "duration_hours": 60,
+    "level": "Advanced",
+    "categories": ["Machine Learning", "Data Science", "Programming"],
+    "price": 249.99,
+    "instructor": "David Black",
+    "language": "English",
+    "rating": 4.9,
+    "students": 12000,
+    "imgUrl": "https://example.com/course-image8.jpg",
+    "lessons": [
+      {
+        "name": "Introduction to Machine Learning",
+        "duration_minutes": 60,
+        "description": "Understand the basics and applications of ML."
+      },
+      {
+        "name": "Supervised Learning",
+        "duration_minutes": 90,
+        "description": "Learn about regression and classification techniques."
+      },
+      {
+        "name": "Unsupervised Learning",
+        "duration_minutes": 90,
+        "description": "Explore clustering and association algorithms."
+      },
+      {
+        "name": "Deep Learning Basics",
+        "duration_minutes": 120,
+        "description": "Get introduced to deep learning concepts and models."
+      }
+    ]
+  },
+
+  {
+    "name": "Cloud Computing Fundamentals",
+    "description": "Discover the essentials of cloud computing and its applications in business.",
+    "duration_hours": 30,
+    "level": "Beginner",
+    "categories": ["Cloud Computing", "Technology", "Business"],
+    "price": 119.99,
+    "instructor": "Laura White",
+    "language": "English",
+    "rating": 4.3,
+    "students": 4000,
+    "imgUrl": "https://example.com/course-image9.jpg",
+    "lessons": [
+      {
+        "name": "Cloud Computing Basics",
+        "duration_minutes": 60,
+        "description": "Understand the fundamental concepts of cloud computing."
+      },
+      {
+        "name": "Service Models",
+        "duration_minutes": 60,
+        "description": "Explore different cloud service models like IaaS, PaaS, and SaaS."
+      },
+      {
+        "name": "Cloud Security",
+        "duration_minutes": 90,
+        "description": "Learn about security considerations in cloud environments."
+      },
+      {
+        "name": "Building Cloud Applications",
+        "duration_minutes": 120,
+        "description": "Learn to design and deploy applications on the cloud."
+      }
+    ]
+  }
+]
