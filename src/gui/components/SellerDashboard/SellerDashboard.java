@@ -136,4 +136,86 @@ public class SellerDashboard {
 
         return panel;
     }
+ // Panel de "Dashboard"
+    private static JPanel createDashboardPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        JLabel welcomeLabel = new JLabel("Bienvenido a tu Dashboard de Vendedor", SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        welcomeLabel.setForeground(new Color(57, 62, 70));
+
+        JPanel statsPanel = new JPanel();
+        statsPanel.setLayout(new GridLayout(1, 3, 20, 0));
+        statsPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        statsPanel.add(createSalesChartPanel());
+        statsPanel.add(createChartPanel("Productos Vendidos", new double[]{50, 70, 45, 90}, "Mes", "Unidades"));
+        statsPanel.add(createChartPanel("Clientes", new double[]{120, 150, 130, 170}, "Mes", "Clientes"));
+
+        panel.add(welcomeLabel, BorderLayout.NORTH);
+        panel.add(statsPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    // Panel de "Ventas"
+    private static JPanel createSalesPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        JLabel titleLabel = new JLabel("Ventas Recientes", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+
+        String[] columns = {"ID Venta", "Cliente", "Producto", "Total", "Fecha"};
+        Object[][] data = {
+                {"001", "Juan Pérez", "Camiseta", "€25.00", "2024-11-20"},
+                {"002", "María López", "Pantalón", "€40.00", "2024-11-21"},
+                {"003", "Carlos Ruiz", "Zapatos", "€60.00", "2024-11-22"},
+        };
+
+        JTable salesTable = new JTable(data, columns);
+        JScrollPane scrollPane = new JScrollPane(salesTable);
+
+        panel.add(titleLabel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    // Gráfico de ventas
+    private static JPanel createSalesChartPanel() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        String[] categories = {"Enero", "Febrero", "Marzo", "Abril"};
+        double[] values = {3000, 5000, 4000, 6000};
+
+        for (int i = 0; i < values.length; i++) {
+            dataset.addValue(values[i], "Cursos", categories[i]);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Ventas Totales", "Mes", "Cursos", dataset
+        );
+
+        chart.setBackgroundPaint(Color.WHITE);
+        return new ChartPanel(chart);
+    }
+
+    private static JPanel createChartPanel(String title, double[] values, String categoryAxisLabel, String valueAxisLabel) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        String[] categories = {"Enero", "Febrero", "Marzo", "Abril"};
+
+        for (int i = 0; i < values.length; i++) {
+            dataset.addValue(values[i], title, categories[i]);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                title, categoryAxisLabel, valueAxisLabel, dataset
+        );
+
+        chart.setBackgroundPaint(Color.WHITE);
+        return new ChartPanel(chart);
+    }
 }
