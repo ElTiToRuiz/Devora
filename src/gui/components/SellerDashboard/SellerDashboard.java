@@ -83,4 +83,30 @@ public class SellerDashboard {
         formPanel.setLayout(new GridLayout(6, 2, 15, 15));
         formPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         formPanel.setOpaque(false);
+        
+     // Crear campos y etiquetas
+        formPanel.add(new JLabel("👤 Nombre:"));
+        JTextField campoNombre = new JTextField();
+        formPanel.add(campoNombre);
+
+        formPanel.add(new JLabel("👤 Apellidos:"));
+        JTextField campoApellidos = new JTextField();
+        formPanel.add(campoApellidos);
+
+        formPanel.add(new JLabel("✉️ Email:"));
+        JTextField campoEmail = new JTextField();
+        formPanel.add(campoEmail);
+
+        formPanel.add(new JLabel("🏠 Dirección:"));
+        JTextField campoDireccion = new JTextField();
+        formPanel.add(campoDireccion);
+
+        formPanel.add(new JLabel("🔑 Contraseña:"));
+        JPasswordField campoContrasena = new JPasswordField();
+        formPanel.add(campoContrasena);
+
+        formPanel.add(new JLabel("👤 Tipo de Usuario:"));
+        String[] tiposUsuario = {"Estudiante", "Profesor", "Administrador", "Creador"};
+        JComboBox<String> comboTipoUsuario = new JComboBox<>(tiposUsuario);
+        formPanel.add(comboTipoUsuario);
 }
