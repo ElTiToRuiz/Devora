@@ -8,21 +8,27 @@ public class Course {
     private int duracion;
     private List<String> categories;
     private double price;
+    private int clases;
     public String instructor;
     private String language;
+    private int students;
     private double rating;
+    private int numReseñas;
     private String imgPath;
     
     public Course(String nombre, String desc, int duracion, List<String> categories, double price,
-            String instructor, String language, double rating, int students, String imgPath) {
+            int clases, String instructor, String language, double rating, int students, int numReseñas, String imgPath) {
   this.nombre = nombre;
   this.desc = desc;
   this.duracion = duracion;
   this.categories = categories;
   this.price = price;
+  this.clases = clases;
   this.instructor = instructor;
   this.language = language;
   this.rating = rating;
+  this.students = students;
+  this.numReseñas = numReseñas;
   this.imgPath = imgPath;
 }
 
@@ -97,6 +103,54 @@ public class Course {
 
 	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+	public int getDuracion() {
+		return duracion;
+	}
+
+	public void setDuracion(int duracion) {
+		this.duracion = duracion;
+	}
+
+	public int getClases() {
+		return clases;
+	}
+
+	public void setClases(int clases) {
+		this.clases = clases;
+	}
+
+	public int getStudents() {
+		return students;
+	}
+
+	public void setStudents(int students) {
+		this.students = students;
+	}
+
+	public int getNumReseñas() {
+		return numReseñas;
+	}
+
+	public void setNumReseñas(int numReseñas) {
+		this.numReseñas = numReseñas;
 	}
 
 }

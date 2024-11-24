@@ -1,5 +1,6 @@
 package src.gui.components.principal;
 
+import src.domain.Course;
 import src.gui.components.authentication.AuthView;
 import src.gui.components.cart.Cart;
 import src.gui.components.editarCursos.CourseEditorPanel;
@@ -11,6 +12,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class Header extends JPanel {
     private boolean isLogged;
@@ -163,7 +165,13 @@ public class Header extends JPanel {
         
         labelCarrito.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
-		        new Cart(null);
+            	ArrayList<Course> listaCursos = new ArrayList<>();
+            	ArrayList<String> lista = new ArrayList<>();
+            	lista.add("Hola");
+            	lista.add("fdaf");
+            	listaCursos.add(new Course("Prubea","Prubea",22,lista,22.53,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
+            	listaCursos.add(new Course("424hdjahfs","Prubea",22,lista,22.79,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
+            	new Cart(listaCursos);
 			}
 			public void mouseEntered(MouseEvent e) {
 				labelCarrito.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

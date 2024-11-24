@@ -1,5 +1,5 @@
 package src.domain.admin;
 
-// this is the admin class that will be used to manage the system
+// No se implementará o para el final si se implementa
 public class Admin {
 }

@@ -4,14 +4,22 @@ import src.domain.Course;
 import src.utils.Pallette;
 
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+
+import java.util.EventObject;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class Cart extends JFrame {
+	
+	// Declarar textoCursos como atributo de la clase Cart
+	private JLabel textoCursos;
+	private JLabel lblPrecioTotal;
 
     public Cart(List<Course> listaCursos) {
         setTitle("Tu Cart - Devora");
@@ -54,7 +62,7 @@ public class Cart extends JFrame {
         textoCarrito.setAlignmentX(LEFT_ALIGNMENT);
         panelTextoProducto.add(textoCarrito);
 
-        JLabel textoCursos = new JLabel("X cursos en la cesta");
+        JLabel textoCursos = new JLabel(listaCursos.size() + " cursos en la cesta");
         textoCursos.setFont(new Font("Arial", Font.BOLD, 28));
         textoCursos.setBorder(BorderFactory.createEmptyBorder(25, 130, 0, 0));
         textoCursos.setAlignmentX(LEFT_ALIGNMENT);
@@ -63,51 +71,17 @@ public class Cart extends JFrame {
         //Panel Tabla Cursos
         panelTabla.setPreferredSize(new Dimension(900,900));
         panelTabla.setOpaque(false);
-        // Datos temporales para la previsualización
-        Object[][] data = {
-            {new PanelCurso("Machine Learning y Data Science: Curso Completo con Python", "Por Paco Jimenez", 4.7, 2572, 31, 121), new lblPrecio(55.99),new lblEliminar()},
-            {new PanelCurso("Curso Completo de IA Generativa: ChatGPT, Midjourney y más!", "Por Santiago Hernández", 4.7, 2368, 18, 137), new lblPrecio(34.99),new lblEliminar()},
-            {new PanelCurso("Inteligencia Artificial & ChatGPT: De Cero a Avanzado 2024", "Por Julián Mac Loughlin", 4.5, 3396, 29.5, 356), new lblPrecio(14.99),new lblEliminar()}
-        };
-
-        // Definir nombres de columnas
-        String[] nombresColumnas = {"Producto", "Acción", "Precio"};
-
-        // Crear el modelo de la tabla
-        DefaultTableModel model = new DefaultTableModel(data, nombresColumnas) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 0) return PanelCurso.class;
-                if (columnIndex == 2) return lblEliminar.class;
-                return String.class;
-            }
-        };
-
-        JTable table = new JTable(model);
-        table.setRowHeight(120); // Ajusta la altura de las filas para que los paneles se muestren completamente
-
-        // Configurar renderizador para la primera columna
-        table.getColumnModel().getColumn(0).setCellRenderer(new PanelRenderer());
-        table.getColumnModel().getColumn(0).setMinWidth(700);
-        table.getColumnModel().getColumn(1).setMinWidth(100);
-        table.getColumnModel().getColumn(1).setCellRenderer(new lblPrecioRenderer());
-        table.getColumnModel().getColumn(2).setMinWidth(100);
-        table.getColumnModel().getColumn(2).setCellRenderer(new lblEliminarRenderer());
         
-        table.setOpaque(false);
-        table.setShowGrid(false);
-        table.setIntercellSpacing(new Dimension(0,0));
-        
-        JPanel contenedorConMargen = new JPanel(new BorderLayout());
-        contenedorConMargen.setBorder(BorderFactory.createEmptyBorder(0, 125, 0, 80)); // Margen izquierdo de 125 px
-
-        table.setTableHeader(null);
+        JTable table = crearTabla(listaCursos);
         
         // Crear el JScrollPane sin borde y añadirlo al contenedor
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Sin borde en el JScrollPane
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
+        
+        JPanel contenedorConMargen = new JPanel(new BorderLayout());
+        contenedorConMargen.setBorder(BorderFactory.createEmptyBorder(0, 125, 0, 80)); // Margen izquierdo de 125 px
         
         // Añadir el JScrollPane al contenedor con margen
         contenedorConMargen.add(scrollPane, BorderLayout.CENTER);
@@ -133,7 +107,7 @@ public class Cart extends JFrame {
         lblTotal.setFont(new Font("Arial",Font.BOLD,22));
         lblTotal.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
         
-        JLabel lblPrecioTotal = new JLabel("184,97€");
+        JLabel lblPrecioTotal = new JLabel(String.valueOf(calcularPrecioTotal(listaCursos)) + "€");
         lblPrecioTotal.setFont(new Font("Arial",Font.BOLD,52));
         lblPrecioTotal.setBorder(BorderFactory.createEmptyBorder(0,0,20,0));
         
@@ -316,7 +290,7 @@ public class Cart extends JFrame {
 			if (value instanceof lblEliminar) {
 				return (lblEliminar) value;
 			}
-			return null;
+			return new JLabel("");
 		}
     }
     
@@ -328,9 +302,133 @@ public class Cart extends JFrame {
 			if (value instanceof lblPrecio) {
 				return (lblPrecio) value;
 			}
-			return null;
+			return new JLabel("");
 		}
     	
     }
+    
+    class lblEliminarEditor extends AbstractCellEditor implements TableCellEditor {
+        private lblEliminar label; // Componente de la celda
+        private JTable table;
+        private List<Course> listaCursos; // Referencia a la lista de cursos
+
+        public lblEliminarEditor(JTable table, List<Course> listaCursos) {
+            this.table = table;
+            this.listaCursos = listaCursos; // Asignamos la lista de cursos
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            if (value instanceof lblEliminar) {
+                label = (lblEliminar) value;
+                label.addMouseListener(new MouseListener() {
+                	@Override
+                	public void mouseClicked(MouseEvent e) {
+                	    DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+                	    listaCursos.remove(row); 
+                	    model.removeRow(row); 
+
+                	    // Recalcular el precio total
+                	    Double nuevoPrecioTotal = calcularPrecioTotal(listaCursos);
+                	    lblPrecioTotal.setText(nuevoPrecioTotal + "€"); // Actualiza la etiqueta de precio total
+
+                	    // Si la tabla está vacía, actualiza el mensaje de cursos en la cesta
+                	    if (model.getRowCount() == 0) {
+                	        textoCursos.setText("No hay cursos en la cesta");
+                	    } else {
+                	        textoCursos.setText(listaCursos.size() + " cursos en la cesta");
+                	    }
+
+                	    // Actualizar la vista
+                	    table.repaint();
+                	}
+
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {}
+                    @Override
+                    public void mouseReleased(MouseEvent e) {}
+                    @Override
+                    public void mouseEntered(MouseEvent e) {}
+                    @Override
+                    public void mouseExited(MouseEvent e) {}
+                });
+            }
+            return label;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return label;
+        }
+
+        @Override
+        public boolean isCellEditable(EventObject e) {
+            return true;
+        }
+    }
+    
+    public JTable crearTabla(List<Course> listaCursos) {
+        String[] nombresColumnas = {"Producto", "Acción", "Precio"};
+        Object[][] data = {};
+
+        DefaultTableModel model = new DefaultTableModel(data, nombresColumnas) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 0) return PanelCurso.class;
+                if (columnIndex == 2) return lblEliminar.class;
+                return String.class;
+            }
+        };
+        
+    	if(!listaCursos.isEmpty()) {
+        	for(Course curso : listaCursos) {
+        		model.addRow(new Object[]{
+        			    new PanelCurso(curso.getName(), 
+        			                   "Por " + curso.getInstructor(), 
+        			                   curso.getRating(), 
+        			                   curso.getNumReseñas(), 
+        			                   curso.getDuration(), 
+        			                   curso.getClases(), 
+        			                   curso.getImgPath()), 
+        			    new lblPrecio(curso.getPrice()), 
+        			    new lblEliminar()
+        			});
+
+        	}
+    	}
+
+        JTable table = new JTable(model);
+        table.setRowHeight(120); // Ajusta la altura de las filas para que los paneles se muestren completamente
+
+        // Configurar renderizador para la primera columna
+        table.getColumnModel().getColumn(0).setCellRenderer(new PanelRenderer());
+        table.getColumnModel().getColumn(0).setMinWidth(700);
+        table.getColumnModel().getColumn(1).setMinWidth(100);
+        table.getColumnModel().getColumn(1).setCellRenderer(new lblPrecioRenderer());
+        table.getColumnModel().getColumn(2).setMinWidth(100);
+        table.getColumnModel().getColumn(2).setCellRenderer(new lblEliminarRenderer());
+        table.getColumnModel().getColumn(2).setCellEditor(new lblEliminarEditor(table,listaCursos));
+
+        
+        table.setOpaque(false);
+        table.setShowGrid(false);
+        table.setIntercellSpacing(new Dimension(0,0));
+
+        table.setTableHeader(null);
+		return table;
+    }
+    
+    public Double calcularPrecioTotal(List<Course> listaCursos) {
+    	
+    	Double precioTotal = 0.00;
+    	for(Course curso : listaCursos) {
+    		precioTotal = precioTotal + curso.getPrice();
+    	}
+    	
+		return precioTotal;
+	}
+    
 }
 

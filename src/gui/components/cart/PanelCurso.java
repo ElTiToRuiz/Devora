@@ -5,8 +5,7 @@ import java.awt.*;
 
 public class PanelCurso extends JPanel {
 
-    public PanelCurso(String titulo, String instructor, double rating, int valoraciones, double horas, int clases) {
-        String imgPath = "src/media/default.png";
+    public PanelCurso(String titulo, String instructor, double rating, int valoraciones, double horas, int clases, String imgPath) {
 
         setLayout(new BorderLayout(5, 5));
         setBackground(Color.WHITE);
