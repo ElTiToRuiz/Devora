@@ -5,6 +5,8 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import src.gui.components.editor.CourseEditorPanel;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -29,4 +31,35 @@ public class SellerDashboard {
         String[] menuOptions = {"Perfil", "Rendimiento de ventas", "Ventas", "Editar Cursos", "Cerrar Sesión"};
         final CardLayout cardLayout = new CardLayout();
         final JPanel mainContent = new JPanel(cardLayout);
+        
+        for (final String option : menuOptions) {
+            JButton button = new JButton(option);
+            button.setFocusPainted(false);
+            button.setForeground(Color.WHITE);
+            button.setBackground(new Color(57, 62, 70));
+            button.setFont(new Font("Arial", Font.BOLD, 14));
+            button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+
+            // Agregar acción para cada botón
+            button.addActionListener(e -> {
+                if (option.equals("Cerrar Sesión")) {
+                    int confirm = JOptionPane.showConfirmDialog(frame, "¿Seguro que deseas cerrar sesión?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        frame.dispose(); // Cierra la aplicación
+                    }
+                } else if (option.equals("Editar Cursos")) {
+                    new CourseEditorPanel().setVisible(true); // Abrir el panel de edición de cursos
+                } else {
+                    cardLayout.show(mainContent, option);
+                }
+            });
+
+            sideMenu.add(button);
+        }
+
+        // Crear paneles para cada sección
+        mainContent.add(createProfilePanel(), "Perfil");
+        mainContent.add(createDashboardPanel(), "Rendimiento de ventas");
+        mainContent.add(createSalesPanel(), "Ventas");
+
 }
