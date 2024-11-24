@@ -61,5 +61,26 @@ public class SellerDashboard {
         mainContent.add(createProfilePanel(), "Perfil");
         mainContent.add(createDashboardPanel(), "Rendimiento de ventas");
         mainContent.add(createSalesPanel(), "Ventas");
+        
+     // Mostrar el panel "Perfil" al iniciar
+        cardLayout.show(mainContent, "Perfil");
 
+        // Añadir los componentes principales al marco
+        frame.add(sideMenu, BorderLayout.WEST);
+        frame.add(mainContent, BorderLayout.CENTER);
+
+        frame.setLocationRelativeTo(null); // Centrar la ventana
+        frame.setVisible(true);
+    }
+
+    // Panel de "Perfil"
+    private static JPanel createProfilePanel() {
+        // (código del panel "Perfil" tal como lo tenías)
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new GridLayout(6, 2, 15, 15));
+        formPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        formPanel.setOpaque(false);
 }
