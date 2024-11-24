@@ -109,4 +109,31 @@ public class SellerDashboard {
         String[] tiposUsuario = {"Estudiante", "Profesor", "Administrador", "Creador"};
         JComboBox<String> comboTipoUsuario = new JComboBox<>(tiposUsuario);
         formPanel.add(comboTipoUsuario);
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        buttonPanel.setOpaque(false);
+
+        JButton botonGuardar = new JButton("Guardar");
+        botonGuardar.setBackground(new Color(0, 128, 0));
+        botonGuardar.setForeground(Color.WHITE);
+        botonGuardar.setFocusPainted(false);
+        botonGuardar.setBorder(new LineBorder(new Color(0, 100, 0), 1, true));
+        buttonPanel.add(botonGuardar);
+
+        JButton botonCancelar = new JButton("Cancelar");
+        botonCancelar.setBackground(new Color(200, 0, 0));
+        botonCancelar.setForeground(Color.WHITE);
+        botonCancelar.setFocusPainted(false);
+        botonCancelar.setBorder(new LineBorder(new Color(150, 0, 0), 1, true));
+        buttonPanel.add(botonCancelar);
+
+        botonGuardar.addActionListener(e -> JOptionPane.showMessageDialog(panel, "Datos guardados correctamente."));
+        botonCancelar.addActionListener(e -> JOptionPane.showMessageDialog(panel, "Cambios descartados."));
+
+        panel.add(formPanel, BorderLayout.CENTER);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
 }
