@@ -2,9 +2,9 @@ package src.gui.components.principal;
 
 import src.domain.Course;
 import src.gui.components.authentication.AuthView;
+import src.gui.components.authentication.PerfilUsuario;
 import src.gui.components.cart.Cart;
 import src.gui.components.editarCursos.CourseEditorPanel;
-import src.gui.components.editor.PerfilUsuario;
 import src.utils.Pallette;
 import javax.swing.*;
 import java.awt.*;

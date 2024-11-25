@@ -4,14 +4,12 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
-
-import src.gui.components.editor.CourseEditorPanel;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import src.gui.components.editarCursos.CourseEditorPanel;
 
 public class SellerDashboard {
 	public static void main(String[] args) {
