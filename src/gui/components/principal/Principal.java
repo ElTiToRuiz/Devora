@@ -1,5 +1,6 @@
 package src.gui.components.principal;
 
+import src.db.Database;
 import src.gui.components.course.CoursesGrid;
 import src.utils.Pallette;
 
@@ -12,6 +13,7 @@ public class Principal extends JFrame {
 
     public Principal() {
         super("Devora");
+        initializeDatabase();
         this.setUpPrincipal();
     }
 
@@ -41,6 +43,19 @@ public class Principal extends JFrame {
         }
         container.add(new CoursesGrid(), BorderLayout.CENTER);
         return container;
+    }
+    
+    private void initializeDatabase() {
+        try {
+            Database.getInstance();
+            System.out.println("Todo OK");// Establece la conexión
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al conectar con la base de datos: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            System.exit(1); // Salir si la conexión falla
+        }
     }
 }
 

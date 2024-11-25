@@ -1,5 +1,6 @@
 package src.gui.components.authentication;
 
+import src.db.Database;
 import src.utils.Pallette;
 
 import java.awt.BorderLayout;
@@ -15,6 +16,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.*;
 
 import javax.swing.*;
 
@@ -261,8 +263,24 @@ public class Login extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+				String usernameOrEmail = tfUsername.getText();
+		        String password = new String(tfPassword.getPassword());
+
+		        // Verificar que los campos no estén vacíos
+		        if (usernameOrEmail.isEmpty() || password.isEmpty()) {
+		            JOptionPane.showMessageDialog(null, "Por favor, completa todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+
+		        // Verificar credenciales
+		        Database db = Database.getInstance(); // Obtener instancia de la base de datos
+		        if (db.verifyCredentials(usernameOrEmail, password)) {
+		            JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+		            // Redirigir al usuario a la siguiente ventana
+		            auth.dispose();
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+		        }
 			}
 
 			@Override
@@ -369,5 +387,5 @@ public class Login extends JPanel{
         	
         });
     }
-
+    
 }
