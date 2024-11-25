@@ -9,7 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import src.gui.components.editarCursos.CourseEditorPanel;
+import src.gui.components.Course.CourseEditorPanel;
 
 public class SellerDashboard {
 	public static void main(String[] args) {
