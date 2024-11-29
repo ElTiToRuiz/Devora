@@ -1,20 +1,46 @@
 package src.gui.components.course;
 
 import src.utils.Pallette;
-
+import src.db.*;
 import javax.swing.*;
 import java.awt.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CoursesGrid extends JPanel {
     
+	JPanel panelCursos;
+	
     public CoursesGrid() {
         JPanel panelCursos = new JPanel();
         panelCursos.setLayout(new GridLayout(0, 3, 10, 10)); 
         panelCursos.setBackground(Color.white);
 
-        for (int i = 0; i < 20; i++) {
-            panelCursos.add(new CourseFront("Curso " + i, "src/media/react.png"));
-        }
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                Database db = Database.getInstance();
+                ArrayList<CourseFront> lista = Database.obtenerCursos();
+
+                // Usamos invokeLater para asegurar que las actualizaciones de la UI se hagan en el hilo principal
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        for(CourseFront curso : lista) {
+                            panelCursos.add(curso);
+                        }
+                        panelCursos.revalidate();  // Forzar la validación del layout
+                        panelCursos.repaint();     // Forzar el repaint para que se dibuje el panel correctamente
+                    }
+                });
+            }
+        });
+
+        t.start();
+
+        
+        /*for (int i = 0; i < 20; i++) {
+            panelCursos.add(new CourseFront(i, "Curso " + i, "src/media/react.png"));
+        }*/
 
         //Añadir scroll para los cursos
         JScrollPane scrollPane = new JScrollPane(panelCursos);

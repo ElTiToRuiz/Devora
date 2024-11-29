@@ -26,3 +26,4 @@ public class CourseDetail extends JFrame {
         this.setVisible(true);
     }
 }
+

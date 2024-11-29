@@ -21,6 +21,7 @@ import java.sql.*;
 import javax.swing.*;
 
 import src.utils.Pallette;
+import src.gui.components.principal.*;
 
 @SuppressWarnings("serial")
 public class Login extends JPanel{
@@ -92,7 +93,7 @@ public class Login extends JPanel{
         ImageIcon iconoLock = new ImageIcon("src/media/lock-icon.png");
         
         Image imgLock = iconoLock.getImage();
-        Image imagenEscalada = imgLock.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+        Image imagenEscalada = imgLock.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         JLabel labelLock = new JLabel(new ImageIcon(imagenEscalada));
         
         
@@ -263,23 +264,30 @@ public class Login extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String usernameOrEmail = tfUsername.getText();
+				String username = tfUsername.getText();
 		        String password = new String(tfPassword.getPassword());
 
 		        // Verificar que los campos no estén vacíos
-		        if (usernameOrEmail.isEmpty() || password.isEmpty()) {
+		        if (username.isEmpty() || password.isEmpty()) {
 		            JOptionPane.showMessageDialog(null, "Por favor, completa todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
 		            return;
 		        }
 
 		        // Verificar credenciales
 		        Database db = Database.getInstance(); // Obtener instancia de la base de datos
-		        if (db.verifyCredentials(usernameOrEmail, password)) {
+		        if (db.verificarCredenciales(username, password)) {
 		            JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 		            // Redirigir al usuario a la siguiente ventana
+		            Header.isLogged = true;
+		            Header.updateBtns();
+		            int id = Database.conseguirId(username);
+		            Header.id = id;
 		            auth.dispose();
+		            
 		        } else {
 		            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+		            Header.isLogged = false;
+		            Header.updateBtns();
 		        }
 			}
 

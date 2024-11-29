@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -22,7 +24,8 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.*;
-
+import src.db.*;
+import src.domain.Course;
 import src.utils.Pallette;
 
 public class Dashboard extends JFrame {
@@ -32,23 +35,25 @@ public class Dashboard extends JFrame {
     private JPanel panelHome,panelCrearCursos,panelVisualizarCursos,panelStatistics;
     private JTable tablaCursos;
     private DefaultTableModel tableModel;
+    private int id;
 
 
     public Dashboard(int id) {
         // Establecer el tamaño del JFrame para que ocupe toda la pantalla
         setSize(Toolkit.getDefaultToolkit().getScreenSize());
         setTitle("Dashboard");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
+        setExtendedState(MAXIMIZED_BOTH);
 
         // Panel principal con BorderLayout
         cardLayout = new CardLayout();
         panelMain = new JPanel(cardLayout);
-        
+        System.out.println(id);
         
         JPanel panelHome = crearPanelMain();
         JPanel panelCrearCursos = crearPanelCrearCursos();
-        JPanel panelVisualizarCursos = crearPanelVisualizarCursos();
+        JPanel panelVisualizarCursos = crearPanelVisualizarCursos(id);
         JPanel panelStatistics = crearPanelStats();
 
         panelMain.add(panelHome, "panelHome");
@@ -85,6 +90,15 @@ public class Dashboard extends JFrame {
         panelSidebar.add(btnConfiguracion);
         panelSidebar.add(Box.createRigidArea(new Dimension(0, 575)));
         panelSidebar.add(panelVolver);
+        
+        panelVolver.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+			}
+        	
+        });
 
         panelSidebar.setPreferredSize(new Dimension(350, getHeight())); // Fijar tamaño del sidebar
         add(panelSidebar, BorderLayout.WEST);
@@ -133,17 +147,138 @@ public class Dashboard extends JFrame {
     }
     
     private JPanel crearPanelCrearCursos() {
-    	JPanel panel = new JPanel();
-    	panel.setBackground(Color.cyan);
-    	return panel;
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.white);
+
+        // Título principal
+        JLabel lblMain = new JLabel("Crear Cursos");
+        lblMain.setFont(new Font("Arial", Font.BOLD, 36));
+        lblMain.setBorder(BorderFactory.createEmptyBorder(40, 40, 0, 0));
+        panel.add(lblMain, BorderLayout.NORTH);  // Añadimos el título en la parte superior
+
+        // Panel de entrada
+        JPanel panelInputs = new JPanel();
+        panelInputs.setLayout(new BoxLayout(panelInputs, BoxLayout.Y_AXIS)); // BoxLayout en el eje Y
+
+        // Panel Título
+        JPanel panelTitulo = new JPanel();
+        JLabel lblTitulo = crearLabel("Título");
+        JTextField tfTitulo = new JTextField(20);
+        panelTitulo.add(lblTitulo);
+        panelTitulo.add(tfTitulo);
+        panelInputs.add(panelTitulo);
+
+        // Panel Descripción
+        JPanel panelDesc = new JPanel();
+        JLabel lblDesc = crearLabel("Descripción");
+        JTextArea taDesc = new JTextArea(5, 20);
+        taDesc.setLineWrap(true);
+        taDesc.setWrapStyleWord(true);
+        JScrollPane scrollDescripcion = new JScrollPane(taDesc);
+        panelDesc.add(lblDesc);
+        panelDesc.add(scrollDescripcion); // Aseguramos que se añada el JScrollPane
+        panelInputs.add(panelDesc);
+
+        // Panel Duración
+        JPanel panelDuracion = new JPanel();
+        JLabel lblDuracion = crearLabel("Duración");
+        JTextField tfDuracion = new JTextField(20);
+        panelDuracion.add(lblDuracion);
+        panelDuracion.add(tfDuracion);
+        panelInputs.add(panelDuracion);
+
+        // Panel Precio
+        JPanel panelPrecio = new JPanel();
+        JLabel lblPrecio = crearLabel("Precio");
+        JTextField tfPrecio = new JTextField(20);
+        panelPrecio.add(lblPrecio);
+        panelPrecio.add(tfPrecio);
+        panelInputs.add(panelPrecio);
+
+        // Panel Idioma
+        JPanel panelIdioma = new JPanel();
+        JLabel lblIdioma = crearLabel("Idioma");
+        String[] idiomas = {"Español", "Inglés", "Francés", "Alemán"};
+        JComboBox<String> cbIdioma = new JComboBox<>(idiomas);
+        panelIdioma.add(lblIdioma);
+        panelIdioma.add(cbIdioma);
+        panelInputs.add(panelIdioma);
+
+        // Panel Imagen
+        JPanel panelImgPath = new JPanel();
+        JTextField txtImgPath = new JTextField(20);
+        JButton btnImgPath = new JButton("Seleccionar Imagen");
+        panelImgPath.add(txtImgPath);
+        panelImgPath.add(btnImgPath);
+
+        // Acción para el botón de selección de imagen
+        btnImgPath.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Crear un JFileChooser
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Seleccionar imagen");
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+                // Mostrar el diálogo de archivo y obtener el resultado
+                int result = fileChooser.showOpenDialog(panel);  // Usamos el panel principal aquí
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    // Actualizamos el texto del JTextField con la ruta seleccionada
+                    txtImgPath.setText(fileChooser.getSelectedFile().getAbsolutePath());
+                }
+            }
+        });
+
+        panelInputs.add(panelImgPath);
+        
+        JButton btnCrearCurso = new JButton("Crear Curso");
+
+        // Acción para el botón Crear Curso
+        btnCrearCurso.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Obtener los datos de los campos
+                String titulo = tfTitulo.getText();
+                String descripcion = taDesc.getText();
+                int duracion = Integer.parseInt(tfDuracion.getText());
+                Double precio = Double.parseDouble(tfPrecio.getText());
+                String idioma = (String) cbIdioma.getSelectedItem();
+                String imgPath = txtImgPath.getText();
+                
+                try {
+					Database.crearCurso(titulo,descripcion,duracion,precio,15,id,idioma,imgPath);
+				} catch (SQLException e1) {
+					System.out.println("Error");
+					e1.printStackTrace();
+				}
+                
+
+                // Aquí puedes almacenar los datos en variables o procesarlos como desees
+                System.out.println("Título: " + titulo);
+                System.out.println("Descripción: " + descripcion);
+                System.out.println("Duración: " + duracion);
+                System.out.println("Precio: " + precio);
+                System.out.println("Idioma: " + idioma);
+                System.out.println("Imagen: " + imgPath);
+
+                // Aquí puedes agregar la lógica para almacenar los datos en una base de datos o en otro lugar
+            }
+        });
+
+        // Añadir el panel de entradas al panel principal (panel con BorderLayout)
+        panel.add(panelInputs, BorderLayout.CENTER);
+        panel.add(btnCrearCurso,BorderLayout.SOUTH);
+
+        return panel;
     }
+
     
-    public JPanel crearPanelVisualizarCursos() {
+    public JPanel crearPanelVisualizarCursos(int id) {
         // Panel principal con BorderLayout
         JPanel panel = new JPanel(new BorderLayout());
         
         // Tabla de cursos
-        tablaCursos = crearTabla();
+        tablaCursos = crearTabla(id);
         JScrollPane scrollPane = new JScrollPane(tablaCursos);
         panel.add(scrollPane, BorderLayout.CENTER);
         
@@ -262,7 +397,6 @@ public class Dashboard extends JFrame {
     }
 
     private JFreeChart crearGrafico(DefaultCategoryDataset dataset) {
-        // Crear el gráfico de barras
         JFreeChart grafico = ChartFactory.createBarChart(
                 "Ventas Últimos 7 Días", // Título del gráfico
                 "Días",                  // Etiqueta del eje X
@@ -270,33 +404,24 @@ public class Dashboard extends JFrame {
                 dataset
         );
 
-        // Obtener el objeto CategoryPlot para personalizar el gráfico
         CategoryPlot plot = grafico.getCategoryPlot();
 
-        // Configurar el renderizador del gráfico
         if (plot.getRenderer() instanceof BarRenderer) {
             BarRenderer renderer = (BarRenderer) plot.getRenderer();
 
-            // Reducir el espacio entre barras
-            renderer.setItemMargin(0.1); // Margen entre barras, entre 0.0 y 1.0
+            renderer.setItemMargin(0.1);
         }
 
-        // Ajustar los márgenes internos del gráfico
-        plot.setInsets(new RectangleInsets(20, 20, 20, 20)); // Márgenes internos del gráfico
+        plot.setInsets(new RectangleInsets(20, 20, 20, 20));
 
-        // Configurar márgenes entre categorías en el eje X
         CategoryAxis domainAxis = plot.getDomainAxis();
-        domainAxis.setCategoryMargin(0.3); // Controlar el espacio entre categorías
+        domainAxis.setCategoryMargin(0.3); // 
 
-        // Ajustar márgenes externos del gráfico
-        grafico.setPadding(new RectangleInsets(50, 50, 50, 50)); // Márgenes externos del gráfico
+        grafico.setPadding(new RectangleInsets(50, 50, 50, 50)); 
 
         return grafico;
     }
 
-
-
-    // Método protegido para crear un JPanel con texto y un ícono
     protected JPanel crearBtn(String texto, String iconoPath, int id) {
         JPanel btn = new JPanel(new BorderLayout());
         btn.setSize(new Dimension(400, 50));
@@ -361,7 +486,7 @@ public class Dashboard extends JFrame {
     }
 
         // Método para crear un gráfico de líneas
-    		private JPanel createLineChart() {
+    private JPanel createLineChart() {
             DefaultCategoryDataset dataset = new DefaultCategoryDataset();
             dataset.addValue(2500, "2016", "2016");
             dataset.addValue(3000, "2017", "2017");
@@ -370,9 +495,9 @@ public class Dashboard extends JFrame {
             dataset.addValue(4500, "2020", "2020");
 
             JFreeChart lineChart = ChartFactory.createLineChart(
-                    "Tendencia Anual",
+                    "Ventas anuales",
                     "Año",
-                    "Valor",
+                    "Ventas",
                     dataset,
                     PlotOrientation.VERTICAL,
                     false, true, false);
@@ -380,8 +505,7 @@ public class Dashboard extends JFrame {
             return new ChartPanel(lineChart);
         }
 
-	        // Método para crear un gráfico de barras
-	        private JPanel createBarChart() {
+    private JPanel createBarChart() {
 	            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 	            dataset.addValue(4000, "High", "Enero");
 	            dataset.addValue(2500, "Low", "Enero");
@@ -389,9 +513,9 @@ public class Dashboard extends JFrame {
 	            dataset.addValue(2000, "Low", "Febrero");
 	
 	            JFreeChart barChart = ChartFactory.createBarChart(
-	                    "Altos y Bajos Mensuales",
+	                    "Ventas mensuales (Comparación 2023vs2024)",
 	                    "Mes",
-	                    "Valor",
+	                    "Ventas",
 	                    dataset,
 	                    PlotOrientation.VERTICAL,
 	                    true, true, false);
@@ -399,8 +523,7 @@ public class Dashboard extends JFrame {
 	            return new ChartPanel(barChart);
 	        }
 	
-	        // Método para crear un gráfico circular (pie chart)
-	        private JPanel createPieChart() {
+    private JPanel createPieChart() {
 	            DefaultPieDataset dataset = new DefaultPieDataset();
 	            dataset.setValue("Categoria 1", 20);
 	            dataset.setValue("Categoria 2", 30);
@@ -414,20 +537,19 @@ public class Dashboard extends JFrame {
 	            return new ChartPanel(pieChart);
 	        }
 	
-	        // Método para un gráfico de líneas comparativo
-	        private JPanel createLineChartComparative() {
+    private JPanel createLineChartComparative() {
 	            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-	            dataset.addValue(5000, "Paid", "Enero");
-	            dataset.addValue(8000, "Organic", "Enero");
-	            dataset.addValue(7000, "Paid", "Febrero");
-	            dataset.addValue(3000, "Organic", "Febrero");
-	            dataset.addValue(5000, "Paid", "Marzo");
-	            dataset.addValue(6000, "Organic", "Marzo");
+	            dataset.addValue(5000, "Directas", "Enero");
+	            dataset.addValue(8000, "Indirectas", "Enero");
+	            dataset.addValue(7000, "Directas", "Febrero");
+	            dataset.addValue(3000, "Indirectas", "Febrero");
+	            dataset.addValue(5000, "Directas", "Marzo");
+	            dataset.addValue(6000, "Indirectas", "Marzo");
 	
 	            JFreeChart lineChart = ChartFactory.createLineChart(
-	                    "Comparativa Paid vs Organic",
+	                    "Comparativa Ventas Directas Vs Indirectas",
 	                    "Mes",
-	                    "Visitas",
+	                    "Ventas",
 	                    dataset,
 	                    PlotOrientation.VERTICAL,
 	                    true, true, false);
@@ -436,7 +558,7 @@ public class Dashboard extends JFrame {
 	        }
 	
 	        // Método para crear un gráfico tipo radar/spider
-	        private JPanel createSpiderChart() {
+    private JPanel createSpiderChart() {
 	            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 	            dataset.addValue(5, "Orders", "Lunes");
 	            dataset.addValue(3, "Orders", "Martes");
@@ -445,32 +567,34 @@ public class Dashboard extends JFrame {
 	            dataset.addValue(6, "Orders", "Viernes");
 	
 	            SpiderWebPlot spiderPlot = new SpiderWebPlot(dataset);
-	            JFreeChart spiderChart = new JFreeChart("Actividad Semanal", JFreeChart.DEFAULT_TITLE_FONT, spiderPlot, false);
+	            JFreeChart spiderChart = new JFreeChart("Ventas Semanales", JFreeChart.DEFAULT_TITLE_FONT, spiderPlot, false);
 	
 	            return new ChartPanel(spiderChart);
 	        }
 	        
-	        private JTable crearTabla() {
-	            // Crear datos de muestra para la tabla
+    private JTable crearTabla(int id) {
 	            String[] columnNames = {"Nombre", "Descripción", "Precio ($)", "Idioma", "Clases"};
-	            Object[][] data = {
-	                    {"Curso Java Básico", "Aprende los fundamentos de Java", 49.99, "Español", 10},
-	                    {"Python para Data Science", "Introducción a herramientas de análisis", 59.99, "Inglés", 12},
-	                    {"Diseño Web Avanzado", "Crea sitios web modernos", 79.99, "Español", 15},
-	                    {"React.js Essentials", "Domina los fundamentos de React.js", 99.99, "Inglés", 20},
-	                    {"SQL para Principiantes", "Gestiona bases de datos relacionales", 29.99, "Español", 8}
-	            };
+	            ArrayList<Course> cursos = Database.obtenerCursosPorInstructor(id);
 
-	            // Crear modelo de tabla
+	            Object[][] data = new Object[cursos.size()][5]; 
+
+	            for (int i = 0; i < cursos.size(); i++) {
+	                Course curso = cursos.get(i);
+	                data[i][0] = curso.getName();            
+	                data[i][1] = curso.getDescription();       
+	                data[i][2] = curso.getPrice();            
+	                data[i][3] = curso.getLanguage();            
+	                data[i][4] = curso.getClases();            
+	            }
+
+	            
 	            tableModel = new DefaultTableModel(data, columnNames) {
-	                // Permitir la edición solo en la columna de "Idioma"
 	                @Override
 	                public boolean isCellEditable(int row, int column) {
-	                    return column == 3; // La columna de índice 3 (Idioma) es editable
+	                    return column == 3; 
 	                }
 	            };
 
-	            // Crear la tabla
 	            JTable table = new JTable(tableModel);
 	            table.setRowHeight(30); 
 	            table.setFont(new Font("Arial", Font.PLAIN, 14)); 
@@ -491,8 +615,28 @@ public class Dashboard extends JFrame {
 				return table;
 	        }
 
-
+	        
+    private JLabel crearLabel(String name) {
+	        	JLabel lbl = new JLabel(name);
+	        	lbl.setFont(new Font("Arial", Font.BOLD,22));
+	        	
+	        	
+	        	return lbl;
+	        }
+    
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Dashboard(53));
-    }
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				new Dashboard(1);
+				
+			}
+		});
+	}
+    
+    //TODO metodo para conseguir todos los cursos de un usuario.
+    
+    //TODO metodo crear curso.
+    
 }

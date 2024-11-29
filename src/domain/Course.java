@@ -3,6 +3,7 @@ package src.domain;
 import java.util.List;
 
 public class Course {
+	private int id;
     public String nombre;
     private String desc;
     private int duracion;
@@ -16,7 +17,7 @@ public class Course {
     private int numReseñas;
     private String imgPath;
     
-    public Course(String nombre, String desc, int duracion, List<String> categories, double price,
+    public Course(int id,String nombre, String desc, int duracion, List<String> categories, double price,
             int clases, String instructor, String language, double rating, int students, int numReseñas, String imgPath) {
   this.nombre = nombre;
   this.desc = desc;

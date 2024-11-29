@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import src.db.Database;
+
 public class Register extends JPanel {
 
     private AuthView auth;
@@ -138,7 +140,15 @@ public class Register extends JPanel {
                 }
 
                 //Guardar los datos en la db
-                
+		        Database db = Database.getInstance(); // Obtener instancia de la base de datos
+		        if (db.registrarDatos(usuario, email, password)) {
+		            JOptionPane.showMessageDialog(null, "Registro compleatado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+		            // Redirigir al usuario a la siguiente ventana
+					auth.dispose();
+					new AuthView(true);
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Ha ocurrido un error, revisar consola", "Error", JOptionPane.ERROR_MESSAGE);
+		        }
                 
                 JOptionPane.showMessageDialog(null, "¡Registro exitoso!");
 

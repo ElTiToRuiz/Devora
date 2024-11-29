@@ -13,7 +13,8 @@ public class Principal extends JFrame {
 
     public Principal() {
         super("Devora");
-        initializeDatabase();
+        Database.crearTablas();
+        InicializarDB();
         this.setUpPrincipal();
     }
 
@@ -45,7 +46,7 @@ public class Principal extends JFrame {
         return container;
     }
     
-    private void initializeDatabase() {
+    private void InicializarDB() {
         try {
             Database.getInstance();
             System.out.println("Todo OK");// Establece la conexión

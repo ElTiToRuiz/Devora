@@ -3,8 +3,9 @@ package src.gui.components.principal;
 import src.domain.Course;
 import src.gui.components.authentication.AuthView;
 import src.gui.components.authentication.PerfilUsuario;
+import src.gui.components.authentication.ProfileSettings;
 import src.gui.components.cart.Cart;
-import src.gui.components.editarCursos.CourseEditorPanel;
+import src.gui.components.course.CourseEditorPanel;
 import src.utils.Pallette;
 import javax.swing.*;
 import java.awt.*;
@@ -15,11 +16,14 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Header extends JPanel {
-    private boolean isLogged;
-
+    public static boolean isLogged = false;
+    private static JPanel panelBotones;
+    public static int id = -1;
+    
     public Header() {
-        this.isLogged = false;
+        Header.isLogged = false;
         setupHeader();
+
     }
 
     // Configuración inicial del header
@@ -30,7 +34,7 @@ public class Header extends JPanel {
 
         JPanel panelLogo = new JPanel();
         JPanel panelBusqueda = new JPanel();
-        JPanel panelBotones = new JPanel();
+        panelBotones = new JPanel();
 
         panelLogo.setLayout(new FlowLayout(FlowLayout.LEFT));
         panelBusqueda.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -43,24 +47,26 @@ public class Header extends JPanel {
         leftSideHeader(panelLogo);
         barraBusqueda(panelBusqueda);
         //TODO redondear las esquinas de los botones con la clase graphics
-        updateBtns(panelBotones);
+        /*updateBtns(panelBotones);*/
+        updateBtns();
 
         this.add(panelLogo, BorderLayout.WEST);
         this.add(panelBusqueda, BorderLayout.CENTER);
         this.add(panelBotones, BorderLayout.EAST);
     }
 
-    private void updateBtns(JPanel panel) {
-        panel.removeAll();
+    public static void updateBtns() {
+    	
+        panelBotones.removeAll();
         if (isLogged) {
             System.out.println("Logged");
-            userLoged(panel);
+            userLoged(panelBotones);
         } else {
             System.out.println("Not logged");
-            notUserLoged(panel);
+            notUserLoged(panelBotones);
         }
-        panel.revalidate();
-        panel.repaint();
+        panelBotones.revalidate();
+        panelBotones.repaint();
     }
     
     //Generación de la parte donde va la "Marca" de la App
@@ -123,7 +129,7 @@ public class Header extends JPanel {
     }
 
     //Vista de un usuario que está registrado
-    private void userLoged(JPanel panel) {
+    private static void userLoged(JPanel panel) {
 
         ImageIcon iconoPerfil = new ImageIcon("src/media/user-icon.png");
         ImageIcon iconoCarrito = new ImageIcon("src/media/cart-icon.png");
@@ -152,8 +158,8 @@ public class Header extends JPanel {
         //Crear hovers para los labels
         labelPerfil.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
-                PerfilUsuario perfil = new PerfilUsuario();
-                perfil.setVisible(true);
+            	System.out.println(id);
+                new ProfileSettings(id);
             }
             public void mousePressed(MouseEvent e) {}
             public void mouseReleased(MouseEvent e) {}
@@ -169,8 +175,8 @@ public class Header extends JPanel {
             	ArrayList<String> lista = new ArrayList<>();
             	lista.add("Hola");
             	lista.add("fdaf");
-            	listaCursos.add(new Course("Prubea","Prubea",22,lista,22.53,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
-            	listaCursos.add(new Course("424hdjahfs","Prubea",22,lista,22.79,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
+            	listaCursos.add(new Course(1,"Prubea","Prubea",22,lista,22.53,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
+            	listaCursos.add(new Course(2,"424hdjahfs","Prubea",22,lista,22.79,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
             	new Cart(listaCursos);
 			}
 			public void mouseEntered(MouseEvent e) {
@@ -212,7 +218,7 @@ public class Header extends JPanel {
 
     
     //Vista de un usuario que no está registrado
-    private void notUserLoged(JPanel panel) {
+    private static void notUserLoged(JPanel panel) {
         JButton loginButton = createHeaderButton("Iniciar sesión");
         JButton registerButton = createHeaderButton("Regístrate");
         
@@ -229,15 +235,11 @@ public class Header extends JPanel {
         
         //Lógica botones
         loginButton.addActionListener(e -> {
-            this.isLogged = true;
             new AuthView(true);
-            updateBtns(panel);
         });
 
         registerButton.addActionListener(e -> {
-            this.isLogged = true;
             new AuthView(false);
-            updateBtns(panel);
         });
         
         //Lógica botones hover
@@ -290,7 +292,7 @@ public class Header extends JPanel {
         panel.add(registerButton);
     }
 
-    private JButton createHeaderButton(String text) {
+    private static JButton createHeaderButton(String text) {
         JButton button = new JButton(text);
         button.setPreferredSize(new Dimension(120, 50));
         button.setBackground(Pallette.BOTONES.getColor());

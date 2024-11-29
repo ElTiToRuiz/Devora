@@ -8,12 +8,15 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 
 public class CourseFront extends JPanel {
+    private int id;
     private String courseName;
     private String imgPath;
 
-    public CourseFront(String name, String imgPath) {
+    public CourseFront(int id, String name, String imgPath) {
+    	this.id = id;
         this.courseName = name;
         this.imgPath = imgPath;
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         setupCourse();
         addCourseName();
         addCourse();
