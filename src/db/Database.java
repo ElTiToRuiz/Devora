@@ -14,18 +14,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Database {
     private static Database instance; 
-    private static String path = "jdbc:sqlite:src/db/devora.db";
+    private static final String path = "jdbc:sqlite:src/db/devora.db";
     private static Connection connection = null;
 
     private Database() { 
     }
 
     public static Database getInstance() {
-        if (instance == null) { 
+        if (instance == null) {
             instance = new Database();
             instance.connect(); 
         }
@@ -56,6 +57,19 @@ public class Database {
             }
         } catch (SQLException e) {
             System.out.println("Error closing connection: " + e.getMessage());
+        }
+    }
+
+    public void test(){
+        try {
+            String query = "SELECT * FROM USUARIO";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                System.out.println("ID: " + rs.getInt("id") + " Username: " + rs.getString("username"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al hacer la consulta: " + e.getMessage());
         }
     }
     
@@ -191,22 +205,22 @@ public class Database {
         try (Connection conn = connect();  
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
 		
-		pstmt.setString(1, titulo); 
-		pstmt.setString(2, descripcion); 
-		pstmt.setInt(3, duracion); 
-		pstmt.setDouble(4, precio); 
-		pstmt.setInt(5, clases); 
-		pstmt.setInt(6, instructorId); 
-		pstmt.setString(7, idioma); 
-		pstmt.setString(8, imgPath); 
-		
-		int filasAfectadas = pstmt.executeUpdate();
-		
-		if (filasAfectadas > 0) {
-			System.out.println("Curso creado con éxito.");
-		} else {
-			System.out.println("No se pudo crear el curso.");
-		}
+            pstmt.setString(1, titulo);
+            pstmt.setString(2, descripcion);
+            pstmt.setInt(3, duracion);
+            pstmt.setDouble(4, precio);
+            pstmt.setInt(5, clases);
+            pstmt.setInt(6, instructorId);
+            pstmt.setString(7, idioma);
+            pstmt.setString(8, imgPath);
+
+            int filasAfectadas = pstmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                System.out.println("Curso creado con éxito.");
+            } else {
+                System.out.println("No se pudo crear el curso.");
+            }
 		} catch (SQLException e) {
 			System.err.println("Error al insertar el curso: " + e.getMessage());
 			throw e; 
@@ -227,10 +241,10 @@ public class Database {
     	        } else {
     	            System.out.println("No se pudo actualizar el usuario con ID " + id + ".");
     	        }
-    	    } catch (SQLException e) {
-    	        System.err.println("Error al actualizar el usuario: " + e.getMessage());
-    	        throw e; 
-    	    }
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar el usuario: " + e.getMessage());
+            throw e;
+        }
     }
     
     public static boolean esVendedor(int id) throws SQLException {
@@ -268,16 +282,20 @@ public class Database {
             return -1; 
         }
     }
-    
-    public static ArrayList<Course> obtenerCursosPorInstructor(int instructorId) {
-        ArrayList<Course> cursos = new ArrayList<>();
-        String query = "SELECT * FROM Curso WHERE instructor = ?";
 
-        try (Connection conn = connect();  
-                PreparedStatement pstmt = conn.prepareStatement(query)) {
-               pstmt.setInt(1, instructorId); 
-               ResultSet rs = pstmt.executeQuery();
-            // Iteramos a través de los resultados y creamos objetos Curso
+    public static ArrayList<Course> obtenerCursosPorInstructor(int instructorId) {
+        String url = "jdbc:sqlite:src/db/Devora.db";
+        String query = "select  * from Curso where instructor = 1";
+
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Course> cursos = new ArrayList<>();
+
+        try{
+            conn = DriverManager.getConnection(url);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String titulo = rs.getString("titulo");
@@ -288,32 +306,18 @@ public class Database {
                 String idioma = rs.getString("idioma");
                 String imgPath = rs.getString("imgPath");
 
-                // Asegúrate de que los valores no sean null antes de pasarlos al constructor
-                ArrayList<String> lista = new ArrayList<>();
-                lista.add("Hola");
-                lista.add("fdaf");
 
-                // Depuración para verificar valores
-                System.out.println("ID: " + id);
-                System.out.println("Título: " + titulo);
-
-                // Llamada a conseguir el instructor
-                String instructor = conseguirUser(instructorId);
-
-                // Creación del objeto Course
+                String instructor = conseguirUser(1);
+                List<String> lista = new ArrayList<>();
                 Course curso = new Course(id, titulo, descripcion, duracion, lista, precio, clases, instructor, idioma, 2.5, 52, 52, imgPath);
-                cursos.add(curso);  // Agregamos el curso a la lista
+                cursos.add(curso);
             }
         } catch (SQLException e) {
-            e.printStackTrace();  // Imprime el error en caso de que ocurra alguna excepción
+            throw new RuntimeException(e);
         }
 
-        return cursos;  // Devuelve la lista de cursos
+        return cursos;
     }
-
-
-
-
 
     public static String conseguirUser(int id) {
         String query = "SELECT username FROM USUARIO WHERE id = ?";
@@ -333,5 +337,4 @@ public class Database {
             return null;  
         }
     }
-    
 }

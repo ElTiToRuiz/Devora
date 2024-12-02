@@ -154,4 +154,21 @@ public class Course {
 		this.numReseñas = numReseñas;
 	}
 
+	@Override
+	public String toString() {
+		return "Course{" +
+				"nombre='" + nombre + '\'' +
+				", desc='" + desc + '\'' +
+				", duracion=" + duracion +
+				", categories=" + categories +
+				", price=" + price +
+				", clases=" + clases +
+				", instructor='" + instructor + '\'' +
+				", language='" + language + '\'' +
+				", students=" + students +
+				", rating=" + rating +
+				", numReseñas=" + numReseñas +
+				", imgPath='" + imgPath + '\'' +
+				'}';
+	}
 }
