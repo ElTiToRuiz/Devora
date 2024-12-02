@@ -203,11 +203,11 @@ public class ProfileSettings extends JFrame {
     private JLabel crearLabel(String name) {
     	JLabel lbl = new JLabel(name);
     	lbl.setFont(new Font("Arial",Font.BOLD,24));
-    	lbl.setForeground(Color.black);
+    	lbl.setForeground(Color.gray);
     	lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     	lbl.setBorder(BorderFactory.createEmptyBorder(0,70,0,0));
     	lbl.addMouseMotionListener(new MouseAdapter() {
-
+    		
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				lbl.setForeground(Color.white);
