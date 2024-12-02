@@ -34,6 +34,6 @@ public class ClientModel {
 //    }
 
     public static void main(String[] args) {
-        Database.setUp();
+//        Database.setUp();
     }
 }

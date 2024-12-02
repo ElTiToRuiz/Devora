@@ -19,11 +19,11 @@ import java.awt.event.MouseListener;
 import java.sql.*;
 
 import javax.swing.*;
+//@SuppressWarnings("serial")
 
 import src.utils.Pallette;
 import src.gui.components.principal.*;
 
-@SuppressWarnings("serial")
 public class Login extends JPanel{
 	
 	private AuthView auth;

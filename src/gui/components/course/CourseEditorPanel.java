@@ -1,4 +1,4 @@
-package src.gui.components.editarCursos;
+package src.gui.components.course;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
