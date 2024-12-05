@@ -285,7 +285,7 @@ public class Database {
 
     public static ArrayList<Course> obtenerCursosPorInstructor(int instructorId) {
         String url = "jdbc:sqlite:src/db/Devora.db";
-        String query = "select  * from Curso where instructor = 1";
+        String query = "select  * from Curso where instructor = " + instructorId;
 
         Connection conn = null;
         Statement stmt = null;
@@ -336,5 +336,43 @@ public class Database {
             e.printStackTrace();
             return null;  
         }
+    }
+    
+    public static String conseguirMail(int id) {
+        String query = "SELECT email FROM USUARIO WHERE id = ?";
+        try (Connection conn = connect();  
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, id); 
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("email");
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;  
+        }
+    }
+    
+    public static String conseguirPassword(int id) {
+        String query = "SELECT password FROM USUARIO WHERE id = ?";
+        try (Connection conn = connect();  
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, id); 
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("password");
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;  
+        }    	
     }
 }

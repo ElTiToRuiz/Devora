@@ -573,8 +573,9 @@ public class Dashboard extends JFrame {
 	        }
 	        
     private JTable crearTabla(int id) {
+    			Database db = Database.getInstance();
 	            String[] columnNames = {"Nombre", "Descripción", "Precio ($)", "Idioma", "Clases"};
-	            ArrayList<Course> cursos = Database.obtenerCursosPorInstructor(id);
+	            ArrayList<Course> cursos = db.obtenerCursosPorInstructor(id);
 
 	            Object[][] data = new Object[cursos.size()][5]; 
 
