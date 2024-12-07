@@ -49,7 +49,7 @@ public class CourseFront extends JPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                new CourseDetail(courseName);
+                new CourseDetail(id);
             }
         });
     }
