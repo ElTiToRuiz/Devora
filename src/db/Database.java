@@ -181,11 +181,23 @@ public class Database {
              rs = stmt.executeQuery(query);
              
              while(rs.next()) {
-            	 
+
 		            int id = rs.getInt("id");
-		            String titulo = rs.getString("titulo");
+                    String titulo = rs.getString("titulo");
+                    float price = rs.getInt("precio");
+
+                    //   todo get categoria
+                    List<String> categorias = null;
+
+                    // NOT IN DB TODO
+                    float rating = rs.getFloat("rating");
+
+                    int duracion = rs.getInt("duracion");
 		            String imgPath = rs.getString("imgPath");
-		            list.add(new CourseFront(id,titulo,imgPath));
+
+
+
+		            list.add(new CourseFront(id, price, titulo, categorias, rating, duracion, imgPath));
 			}
              
         } catch (SQLException e) {
@@ -198,13 +210,17 @@ public class Database {
     public static void crearCurso(String titulo, String descripcion, int duracion, 
             double precio, int clases, int instructorId, String idioma, String imgPath) throws SQLException {
 		// Sentencia SQL para insertar un curso en la tabla 'Curso'
+        String url = "jdbc:sqlite:src/db/Devora.db";
 		String query = "INSERT INTO Curso (titulo, descripcion, duracion, precio, clases, instructor, idioma, imgPath) "
 		+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-		
+
+        Connection conn = null;
+
 		// Crear un PreparedStatement para ejecutar la consulta con los valores proporcionados
-        try (Connection conn = connect();  
-                PreparedStatement pstmt = conn.prepareStatement(query)) {
-		
+        try {
+            conn = DriverManager.getConnection(url);
+            PreparedStatement pstmt = conn.prepareStatement(query);
+
             pstmt.setString(1, titulo);
             pstmt.setString(2, descripcion);
             pstmt.setInt(3, duracion);
@@ -217,7 +233,7 @@ public class Database {
             int filasAfectadas = pstmt.executeUpdate();
 
             if (filasAfectadas > 0) {
-                System.out.println("Curso creado con éxito.");
+                System.out.println(titulo + " creado con éxito.");
             } else {
                 System.out.println("No se pudo crear el curso.");
             }
@@ -287,9 +303,9 @@ public class Database {
         String url = "jdbc:sqlite:src/db/Devora.db";
         String query = "select  * from Curso where instructor = " + instructorId;
 
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
+        Connection conn;
+        Statement stmt;
+        ResultSet rs;
         ArrayList<Course> cursos = new ArrayList<>();
 
         try{

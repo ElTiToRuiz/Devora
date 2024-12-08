@@ -1,9 +1,11 @@
 package src;
+import src.gui.components.principal.Principal;
 
-import src.gui.App;
+import javax.swing.*;
 
 public class Devora {
     public static void main(String[] args) {
-        new App().createRoot();
+        JFrame main = new Principal();
+        main.revalidate();
     }
 }

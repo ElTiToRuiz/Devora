@@ -6,14 +6,25 @@ import src.utils.Pallette;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CourseFront extends JPanel {
     private int id;
+    private float price;
+    private float rating;
+    private int duracion;
+    private List<String> categorias;
     private String courseName;
     private String imgPath;
 
-    public CourseFront(int id, String name, String imgPath) {
+    public CourseFront(int id, float price, String name,  List<String> categorias, float rating,
+                       int duracion, String imgPath) {
     	this.id = id;
+        this.price = price;
+        this.categorias = categorias;
+        this.rating = rating;
+        this.duracion = duracion;
         this.courseName = name;
         this.imgPath = imgPath;
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -22,6 +33,11 @@ public class CourseFront extends JPanel {
         addCourse();
         addClickListener();
     }
+
+    public float getPrice() {return price;}
+    public float getRating() {return rating;}
+    public float getDuracion() {return duracion;}
+    public List<String> getCategorias() {return categorias;}
 
     private void setupCourse() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -53,6 +69,4 @@ public class CourseFront extends JPanel {
             }
         });
     }
-
-
 }

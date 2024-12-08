@@ -1,5 +1,7 @@
 package src.gui.components.course;
 
+import src.domain.Course;
+import src.gui.components.principal.Filter;
 import src.utils.Pallette;
 import src.db.*;
 import javax.swing.*;
@@ -19,13 +21,11 @@ public class CoursesGrid extends JPanel {
 
         Thread t = new Thread(new Runnable() {
             public void run() {
-                Database db = Database.getInstance();
-                ArrayList<CourseFront> lista = Database.obtenerCursos();
-
                 // Usamos invokeLater para asegurar que las actualizaciones de la UI se hagan en el hilo principal
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        for(CourseFront curso : lista) {
+                        ArrayList<CourseFront> cursosFiltrados = Filter.filterCourses();
+                        for(CourseFront curso : cursosFiltrados) {
                             panelCursos.add(curso);
                         }
                         panelCursos.revalidate();  // Forzar la validación del layout
@@ -37,11 +37,6 @@ public class CoursesGrid extends JPanel {
 
         t.start();
 
-        
-        /*for (int i = 0; i < 20; i++) {
-            panelCursos.add(new CourseFront(i, "Curso " + i, "src/media/react.png"));
-        }*/
-
         //Añadir scroll para los cursos
         JScrollPane scrollPane = new JScrollPane(panelCursos);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
@@ -49,10 +44,6 @@ public class CoursesGrid extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(scrollPane, BorderLayout.CENTER);
         this.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
-//        for (Course course : getAllCourses()){
-//            this.add(new CourseFront(course));
-//        }
     }
 
     // TEMPORAL

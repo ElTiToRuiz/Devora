@@ -2,6 +2,7 @@ package src.gui.components.principal;
 
 import src.db.Database;
 import src.gui.components.course.CoursesGrid;
+import src.utils.InitData;
 import src.utils.Pallette;
 
 import javax.swing.*;
@@ -13,9 +14,29 @@ public class Principal extends JFrame {
 
     public Principal() {
         super("Devora");
-        Database.crearTablas();
-        InicializarDB();
+        try {
+            Thread connect = new Thread(()-> InicializarDB());
+            Thread setupTable = new Thread(() -> Database.crearTablas());
+            Thread initData = new Thread(() -> InitData.setup());
+            connect.start();
+            setupTable.start();
+            initData.start();
+            connect.join();
+            setupTable.join();
+            initData.join();
+        } catch (InterruptedException e) {
+            System.out.println("El hilo principal fue interrumpido: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Algo no ha salido como esperado: " + e.getMessage());
+        }
+        this.createRoot();
+    }
+
+    public JFrame createRoot() {
         this.setUpPrincipal();
+        this.add(new Header(), BorderLayout.NORTH);
+        this.add(createContainer(), BorderLayout.CENTER);
+        return this;
     }
 
     private void setUpPrincipal() {
@@ -27,11 +48,6 @@ public class Principal extends JFrame {
         showFilter = false;
     }
 
-    public JFrame createRoot() {
-        this.add(new Header(), BorderLayout.NORTH);
-        this.add(createContainer(), BorderLayout.CENTER);
-        return this;
-    }
 
     JPanel createContainer(){
         JPanel container = new JPanel();
