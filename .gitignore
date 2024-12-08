@@ -246,7 +246,7 @@ fabric.properties
 # that are supposed to be shared within teams.
 
 .idea/*
-
+src/.idea
 !.idea/codeStyles
 !.idea/runConfigurations
 
