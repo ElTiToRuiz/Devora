@@ -13,7 +13,10 @@ import src.utils.Pallette;
 
 public class ProfileSettings extends JFrame {
     int id;
+    private CardLayout cardLayout;
+    private JPanel panelMain,panelSettings,panelSaldo,panelDashboard,panelHistorial;
 
+    
     public ProfileSettings(int id) {
         setSize(Toolkit.getDefaultToolkit().getScreenSize());
         setExtendedState(MAXIMIZED_BOTH);
@@ -22,6 +25,18 @@ public class ProfileSettings extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        //Panel cardLayout
+        cardLayout = new CardLayout();
+        panelMain = new JPanel(cardLayout);
+        
+        JPanel panelSettings = crearPanelSettings();
+        JPanel panelSaldo = crearPanelSaldo();
+        JPanel panelHistorial = crearPanelHistorial();
+
+        panelMain.add(panelSettings, "panelSettings");
+        panelMain.add(panelSaldo, "panelSaldo");
+        panelMain.add(panelHistorial, "panelHistorial");
+        
         // Barra lateral (sidebar) con más tamaño
         JPanel panelSidebar = new JPanel();
         panelSidebar.setBackground(new Color(26, 36, 52));
@@ -31,49 +46,112 @@ public class ProfileSettings extends JFrame {
         panelSidebar.setLayout(new BoxLayout(panelSidebar, BoxLayout.Y_AXIS)); 
         
         // Añadimos los labels en el panelSidebar
-        JLabel labelConfiguracion = crearLabel("Configuración");
-        labelConfiguracion.setAlignmentX(Component.LEFT_ALIGNMENT);  // Centrado horizontal
+        JPanel panelCuenta = crearPanel("Mi cuenta", "src/media/home-icon.png", 1);
+        panelCuenta.setAlignmentX(Component.LEFT_ALIGNMENT);  // Centrado horizontal
 
-        JLabel labelCompras = crearLabel("Historial de Compras");
+        JPanel labelCompras = crearPanel("Historial de Compras","src/media/home-icon.png", 2);
         labelCompras.setAlignmentX(Component.LEFT_ALIGNMENT);  // Centrado horizontal
         
-        JLabel labelSaldo = crearLabel("Gestionar Saldo");
+        JPanel labelSaldo = crearPanel("Gestionar Saldo", "src/media/home-icon.png", 3);
         labelSaldo.setAlignmentX(Component.LEFT_ALIGNMENT);  // Centrado horizontal
 
+        JPanel panelVolver = crearPanel("Volver","src/media/back-icon.png",5);
+        panelVolver.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         // Añadimos los labels al panelSidebar
-        panelSidebar.add(Box.createVerticalStrut(360)); // Espacio arriba
-        panelSidebar.add(labelConfiguracion);
-        panelSidebar.add(Box.createVerticalStrut(50));  // Espacio entre labels
+        panelSidebar.add(Box.createVerticalStrut(200)); // Espacio arriba
+        panelSidebar.add(panelCuenta);
+        panelSidebar.add(Box.createVerticalStrut(-100));  // Espacio entre labels
         panelSidebar.add(labelCompras);
-        panelSidebar.add(Box.createVerticalStrut(50));
+        panelSidebar.add(Box.createVerticalStrut(-100));
         panelSidebar.add(labelSaldo);
         try {
 			if (Database.esVendedor(id)) {
-			    JLabel labelDashboard = crearLabel("Acceder A Dashboard");
+			    JPanel labelDashboard = crearPanel("Acceder A Dashboard","src/media/home-icon.png", 4);
 			    labelDashboard.setAlignmentX(Component.LEFT_ALIGNMENT);  // Centrado horizontal
-
-			    // Agregar un MouseListener si deseas hacer algo cuando se haga clic en el label
-			    labelDashboard.addMouseListener(new MouseAdapter() {
-			        public void mouseClicked(MouseEvent e) {
-			        	System.out.println("Accediendo al Dashboard...");
-			        	new Dashboard(id);
-			        }
-			    });
-			    
-			    panelSidebar.add(Box.createVerticalStrut(50));  // Espacio entre labels
+			    panelSidebar.add(Box.createVerticalStrut(-100));  // Espacio entre labels
 			    panelSidebar.add(labelDashboard);  // Agregar el label "Acceder A Dashboard" al panel
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+        panelSidebar.add(Box.createVerticalStrut(40));
+        panelSidebar.add(panelVolver);
         panelSidebar.add(Box.createVerticalGlue());
-
-        // Panel de configuración principal
-        JPanel panelSettings = new JPanel(new BorderLayout());
         
+        add(panelSidebar, BorderLayout.WEST); 
+        add(panelMain, BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new ProfileSettings(1);
+            }
+        });
+    }
+    
+    private JPanel crearPanel(String texto, String iconoPath, int idPanel) {
+    	JPanel panel = new JPanel(new BorderLayout());
+        panel.setSize(new Dimension(400, 50));
+
+        JLabel textoLabel = new JLabel(texto);
+        textoLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        textoLabel.setForeground(Color.gray);
+
+        ImageIcon iconoPerfil = new ImageIcon(iconoPath);
+        Image img = iconoPerfil.getImage();
+
+        Image iconoPerfilEscalado = img.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+        JLabel imgLabel = new JLabel(new ImageIcon(iconoPerfilEscalado));
+        imgLabel.setBorder(BorderFactory.createEmptyBorder(0, 55, 0, 40));
+
+        panel.add(imgLabel, BorderLayout.WEST);
+        panel.add(textoLabel, BorderLayout.CENTER);
+
+        panel.setBackground(new Color(26, 36, 52));
+        panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                textoLabel.setForeground(Color.white);
+                
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                textoLabel.setForeground(Color.gray);
+                super.mouseExited(e);
+            }
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String namePanel = "";
+				switch (idPanel) {
+	            case 1:
+	            	namePanel = "panelSettings";
+	                break;
+	            case 2:
+	            	namePanel = "panelSaldo";
+	                break;
+	            case 3:
+	            	namePanel = "panelHistorial";
+	                break;
+	            case 4:
+	            	new Dashboard(4);
+				}
+				
+                cardLayout.show(panelMain, namePanel);
+			}
+        });
+
+        return panel;
+    }
+   
+    private JPanel crearPanelSettings() {
+    	JPanel panelSettings = new JPanel(new BorderLayout());
         JPanel panelTitulo = new JPanel();
         JLabel lblTitulo = new JLabel("Editar Perfil");
         lblTitulo.setAlignmentX(LEFT_ALIGNMENT);
@@ -180,45 +258,22 @@ public class ProfileSettings extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-        
-        JPanel panelPedidos = new JPanel();
-        
+                
         panelSettings.add(panelTitulo,BorderLayout.NORTH); panelSettings.add(panelInputs,BorderLayout.CENTER); panelSettings.add(panelBtn,BorderLayout.SOUTH);
-        
-        // Añadimos los paneles principales al JFrame
-        add(panelSidebar, BorderLayout.WEST);  // Cambié a BorderLayout.WEST para que esté a la izquierda
-        add(panelSettings, BorderLayout.CENTER);
-
-        setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new ProfileSettings(2);
-            }
-        });
+        return panelSettings;
     }
     
-    private JLabel crearLabel(String name) {
-    	JLabel lbl = new JLabel(name);
-    	lbl.setFont(new Font("Arial",Font.BOLD,24));
-    	lbl.setForeground(Color.gray);
-    	lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    	lbl.setBorder(BorderFactory.createEmptyBorder(0,70,0,0));
-    	lbl.addMouseMotionListener(new MouseAdapter() {
-    		
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				lbl.setForeground(Color.white);
-			}
-    		
-    	});
-    	
-		return lbl;
+    private JPanel crearPanelSaldo() {
+    	JPanel panel = new JPanel();
+    	panel.setBackground(Color.blue);
+    	return panel;
     }
     
-    
+    private JPanel crearPanelHistorial() {
+    	JPanel panel = new JPanel();
+    	panel.setBackground(Color.green);
+    	return panel;
+    }
     //TODO Completar los metodos para coger el user, mail, contraseña de la db y 
     //TODO ponerlo directamente en los textfields, completar metodo UpdateDatos.
     //TODO Crear un lugar para interactuar con al db
