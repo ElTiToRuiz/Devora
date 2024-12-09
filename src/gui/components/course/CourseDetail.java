@@ -3,8 +3,11 @@ package src.gui.components.course;
 import javax.swing.*;
 
 import src.db.Database;
+import src.utils.Pallette;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -98,7 +101,7 @@ public class CourseDetail extends JFrame {
                 JLabel labelInstructor = new JLabel(new ImageIcon(imagenEscalada));
             
                 //JLabel texto instructor
-                JLabel lblTextInstructor = new JLabel(Database.conseguirUser(3));
+                JLabel lblTextInstructor = new JLabel(Database.conseguirUser(1));
                 lblTextInstructor.setFont(new Font("Arial",Font.PLAIN,20));
                 
                 panelInstructor.add(labelInstructor); panelInstructor.add(lblTextInstructor);
@@ -168,15 +171,38 @@ public class CourseDetail extends JFrame {
                 JPanel panelPrecio = new JPanel(new BorderLayout());
                 panelPrecio.setBackground(Color.white);
                 JLabel lblPrecio = new JLabel(resultSet.getString("Precio") + "€");
-                lblPrecio.setFont(new Font("Arial",Font.BOLD,36));
-                JButton btnComprar = new JButton("Añadir al carrito");
-                btnComprar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                btnComprar.setFont(new Font("Arial",Font.BOLD,16));
-                btnComprar.setForeground(Color.white);
-                btnComprar.setBorder(BorderFactory.createEmptyBorder(20,50,20,50));
+                lblPrecio.setFont(new Font("Arial",Font.BOLD,56));
+                lblPrecio.setBorder(BorderFactory.createEmptyBorder(300,50,0,0));
+                
+                JPanel panelAñadir = new JPanel();
+                JButton btnAñadir = new JButton("Añadir a la cesta");
+                btnAñadir.setForeground(Color.white);
+                btnAñadir.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
+                btnAñadir.setFont(new Font("Arial",Font.BOLD,24));
+                btnAñadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btnAñadir.setBorder(BorderFactory.createEmptyBorder(20,100,20,100));
+                panelAñadir.add(btnAñadir);
+                panelAñadir.setBackground(Color.white);
+                panelAñadir.setBorder(BorderFactory.createEmptyBorder(20,0,0,0));
+                
+                btnAñadir.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						btnAñadir.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						btnAñadir.setBackground(Pallette.COLOR_HOVER_PRINCIPAL.getColor());
+					}
+                });
                 
                 panelPrecio.add(lblPrecio,BorderLayout.NORTH);
-                panelPrecio.add(btnComprar,BorderLayout.CENTER);
+                panelPrecio.add(panelAñadir,BorderLayout.CENTER);
 
                 rightPanel.add(lblMenu,BorderLayout.NORTH);
                 rightPanel.add(panelPrecio,BorderLayout.CENTER);
