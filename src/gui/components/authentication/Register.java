@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import src.db.Database;
 
 public class Register extends JPanel {
@@ -141,7 +143,7 @@ public class Register extends JPanel {
 
                 //Guardar los datos en la db
 		        Database db = Database.getInstance(); // Obtener instancia de la base de datos
-		        if (db.registrarDatos(usuario, email, password)) {
+		        if (db.registrarDatos(usuario, email, BCrypt.hashpw(password, BCrypt.gensalt()))) {
 		            JOptionPane.showMessageDialog(null, "Registro compleatado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 		            // Redirigir al usuario a la siguiente ventana
 					auth.dispose();

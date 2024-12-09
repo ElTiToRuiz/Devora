@@ -1,7 +1,15 @@
 package src.gui.components.course;
 
 import javax.swing.*;
+
+import src.db.Database;
+
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,7 +29,6 @@ public class CourseDetail extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); // Ventana a pantalla completa
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setTitle("Detalles del Curso");
-        this.setLayout(new GridLayout(1, 2)); // Dividir la ventana en dos paneles
     }
 
     private void loadCourseDetails() {
@@ -40,78 +47,145 @@ public class CourseDetail extends JFrame {
 
             if (resultSet.next()) {
                 // ================== PANEL IZQUIERDO ==================
-                JPanel leftPanel = new JPanel(new BorderLayout(10, 20));
-                leftPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+            	JPanel mainPanel = new JPanel(new BorderLayout());
+                JPanel leftPanel = new JPanel(new BorderLayout());
+                leftPanel.setPreferredSize(new Dimension(700,1080));
+                leftPanel.setBackground(Color.white);
+                JPanel rightPanel = new JPanel(new BorderLayout());
+                rightPanel.setPreferredSize(new Dimension(500,1080));
+                rightPanel.setBackground(Color.white);
+                JPanel panelImg = new JPanel();
+                JPanel panelDatos = new JPanel(new BorderLayout());
+                panelDatos.setBackground(Color.white);
+                JPanel panelInfo = new JPanel();
+                panelInfo.setPreferredSize(new Dimension(9,300));
+                panelInfo.setMaximumSize(new Dimension(0,300));
+                panelInfo.setBackground(Color.white);
+                
+                ImageIcon imgCurso = new ImageIcon(new ImageIcon(resultSet.getString("imgPath")).getImage().getScaledInstance(700, 650, Image.SCALE_SMOOTH));
+                JLabel lblImgCurso = new JLabel();
 
-                // Imagen del curso
-                String imgPath = resultSet.getString("imgPath");
-                ImageIcon courseImage = new ImageIcon(
-                        new ImageIcon(imgPath).getImage().getScaledInstance(550, 350, Image.SCALE_SMOOTH)
-                );
-                JLabel imgLabel = new JLabel(courseImage);
-                imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                leftPanel.add(imgLabel, BorderLayout.NORTH);
+                panelImg.addComponentListener(new ComponentAdapter() {
 
-                // Detalles del curso en el panel izquierdo
-                JPanel detailsPanel = new JPanel(new GridLayout(5, 1, 15, 15));
-                detailsPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+					@Override
+					public void componentResized(ComponentEvent e) {
+						int width = panelImg.getWidth();
+				        int height = panelImg.getHeight();
 
-                JLabel titleLabel = new JLabel(resultSet.getString("titulo"));
-                titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
-                titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                detailsPanel.add(titleLabel);
-
-                JLabel instructorLabel = new JLabel("Instructor: " + resultSet.getString("instructor"));
-                instructorLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-                detailsPanel.add(instructorLabel);
-
-                JLabel ratingLabel = new JLabel("Valoración: 3*");
-                ratingLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-                detailsPanel.add(ratingLabel);
-
-                // Descripción del curso
-                JTextArea descriptionArea = new JTextArea(resultSet.getString("descripcion"));
-                descriptionArea.setRows(4); // Número de líneas visibles (ajustado)
-                descriptionArea.setLineWrap(true);
-                descriptionArea.setWrapStyleWord(true);
-                descriptionArea.setEditable(false);
-                descriptionArea.setFont(new Font("Arial", Font.PLAIN, 18));
-                JScrollPane descriptionScroll = new JScrollPane(descriptionArea);
-                detailsPanel.add(descriptionScroll);
-
-                leftPanel.add(detailsPanel, BorderLayout.CENTER);
-                this.add(leftPanel);
-
-                // ================== PANEL DERECHO ==================
-                JPanel rightPanel = new JPanel(new BorderLayout(20, 20));
-                rightPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-
-                // Botón "Volver" en la parte superior
-                JButton backButton = new JButton("Volver");
-                backButton.setFont(new Font("Arial", Font.BOLD, 20));
-                backButton.setPreferredSize(new Dimension(200, 50));
-                backButton.addActionListener(e -> {
-                    this.dispose();
-                    // Aquí puedes añadir el código para volver al grid de cursos si es necesario
+				        Image scaledImage = imgCurso.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+				        lblImgCurso.setIcon(new ImageIcon(scaledImage));
+					}
                 });
-                rightPanel.add(backButton, BorderLayout.NORTH);
+                
+                panelImg.add(lblImgCurso,BorderLayout.CENTER);
+                
+                panelDatos.setBackground(Color.white);
+                panelDatos.setPreferredSize(new Dimension(0,350));
+                
+                JLabel lblTitulo = new JLabel(resultSet.getString("titulo"));
+                lblTitulo.setFont(new Font("Arial",Font.BOLD,42));
+                lblTitulo.setForeground(Color.black);
+                lblTitulo.setBorder(BorderFactory.createEmptyBorder(30,100,0,0));
+                
+                //Panel Instructor
+                JPanel panelInstructor = new JPanel();
+                panelInstructor.setBackground(Color.white);
+                
+                //Icono instructor
+                ImageIcon iconoInstructor = new ImageIcon("src/media/person-50px.png");
+                Image img = iconoInstructor.getImage();
+                Image imagenEscalada = img.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+                JLabel labelInstructor = new JLabel(new ImageIcon(imagenEscalada));
+            
+                //JLabel texto instructor
+                JLabel lblTextInstructor = new JLabel(Database.conseguirUser(3));
+                lblTextInstructor.setFont(new Font("Arial",Font.PLAIN,20));
+                
+                panelInstructor.add(labelInstructor); panelInstructor.add(lblTextInstructor);
+                
+                //Panel Valoracion
+                JPanel panelValoracion = new JPanel();
+                panelValoracion.setBackground(Color.white);
+                
+                //Icono Estrella
+                ImageIcon iconoEstrella = new ImageIcon("src/media/star-50px.png");
+                Image imgEstrella = iconoEstrella.getImage();
+                Image imagenEscaladaEstrella = imgEstrella.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+                JLabel labelEstrella = new JLabel(new ImageIcon(imagenEscaladaEstrella));
+                
+                //JLabel texto Rating
+                JLabel lblRating = new JLabel("4,9");
+                lblRating.setFont(new Font("Arial",Font.PLAIN,20));
+                
+                panelValoracion.setBorder(BorderFactory.createEmptyBorder(0,20,0,0));
+                panelValoracion.add(labelEstrella); panelValoracion.add(lblRating);
+                panelInfo.add(panelInstructor); panelInfo.add(panelValoracion);
+                panelInfo.setBorder(BorderFactory.createEmptyBorder(10,0,0,930));
+                
+                //JLabel para la descripción del curso
+                JPanel panelDesc = new JPanel(new BorderLayout());
+                panelDesc.setBackground(Color.white);
+                JLabel lblDescTitle = new JLabel("Descripción");
+                lblDescTitle.setFont(new Font("Arial",Font.BOLD,22));
+                // Obtén el texto desde la base de datos (simulación)
+                String textoDesdeBD = resultSet.getString("descripcion");
 
-                // Parte media del panel derecho (Precio y Botón)
-                JPanel middleRightPanel = new JPanel(new GridLayout(2, 1, 20, 20));
-                middleRightPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0)); // Espaciado superior e inferior
-                JLabel priceLabel = new JLabel("Precio: $" + resultSet.getDouble("precio"));
-                priceLabel.setFont(new Font("Arial", Font.BOLD, 30));
-                priceLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                middleRightPanel.add(priceLabel);
+                // Utilizamos HTML para converitr el texto descripcion en label con saltos de linea
+                String textoHTML = "<html>" + textoDesdeBD.replace("\n", "<br>") + "</html>";
+                JLabel lblDesc = new JLabel(textoHTML);
+                lblDesc.setFont(new Font("Arial",Font.PLAIN,18));
+                lblDesc.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
+                
+                panelDesc.add(lblDescTitle,BorderLayout.NORTH); panelDesc.add(lblDesc,BorderLayout.CENTER);
+                panelDesc.setBorder(BorderFactory.createEmptyBorder(0,100,90,0));
+                
+                // Añade el panel al BorderLayout principal
+                panelDatos.add(lblTitulo, BorderLayout.NORTH);
+                panelDatos.add(panelInfo, BorderLayout.CENTER);
+                panelDatos.add(panelDesc, BorderLayout.SOUTH);
+                
+                leftPanel.add(panelImg,BorderLayout.CENTER);
+                leftPanel.add(panelDatos,BorderLayout.SOUTH);
+                
+                //Panel Derecha
+                
+                //Icono volver
+                ImageIcon iconoMenu = new ImageIcon("src/media/home-50px.png");
+                Image imgMenu = iconoMenu.getImage();
+                Image imagenEscaladaMenu = imgMenu.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                JLabel lblMenu = new JLabel(new ImageIcon(imagenEscaladaMenu));
+                lblMenu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                lblMenu.setBorder(BorderFactory.createEmptyBorder(40,350,0,0));
+                
+                lblMenu.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						dispose();
+					}
+                });
+                
+                //Panel precio + añadir carrito
+                JPanel panelPrecio = new JPanel(new BorderLayout());
+                panelPrecio.setBackground(Color.white);
+                JLabel lblPrecio = new JLabel(resultSet.getString("Precio") + "€");
+                lblPrecio.setFont(new Font("Arial",Font.BOLD,36));
+                JButton btnComprar = new JButton("Añadir al carrito");
+                btnComprar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                btnComprar.setFont(new Font("Arial",Font.BOLD,16));
+                btnComprar.setForeground(Color.white);
+                btnComprar.setBorder(BorderFactory.createEmptyBorder(20,50,20,50));
+                
+                panelPrecio.add(lblPrecio,BorderLayout.NORTH);
+                panelPrecio.add(btnComprar,BorderLayout.CENTER);
 
-                JButton addToCartButton = new JButton("Añadir al carrito");
-                addToCartButton.setFont(new Font("Arial", Font.BOLD, 16)); // Fuente ajustada
-                addToCartButton.setPreferredSize(new Dimension(200, 35)); // Botón más bajo
-                middleRightPanel.add(addToCartButton);
-
-                rightPanel.add(middleRightPanel, BorderLayout.CENTER);
-
-                this.add(rightPanel);
+                rightPanel.add(lblMenu,BorderLayout.NORTH);
+                rightPanel.add(panelPrecio,BorderLayout.CENTER);
+                
+                
+                
+                mainPanel.add(leftPanel,BorderLayout.CENTER);
+                mainPanel.add(rightPanel,BorderLayout.EAST);
+                add(mainPanel);
 
             } else {
                 JOptionPane.showMessageDialog(this, "No se encontró información del curso.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -136,3 +210,4 @@ public class CourseDetail extends JFrame {
         SwingUtilities.invokeLater(() -> new CourseDetail(1));
     }
 }
+

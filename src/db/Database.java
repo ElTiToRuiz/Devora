@@ -2,6 +2,8 @@ package src.db;
 
 import java.io.FileNotFoundException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import src.domain.Course;
 import src.gui.components.course.CourseFront;
 import src.utils.Encriptar;
@@ -75,16 +77,19 @@ public class Database {
     
     
     public boolean verificarCredenciales(String username, String password) {
-        String query = "SELECT COUNT(*) AS count FROM USUARIO WHERE username = ? AND password = ?";
+        String query = "SELECT COUNT(*) AS count, PASSWORD as password FROM USUARIO WHERE username = ?";
         try (Connection conn = connect(); 
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, password);
 
             ResultSet rs = stmt.executeQuery();
-            if (rs.next() && rs.getInt("count") > 0) {
-                return true; 
+            if (rs.getInt("count") > 0) {
+            	String hashedPassword = rs.getString("password");
+            	if(BCrypt.checkpw(password, hashedPassword)) {
+            		return true;
+            	}
+                return false; 
             }
         } catch (Exception e) {
             System.out.println("Error al verificar credenciales: " + e.getMessage());
@@ -95,7 +100,7 @@ public class Database {
     public boolean registrarDatos(String username, String email, String password) {
         String query = "INSERT INTO USUARIO (username, email, password, saldo) VALUES (?, ?, ?, ?)";
         try (Connection conn = connect(); 
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+            PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, username);
             stmt.setString(2, email);
