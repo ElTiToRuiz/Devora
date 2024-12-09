@@ -34,8 +34,8 @@ public class ProfileSettings extends JFrame {
         JPanel panelHistorial = crearPanelHistorial();
 
         panelMain.add(panelSettings, "panelSettings");
-        panelMain.add(panelSaldo, "panelSaldo");
         panelMain.add(panelHistorial, "panelHistorial");
+        panelMain.add(panelSaldo, "panelSaldo");
         
         // Barra lateral (sidebar) con más tamaño
         JPanel panelSidebar = new JPanel();
@@ -141,7 +141,10 @@ public class ProfileSettings extends JFrame {
 	                break;
 	            case 4:
 	            	new Dashboard(4);
+				case 5:
+					dispose();
 				}
+					
 				
                 cardLayout.show(panelMain, namePanel);
 			}
@@ -264,8 +267,42 @@ public class ProfileSettings extends JFrame {
     }
     
     private JPanel crearPanelSaldo() {
-    	JPanel panel = new JPanel();
-    	panel.setBackground(Color.blue);
+    	JPanel panel = new JPanel(new BorderLayout());
+    	Database db = Database.getInstance();
+    	JLabel lblTextoSaldo = new JLabel("Tu saldo actual es de: " + Database.conseguirSaldo(id));
+    	lblTextoSaldo.setFont(new Font("Arial",Font.BOLD,52));
+    	lblTextoSaldo.setBorder(BorderFactory.createEmptyBorder(300,150,0,0));
+    	
+    	JPanel panelGestionSaldo = new JPanel(new GridLayout(1,2,0,0));
+    	JPanel panelAñadir = new JPanel();
+    	JButton btnAñadir = new JButton("Añadir Fondos");
+    	btnAñadir.addMouseListener(new MouseAdapter() {
+    		
+    	});
+    	btnAñadir.setBorder(BorderFactory.createEmptyBorder(20,175,20,175));
+    	btnAñadir.setFont(new Font("Arial",Font.BOLD,20));
+    	btnAñadir.setBackground(Color.green);
+    	btnAñadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    	btnAñadir.setForeground(Color.white);
+    	panelAñadir.add(btnAñadir);
+    	
+    	JPanel panelRetirar = new JPanel();
+    	JButton btnRetirar = new JButton("Retirar Fondos");
+    	btnRetirar.setFont(new Font("Arial",Font.BOLD,20));
+    	btnRetirar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    	btnRetirar.addMouseListener(new MouseAdapter() {
+    		
+    	});
+    	btnRetirar.setBorder(BorderFactory.createEmptyBorder(20,175,20,175));
+    	btnRetirar.setBackground(Color.red);
+    	btnRetirar.setForeground(Color.white);
+    	panelRetirar.add(btnRetirar);
+    	panelGestionSaldo.add(panelAñadir); panelGestionSaldo.add(panelRetirar);
+    	panelGestionSaldo.setBorder(BorderFactory.createEmptyBorder(100,25,0,0));
+    	
+    	panel.add(lblTextoSaldo,BorderLayout.NORTH);
+    	panel.add(panelGestionSaldo,BorderLayout.CENTER);
+    	
     	return panel;
     }
     

@@ -396,4 +396,23 @@ public class Database {
             return null;  
         }    	
     }
+    
+    public static Double conseguirSaldo(int id) {
+    	String query = "SELECT saldo FROM USUARIO WHERE id = ?";
+        try (Connection conn = connect();  
+                PreparedStatement pstmt = conn.prepareStatement(query)) {
+               pstmt.setInt(1, id); 
+               
+               try (ResultSet rs = pstmt.executeQuery()) {
+                   if (rs.next()) {
+                       return Double.parseDouble(rs.getString("saldo"));
+                   } else {
+                       return null;
+                   }
+               }
+           } catch (SQLException e) {
+               e.printStackTrace();
+               return null;  
+           }    	
+       }
 }
