@@ -143,6 +143,8 @@ public class Database {
                 + "instructor INTEGER,"  
                 + "idioma TEXT," 
                 + "imgPath TEXT,"  // Columna para la ruta de la imagen
+                + "rating REAL,"
+                + "categoria TEXT,"
                 + "FOREIGN KEY (instructor) REFERENCES Usuario(id));";
 
         stmt.execute(query);
@@ -190,10 +192,9 @@ public class Database {
 		            int id = rs.getInt("id");
                     String titulo = rs.getString("titulo");
                     float price = rs.getInt("precio");
-
-                    //   todo get categoria
-                    List<String> categorias = null;
-
+                    
+                    //NOT IN DB TODO
+                    String categoria = null;
                     // NOT IN DB TODO
                     float rating = rs.getFloat("rating");
 
@@ -202,7 +203,7 @@ public class Database {
 
 
 
-		            list.add(new CourseFront(id, price, titulo, categorias, rating, duracion, imgPath));
+		            list.add(new CourseFront(id, price, titulo, categoria, rating, duracion, imgPath));
 			}
              
         } catch (SQLException e) {
@@ -213,11 +214,11 @@ public class Database {
     }
     
     public static void crearCurso(String titulo, String descripcion, int duracion, 
-            double precio, int clases, int instructorId, String idioma, String imgPath) throws SQLException {
+            double precio, int clases, int instructorId, String idioma, String imgPath, Double rating, String categoria) throws SQLException {
 		// Sentencia SQL para insertar un curso en la tabla 'Curso'
         String url = "jdbc:sqlite:src/db/Devora.db";
-		String query = "INSERT INTO Curso (titulo, descripcion, duracion, precio, clases, instructor, idioma, imgPath) "
-		+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Curso (titulo, descripcion, duracion, precio, clases, instructor, idioma, imgPath, rating, categoria) "
+		+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         Connection conn = null;
 
@@ -234,6 +235,8 @@ public class Database {
             pstmt.setInt(6, instructorId);
             pstmt.setString(7, idioma);
             pstmt.setString(8, imgPath);
+            pstmt.setDouble(9, rating);
+            pstmt.setString(10, categoria);
 
             int filasAfectadas = pstmt.executeUpdate();
 
