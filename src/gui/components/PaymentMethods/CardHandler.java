@@ -26,6 +26,19 @@ public class CardHandler implements PaymentMethodHandler {
         };
         backgroundPanel.setLayout(new BoxLayout(backgroundPanel, BoxLayout.Y_AXIS));
 
+        // Panel para el logo
+        JPanel logoPanel = new JPanel();
+        logoPanel.setBackground(Color.WHITE);
+        logoPanel.setMaximumSize(new Dimension(200, 100));
+        logoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Cargar el logo de la tarjeta de crédito
+        ImageIcon originalIcon = new ImageIcon("src/icons/creditcard.png");
+        Image scaledImage = originalIcon.getImage().getScaledInstance(150, 50, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        JLabel logoLabel = new JLabel(scaledIcon, SwingConstants.CENTER);
+        logoPanel.add(logoLabel);
+
         // Título
         JLabel titleLabel = new JLabel("Enter your Card Details");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -82,13 +95,15 @@ public class CardHandler implements PaymentMethodHandler {
             }
         });
 
-        // Agregar componentes al panel
+        // Agregar componentes a la interfaz
         backgroundPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        backgroundPanel.add(titleLabel);
+        backgroundPanel.add(logoPanel); // Logo con fondo blanco
         backgroundPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        backgroundPanel.add(formPanel);
+        backgroundPanel.add(titleLabel); // Título
         backgroundPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        backgroundPanel.add(confirmButton);
+        backgroundPanel.add(formPanel); // Formulario
+        backgroundPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        backgroundPanel.add(confirmButton); // Botón
 
         frame.add(backgroundPanel, BorderLayout.CENTER);
         frame.setLocationRelativeTo(parent);
