@@ -1,11 +1,11 @@
-Curso;Descripción;Duración;Precio;Estudiantes;Índice;Idioma;Imagen
-Curso de Java para principiantes;Aprende los fundamentos de la programación en Java. Dirigido a principiantes.;30;99.99;12;1;Español;src/media/miniatura.png
-Desarrollo web con HTML y CSS;Curso completo para aprender a crear páginas web utilizando HTML y CSS.;20;79.99;10;1;Español;src/media/miniatura.png
-Curso de Python para data science;Aprende a usar Python en ciencia de datos, desde lo básico hasta técnicas avanzadas.;40;149.99;15;2;Español;src/media/miniatura.png
-Introducción al diseño gráfico;Curso básico de diseño gráfico utilizando herramientas como Photoshop e Illustrator.;25;120;10;3;Español;src/media/miniatura.png
-Curso de Marketing Digital;Aprende a crear campañas de marketing digital, desde la estrategia hasta la ejecución.;35;200;18;4;Español;src/media/miniatura.png
-Curso de Java Básico;Aprende los fundamentos de la programación en Java. Desde variables hasta estructuras de control.;30;100;20;1;Español;src/media/miniatura.png
-Curso de Python para Data Science;Curso orientado a la ciencia de datos utilizando Python. Incluye librerías como NumPy y pandas.;40;150;25;2;Español;src/media/miniatura.png
-Diseño Gráfico con Photoshop;Curso completo sobre el uso de Adobe Photoshop para diseñar gráficos y editar fotos.;35;120;22;3;Español;src/media/miniatura.png
-Marketing Digital para Principiantes;Curso que cubre los aspectos básicos del marketing digital, SEO, SEM, y redes sociales.;25;80;18;4;Español;src/media/miniatura.png
-Desarrollo Web con HTML, CSS y JavaScript;Aprende a crear páginas web estéticas y dinámicas con las tecnologías web más populares.;45;130;30;1;Español;src/media/miniatura.png
+Curso;Descripción;Duración;Precio;Estudiantes;Índice;Idioma;Imagen;Rating;Categoria
+Curso de Java para principiantes;Aprende los fundamentos de la programación en Java. Dirigido a principiantes.;30;99.99;12;1;Español;src/media/miniatura.png;3.9;Node.js
+Desarrollo web con HTML y CSS;Curso completo para aprender a crear páginas web utilizando HTML y CSS.;20;79.99;10;1;Español;src/media/miniatura.png;2.5;Node.js
+Curso de Python para data science;Aprende a usar Python en ciencia de datos, desde lo básico hasta técnicas avanzadas.;40;149.99;15;2;Español;src/media/miniatura.png;4.8;Node.js
+Introducción al diseño gráfico;Curso básico de diseño gráfico utilizando herramientas como Photoshop e Illustrator.;25;120;10;3;Español;src/media/miniatura.png;4.5;Node.js
+Curso de Marketing Digital;Aprende a crear campañas de marketing digital, desde la estrategia hasta la ejecución.;35;200;18;4;Español;src/media/miniatura.png;1.5;Node.js
+Curso de Java Básico;Aprende los fundamentos de la programación en Java. Desde variables hasta estructuras de control.;30;100;20;1;Español;src/media/miniatura.png;4.3;Java
+Curso de Python para Data Science;Curso orientado a la ciencia de datos utilizando Python. Incluye librerías como NumPy y pandas.;40;150;25;2;Español;src/media/miniatura.png;3.5;MERN
+Diseño Gráfico con Photoshop;Curso completo sobre el uso de Adobe Photoshop para diseñar gráficos y editar fotos.;35;120;22;3;Español;src/media/miniatura.png;4.7;Node.js
+Marketing Digital para Principiantes;Curso que cubre los aspectos básicos del marketing digital, SEO, SEM, y redes sociales.;25;80;18;4;Español;src/media/miniatura.png;2.5;JavaScript
+Desarrollo Web con HTML, CSS y JavaScript;Aprende a crear páginas web estéticas y dinámicas con las tecnologías web más populares.;45;130;30;1;Español;src/media/miniatura.png;3.5;Java

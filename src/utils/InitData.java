@@ -32,7 +32,9 @@ public class InitData {
                         Integer.parseInt(values[4]),  // Clases
                         Integer.parseInt(values[5]),  // Id Instructor
                         values[6],  // Idioma
-                        values[7] // Imagen path
+                        values[7], // Imagen path
+                        Double.parseDouble(values[8]),
+                        values[9]
                 );
             }
         } catch (IOException e) {
