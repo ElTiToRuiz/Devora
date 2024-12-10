@@ -13,7 +13,7 @@ public class InitData {
     }
 
     private void cargarCuros() {
-        if(Database.obtenerCursos().size() > 9) return;
+        if(Database.obtenerCursos().size() > 10) return;
         String cursosFile = "src/utils/data/devoracursos.csv";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(cursosFile))) {

@@ -104,7 +104,7 @@ public class CourseDetail extends JFrame {
                 JLabel labelInstructor = new JLabel(new ImageIcon(imagenEscalada));
             
                 //JLabel texto instructor
-                JLabel lblTextInstructor = new JLabel(Database.conseguirUser(1));
+                JLabel lblTextInstructor = new JLabel((Database.conseguirCurso(courseId).getInstructor()));
                 lblTextInstructor.setFont(new Font("Arial",Font.PLAIN,20));
                 
                 panelInstructor.add(labelInstructor); panelInstructor.add(lblTextInstructor);
