@@ -145,7 +145,7 @@ public class Dashboard extends JFrame {
         LocalDate startOfWeek = DateUtils.getStartOfWeek();
         LocalDate endOfWeek = DateUtils.getEndOfWeek();
         
-        Map<DayOfWeek, Integer> salesData = Database.conseguirVentasSemanales(startOfWeek, endOfWeek);
+        Map<DayOfWeek, Integer> salesData = Database.conseguirVentasSemanales(Header.id,startOfWeek, endOfWeek);
         DefaultCategoryDataset dataset = crearDataset(salesData);
         JFreeChart grafico = crearGrafico(dataset);
         ChartPanel chartPanel = new ChartPanel(grafico);
@@ -432,9 +432,9 @@ public class Dashboard extends JFrame {
 
     private JFreeChart crearGrafico(DefaultCategoryDataset dataset) {
         JFreeChart grafico = ChartFactory.createBarChart(
-                "Ventas Semanales", // Título del gráfico
-                "Días",                  // Etiqueta del eje X
-                "Ventas ($)",            // Etiqueta del eje Y
+                "Ventas Semanales", 
+                "Días",                  
+                "Ventas ($)",            
                 dataset
         );
 
@@ -604,9 +604,4 @@ public class Dashboard extends JFrame {
 			}
 		});
 	}
-    
-    //TODO metodo para conseguir todos los cursos de un usuario.
-    
-    //TODO metodo crear curso.
-    
 }

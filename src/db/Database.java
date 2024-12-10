@@ -656,20 +656,28 @@ public class Database {
     }
 
     	
-    public static Map<DayOfWeek, Integer> conseguirVentasSemanales(LocalDate comienzoSemana, LocalDate finalSemana) {
+    public static Map<DayOfWeek, Integer> conseguirVentasSemanales(int id, LocalDate comienzoSemana, LocalDate finalSemana) {
         Map<DayOfWeek, Integer> salesData = new HashMap<>();
 
-        String query = "SELECT strftime('%w', fecha_compra) AS dia, COUNT(id_curso) AS total_ventas " +
-                       "FROM Compra " +
-                       "WHERE fecha_compra BETWEEN ? AND ? " +
-                       "GROUP BY strftime('%w', fecha_compra);";
-
+        String query = "SELECT strftime('%w', B.fecha_compra) AS dia, " +
+                "COUNT(B.id_curso) AS total_ventas " +
+                "FROM " +
+                "    (SELECT C.id_usuario, C.id_curso, C.fecha_compra " +
+                "     FROM Compra AS C " +
+                "     JOIN " +
+                "        (SELECT id " +
+                "         FROM Curso " +
+                "         WHERE instructor = ?) AS A " +
+                "     ON A.id = C.id_curso) AS B " +
+                "WHERE B.fecha_compra BETWEEN ? AND ? " +
+                "GROUP BY strftime('%w', B.fecha_compra);";
+        
         try (Connection conn = connect();  
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            // Establecer parámetros de la consulta
-            pstmt.setString(1, comienzoSemana.toString());
-            pstmt.setString(2, finalSemana.toString());
+        	pstmt.setInt(1, id);
+            pstmt.setString(2, comienzoSemana.toString());
+            pstmt.setString(3, finalSemana.toString());
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
