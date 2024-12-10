@@ -718,7 +718,7 @@ public class Database {
 }
     
     public static boolean actualizarCurso(int idCurso, String titulo, String descripcion, double precio, String idioma, int clases) throws SQLException {
-    	String query = "UPDATE SET Curso titulo = ?, descripcion = ?, precio = ?, clases = ?, idioma = ? WHERE id = ?";
+    	String query = "UPDATE Curso SET titulo = ?, descripcion = ?, precio = ?, clases = ?, idioma = ? WHERE id = ?";
       	 try (Connection conn = connect();  
                  PreparedStatement pstmt = conn.prepareStatement(query)) {
 	             pstmt.setString(1, titulo);

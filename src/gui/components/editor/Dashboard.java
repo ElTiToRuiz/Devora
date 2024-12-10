@@ -316,7 +316,21 @@ public class Dashboard extends JFrame {
                     int idCurso = (int) tableModel.getValueAt(i, 0); 
                     String titulo = (String) tableModel.getValueAt(i, 1);
                     String descripcion = (String) tableModel.getValueAt(i, 2);
-                    double precio = (double) tableModel.getValueAt(i, 3);
+                    Object precioObject = tableModel.getValueAt(i, 3);
+                    
+                    //Solucion bug de que no se podia parsear.
+                    double precio = 0.0; 
+
+                    if (precioObject instanceof String) {
+                        try {
+                            precio = Double.parseDouble((String) precioObject);
+                        } catch (NumberFormatException e1) {
+                            System.out.println("Error al convertir el precio: " + e1.getMessage());
+                        }
+                    } else if (precioObject instanceof Double) {
+                        precio = (Double) precioObject;
+                    }
+                    
                     String idioma = (String) tableModel.getValueAt(i, 4);
                     int clases = (int) tableModel.getValueAt(i, 5);
 
