@@ -314,7 +314,7 @@ public class ProfileSettings extends JFrame {
         	
         });
         try {
-			if(!Database.esVendedor(id)) {
+			if(!Database.esVendedor(Header.id)) {
 			    JButton btnRegVendedor = new JButton("Registrarse Como Vendedor");
 			    btnRegVendedor.setBackground(Color.gray);
 			    btnRegVendedor.setBorder(BorderFactory.createEmptyBorder(20,40,20,40));
