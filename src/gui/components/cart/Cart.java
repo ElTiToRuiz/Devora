@@ -14,6 +14,9 @@ import javax.swing.table.TableCellRenderer;
 import java.util.EventObject;
 import java.util.List;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
@@ -77,35 +80,27 @@ public class Cart extends JFrame {
         
         JTable table = crearTabla(listaCursos);
         
-        // Crear el JScrollPane sin borde y añadirlo al contenedor
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Sin borde en el JScrollPane
+        scrollPane.setBorder(BorderFactory.createEmptyBorder()); 
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         
         JPanel contenedorConMargen = new JPanel(new BorderLayout());
-        contenedorConMargen.setBorder(BorderFactory.createEmptyBorder(0, 125, 0, 80)); // Margen izquierdo de 125 px
+        contenedorConMargen.setBorder(BorderFactory.createEmptyBorder(0, 125, 0, 80));
         
-        // Añadir el JScrollPane al contenedor con margen
         contenedorConMargen.add(scrollPane, BorderLayout.CENTER);
         contenedorConMargen.setOpaque(false);
 
-        // Añadir el contenedor con margen al panelTabla
         panelTabla.add(contenedorConMargen, BorderLayout.CENTER);
         
-        
-        // Configuración de panelTotal (Panel Derecha)
-        //Panel Pagar
         panelPagar.setLayout(new BoxLayout(panelPagar, BoxLayout.Y_AXIS)); 
         panelPagar.setBackground(Color.white); 
         panelPagar.setBorder(BorderFactory.createEmptyBorder(170, 100, 20, 20));
 
-        
         panelPagar.setPreferredSize(new Dimension(300, 360));
         panelPagar.setMaximumSize(new Dimension(300, 360));
         panelPagar.setMinimumSize(new Dimension(300, 360));
 
-        // Añadiendo etiquetas y botón
         JLabel lblTotal = new JLabel("Total: ");
         lblTotal.setFont(new Font("Arial",Font.BOLD,22));
         lblTotal.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
@@ -224,13 +219,7 @@ public class Cart extends JFrame {
         btnPromo.setForeground(Color.white);
 
         //Hover
-        btnPromo.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
+        btnPromo.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -244,18 +233,43 @@ public class Cart extends JFrame {
 
 			}
 
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
+        });
+        
+        btnPromo.addActionListener(new ActionListener() {
 
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
+			public void actionPerformed(ActionEvent e) {
+			    if (tfPromo.getText().isEmpty()) {
+			        JOptionPane.showMessageDialog(null, "Añade un código promocional para obtener un descuento en tu compra");
+			        return;
+			    }
 
+			    Double descuento = 1.0; 
+
+			    if (tfPromo.getText().equals("Imanol")) {
+			        descuento = 0.90; 
+			    } else if (tfPromo.getText().equals("Igor")) {
+			        descuento = 0.85; 
+			    } else if (tfPromo.getText().equals("Iñigo")) {
+			        descuento = 0.80; 
+			    } else if (tfPromo.getText().equals("JoseMaria")) {
+			        descuento = 0.75; 
+			    } else {
+			        JOptionPane.showMessageDialog(null, "Introduce un código promocional válido para obtener un descuento en tu compra");
+			        return;
+			    }
+
+			    String costeTotalAnterior = lblPrecioTotal.getText().replaceAll("[^0-9.,]", ""); // Quitamos el símbolo de €
+			    try {
+			        Double costeTotalActual = descuento * Double.parseDouble(costeTotalAnterior); 
+			        lblPrecioTotal.setText(String.format("%.2f€", costeTotalActual)); 
+			        tfPromo.setEditable(false);  
+			        btnPromo.setEnabled(false); 
+			    } catch (NumberFormatException ex) {
+			        JOptionPane.showMessageDialog(null, "Error al calcular el precio total. Asegúrate de que el precio sea válido.");
+			    }
 			}
-
+        	
         });
         panelInputPromo.add(tfPromo); panelInputPromo.add(btnPromo);
         
@@ -333,13 +347,13 @@ public class Cart extends JFrame {
     }
     
     class lblEliminarEditor extends AbstractCellEditor implements TableCellEditor {
-        private lblEliminar label; // Componente de la celda
+        private lblEliminar label;
         private JTable table;
-        private List<Course> listaCursos; // Referencia a la lista de cursos
+        private List<Course> listaCursos; 
 
         public lblEliminarEditor(JTable table, List<Course> listaCursos) {
             this.table = table;
-            this.listaCursos = listaCursos; // Asignamos la lista de cursos
+            this.listaCursos = listaCursos; 
         }
 
         @Override
@@ -356,16 +370,14 @@ public class Cart extends JFrame {
 
                 	    // Recalcular el precio total
                 	    Double nuevoPrecioTotal = calcularPrecioTotal(listaCursos);
-                	    lblPrecioTotal.setText(nuevoPrecioTotal + "€"); // Actualiza la etiqueta de precio total
+                	    lblPrecioTotal.setText(nuevoPrecioTotal + "€");
 
-                	    // Si la tabla está vacía, actualiza el mensaje de cursos en la cesta
                 	    if (model.getRowCount() == 0) {
                 	        textoCursos.setText("No hay cursos en la cesta");
                 	    } else {
                 	        textoCursos.setText(listaCursos.size() + " cursos en la cesta");
                 	    }
 
-                	    // Actualizar la vista
                 	    table.repaint();
                 	}
 
