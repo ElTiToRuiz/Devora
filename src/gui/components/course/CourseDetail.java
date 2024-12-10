@@ -19,6 +19,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class CourseDetail extends JFrame {
     private final int courseId;
@@ -195,7 +196,9 @@ public class CourseDetail extends JFrame {
 						} else  if(Database.comprobarCompra(Header.id,courseId)) {
 					        JOptionPane.showMessageDialog(null, "Ya has comprado este curso anteriormente", "Alerta", JOptionPane.WARNING_MESSAGE);
 						} else if (Database.comprobarCreador(Header.id,courseId)) {
-					        JOptionPane.showMessageDialog(null, "Eres el creador del curso", "Alerta", JOptionPane.WARNING_MESSAGE);
+					        JOptionPane.showMessageDialog(null, "Eres el creador del curso", "Alerta", JOptionPane.WARNING_MESSAGE);  
+						} else if (comprobarPedido()) {
+							JOptionPane.showMessageDialog(null, "Este curso ya esta en tu cesta");
 						}else {
 							Course curso = Database.conseguirCurso(courseId);
 							Header.pedido.add(curso);
@@ -246,6 +249,16 @@ public class CourseDetail extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new CourseDetail(1));
+    }
+    
+    private boolean comprobarPedido() {
+    	ArrayList<Course> pedido = Header.pedido;
+    	for(Course curso : pedido) {
+    		if(courseId == curso.getId()) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 }
 

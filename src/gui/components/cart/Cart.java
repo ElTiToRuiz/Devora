@@ -120,6 +120,10 @@ public class Cart extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				if(listaCursos.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Tienes que añadir al menos un producto antes de realizar la compra.");
+				}
+				
 				Double saldo = Database.conseguirSaldo(Header.id);
 		        String costeTotal = lblPrecioTotal.getText().replaceAll("[^0-9.,]", ""); //Quitamos el simbolo de €
 				if(saldo < Double.parseDouble(costeTotal)) {
@@ -275,31 +279,77 @@ public class Cart extends JFrame {
         
         panelPromocion.add(panelInputPromo);
         
+        JPanel panelEliminar = new JPanel();
+        JButton btnEliminar = new JButton("Vaciar cesta");
+        btnEliminar.setPreferredSize(new Dimension(404,38));
+        btnEliminar.setBorder(BorderFactory.createEmptyBorder());
+        btnEliminar.setForeground(Color.white);
+        btnEliminar.setBackground(Color.red);
+        btnEliminar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnEliminar.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				model.setRowCount(0);
+				lblPrecioTotal.setText("0.00€");
+				textoCursos.setText("0 Cursos en la cesta");
+				listaCursos.clear();
+				Header.pedido.clear();
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseEntered(e);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseExited(e);
+			}
+        	
+        });
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setPreferredSize(new Dimension(404,38));
+        btnVolver.setBorder(BorderFactory.createEmptyBorder());
+        btnVolver.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseEntered(e);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseExited(e);
+			}
+        	
+        });
+        
+        panelEliminar.add(btnEliminar);
+        panelEliminar.add(btnVolver);
+        panelEliminar.setBackground(Color.white);
+        panelEliminar.setBorder(BorderFactory.createEmptyBorder(0,0,200,0)); 
+        
         // Añadir panelPagar al panelTotal
         panelTotal.add(panelPagar, BorderLayout.NORTH);
-        panelTotal.add(panelPromocion, BorderLayout.SOUTH);
+        panelTotal.add(panelPromocion, BorderLayout.CENTER);
+        panelTotal.add(panelEliminar,BorderLayout.SOUTH);
 
         add(panelMain);
         setVisible(true);
     }
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> new Cart(null));
-//    }
-
-    class lblEliminar extends JLabel {
-    	public lblEliminar() {
-    		ImageIcon deleteIcon = new ImageIcon("src/media/delete-icon.png");
-            Image img = deleteIcon.getImage();
-            Image deleteIconEscalada = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-            
-            deleteIcon.setImage(deleteIconEscalada);
-            setIcon(deleteIcon);
-            setBorder(BorderFactory.createEmptyBorder(0,80,0,0));
-            
-    	}
-    }
-    
     class lblPrecio extends JLabel{
     	
     	public lblPrecio(Double precio) {
@@ -321,18 +371,6 @@ public class Cart extends JFrame {
         }
     }
     
-    class lblEliminarRenderer implements TableCellRenderer{
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-			if (value instanceof lblEliminar) {
-				return (lblEliminar) value;
-			}
-			return new JLabel("");
-		}
-    }
-    
     class lblPrecioRenderer implements TableCellRenderer{
 
 		@Override
@@ -343,78 +381,20 @@ public class Cart extends JFrame {
 			}
 			return new JLabel("");
 		}
-    	
-    }
-    
-    class lblEliminarEditor extends AbstractCellEditor implements TableCellEditor {
-        private lblEliminar label;
-        private JTable table;
-        private List<Course> listaCursos; 
 
-        public lblEliminarEditor(JTable table, List<Course> listaCursos) {
-            this.table = table;
-            this.listaCursos = listaCursos; 
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            if (value instanceof lblEliminar) {
-                label = (lblEliminar) value;
-                label.addMouseListener(new MouseListener() {
-                	@Override
-                	public void mouseClicked(MouseEvent e) {
-                	    DefaultTableModel model = (DefaultTableModel) table.getModel();
-
-                	    listaCursos.remove(row); 
-                	    model.removeRow(row); 
-
-                	    // Recalcular el precio total
-                	    Double nuevoPrecioTotal = calcularPrecioTotal(listaCursos);
-                	    lblPrecioTotal.setText(nuevoPrecioTotal + "€");
-
-                	    if (model.getRowCount() == 0) {
-                	        textoCursos.setText("No hay cursos en la cesta");
-                	    } else {
-                	        textoCursos.setText(listaCursos.size() + " cursos en la cesta");
-                	    }
-
-                	    table.repaint();
-                	}
-
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {}
-                    @Override
-                    public void mouseReleased(MouseEvent e) {}
-                    @Override
-                    public void mouseEntered(MouseEvent e) {}
-                    @Override
-                    public void mouseExited(MouseEvent e) {}
-                });
-            }
-            return label;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return label;
-        }
-
-        @Override
         public boolean isCellEditable(EventObject e) {
             return true;
         }
-    }
+    };
     
     public JTable crearTabla(List<Course> listaCursos) {
-        String[] nombresColumnas = {"Producto", "Acción", "Precio"};
+        String[] nombresColumnas = {"Producto", "Precio"};
         Object[][] data = {};
 
         DefaultTableModel model = new DefaultTableModel(data, nombresColumnas) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 if (columnIndex == 0) return PanelCurso.class;
-                if (columnIndex == 2) return lblEliminar.class;
                 return String.class;
             }
         };
@@ -429,26 +409,21 @@ public class Cart extends JFrame {
         			                   curso.getDuration(), 
         			                   curso.getClases(), 
         			                   curso.getImgPath()), 
-        			    new lblPrecio(curso.getPrice()), 
-        			    new lblEliminar()
+        			    new lblPrecio(curso.getPrice())
         			});
 
         	}
     	}
 
         JTable table = new JTable(model);
-        table.setRowHeight(120); // Ajusta la altura de las filas para que los paneles se muestren completamente
+        table.setRowHeight(120); 
 
         // Configurar renderizador para la primera columna
         table.getColumnModel().getColumn(0).setCellRenderer(new PanelRenderer());
         table.getColumnModel().getColumn(0).setMinWidth(700);
         table.getColumnModel().getColumn(1).setMinWidth(100);
         table.getColumnModel().getColumn(1).setCellRenderer(new lblPrecioRenderer());
-        table.getColumnModel().getColumn(2).setMinWidth(100);
-        table.getColumnModel().getColumn(2).setCellRenderer(new lblEliminarRenderer());
-        table.getColumnModel().getColumn(2).setCellEditor(new lblEliminarEditor(table,listaCursos));
-
-        
+   
         table.setOpaque(false);
         table.setShowGrid(false);
         table.setIntercellSpacing(new Dimension(0,0));
