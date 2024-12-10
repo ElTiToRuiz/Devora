@@ -30,6 +30,7 @@ import org.jfree.ui.RectangleInsets;
 import org.jfree.*;
 import src.db.*;
 import src.domain.Course;
+import src.gui.components.course.CourseIncome;
 import src.gui.components.principal.Header;
 import src.utils.DateUtils;
 import src.utils.Pallette;
@@ -380,12 +381,9 @@ public class Dashboard extends JFrame {
     }
 
     private JPanel crearPanelStats() {
-    	JPanel panel = new JPanel();
-    	panel.add(createLineChart());
-    	panel.add(createBarChart());
-    	panel.add(createPieChart());
-    	panel.add(createLineChartComparative());
-    	panel.add(createSpiderChart());
+    	JPanel panel = new JPanel(new BorderLayout());
+    	panel.add(createPieChart(),BorderLayout.CENTER);
+
     	
     	panel.setBackground(Color.white);
     	return panel;
@@ -519,92 +517,26 @@ public class Dashboard extends JFrame {
         return btn;
     }
 
-        // Método para crear un gráfico de líneas
-    private JPanel createLineChart() {
-            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-            dataset.addValue(2500, "2016", "2016");
-            dataset.addValue(3000, "2017", "2017");
-            dataset.addValue(8000, "2018", "2018");
-            dataset.addValue(4000, "2019", "2019");
-            dataset.addValue(4500, "2020", "2020");
 
-            JFreeChart lineChart = ChartFactory.createLineChart(
-                    "Ventas anuales",
-                    "Año",
-                    "Ventas",
-                    dataset,
-                    PlotOrientation.VERTICAL,
-                    false, true, false);
-
-            return new ChartPanel(lineChart);
-        }
-
-    private JPanel createBarChart() {
-	            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-	            dataset.addValue(4000, "High", "Enero");
-	            dataset.addValue(2500, "Low", "Enero");
-	            dataset.addValue(5000, "High", "Febrero");
-	            dataset.addValue(2000, "Low", "Febrero");
-	
-	            JFreeChart barChart = ChartFactory.createBarChart(
-	                    "Ventas mensuales (Comparación 2023vs2024)",
-	                    "Mes",
-	                    "Ventas",
-	                    dataset,
-	                    PlotOrientation.VERTICAL,
-	                    true, true, false);
-	
-	            return new ChartPanel(barChart);
-	        }
-	
     private JPanel createPieChart() {
-	            DefaultPieDataset dataset = new DefaultPieDataset();
-	            dataset.setValue("Categoria 1", 20);
-	            dataset.setValue("Categoria 2", 30);
-	            dataset.setValue("Categoria 3", 50);
-	
-	            JFreeChart pieChart = ChartFactory.createPieChart(
-	                    "Distribución",
-	                    dataset,
-	                    true, true, false);
-	
-	            return new ChartPanel(pieChart);
+    	try {
+			ArrayList<CourseIncome> porcentajesIngresos = Database.obtenerIngresosPorcentaje(Header.id);
+	    	DefaultPieDataset dataset = new DefaultPieDataset();
+	        for (CourseIncome porcentajeIngreso : porcentajesIngresos) {
+	            dataset.setValue("Curso " + porcentajeIngreso.getIdCurso(), porcentajeIngreso.getPorcentaje());
 	        }
-	
-    private JPanel createLineChartComparative() {
-	            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-	            dataset.addValue(5000, "Directas", "Enero");
-	            dataset.addValue(8000, "Indirectas", "Enero");
-	            dataset.addValue(7000, "Directas", "Febrero");
-	            dataset.addValue(3000, "Indirectas", "Febrero");
-	            dataset.addValue(5000, "Directas", "Marzo");
-	            dataset.addValue(6000, "Indirectas", "Marzo");
-	
-	            JFreeChart lineChart = ChartFactory.createLineChart(
-	                    "Comparativa Ventas Directas Vs Indirectas",
-	                    "Mes",
-	                    "Ventas",
-	                    dataset,
-	                    PlotOrientation.VERTICAL,
-	                    true, true, false);
-	
-	            return new ChartPanel(lineChart);
-	        }
-	
-	        // Método para crear un gráfico tipo radar/spider
-    private JPanel createSpiderChart() {
-	            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-	            dataset.addValue(5, "Orders", "Lunes");
-	            dataset.addValue(3, "Orders", "Martes");
-	            dataset.addValue(8, "Orders", "Miércoles");
-	            dataset.addValue(7, "Orders", "Jueves");
-	            dataset.addValue(6, "Orders", "Viernes");
-	
-	            SpiderWebPlot spiderPlot = new SpiderWebPlot(dataset);
-	            JFreeChart spiderChart = new JFreeChart("Ventas Semanales", JFreeChart.DEFAULT_TITLE_FONT, spiderPlot, false);
-	
-	            return new ChartPanel(spiderChart);
-	        }
+            JFreeChart pieChart = ChartFactory.createPieChart(
+                    "Distribución de ingresos",
+                    dataset,
+                    true, true, false);
+
+            return new ChartPanel(pieChart);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	
+    	return null;
+    }
 	        
     private JTable crearTabla(int id) {
 	            String[] columnNames = {"Id","Nombre", "Descripción", "Precio (€)", "Idioma", "Clases"};

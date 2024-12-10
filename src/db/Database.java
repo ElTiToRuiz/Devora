@@ -6,6 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import src.domain.Course;
 import src.gui.components.course.CourseFront;
+import src.gui.components.course.CourseIncome;
 import src.utils.Encriptar;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -797,5 +798,33 @@ public class Database {
            }
 		return false;
     }
+    
+    public static ArrayList<CourseIncome> obtenerIngresosPorcentaje(int id) throws SQLException{
+    	
+        ArrayList<CourseIncome> ingresosCursoPorcentaje = new ArrayList<CourseIncome>();
+        
+        String query = "SELECT D.id_curso, ROUND((D.Recaudado / SUM(D.Recaudado) OVER () * 100), 2) AS Porcentaje "
+                + "FROM (SELECT B.id_curso, SUM(B.precio) AS Recaudado "
+                + "FROM (SELECT A.id_usuario, A.id_curso, C.precio "
+                + "FROM Compra AS A "
+                + "JOIN (SELECT id, precio FROM Curso WHERE instructor = ?) AS C "
+                + "ON A.id_curso = C.id) AS B "
+                + "GROUP BY B.id_curso) AS D;";
+        
+    	try (Connection conn = connect();  
+                PreparedStatement pstmt = conn.prepareStatement(query)) {
+	            pstmt.setInt(1, id); 
+	            try (ResultSet rs = pstmt.executeQuery()) {
+		            while (rs.next()) {
+		                int idCurso = rs.getInt("id_curso");
+		                double porcentaje = rs.getDouble("Porcentaje");
+		                ingresosCursoPorcentaje.add(new CourseIncome(idCurso, porcentaje));
+		            }
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+        return ingresosCursoPorcentaje;
+    }
+}
     
 }
