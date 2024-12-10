@@ -90,7 +90,7 @@ public class Login extends JPanel{
         Image escaladaUsuario = imgUsuario.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         JLabel labelUsuario = new JLabel(new ImageIcon(escaladaUsuario));
         
-        ImageIcon iconoLock = new ImageIcon("src/media/lock-icon.png");
+        ImageIcon iconoLock = new ImageIcon("src/media/lock-50px.png");
         
         Image imgLock = iconoLock.getImage();
         Image imagenEscalada = imgLock.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
