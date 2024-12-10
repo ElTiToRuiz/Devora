@@ -267,16 +267,8 @@ public class Dashboard extends JFrame {
 					System.out.println("Error");
 					e1.printStackTrace();
 				}
+                JOptionPane.showMessageDialog(null, "¡Felicidades! El curso ha sido creado exitosamente.");
                 
-                // Aquí puedes almacenar los datos en variables o procesarlos como desees
-                System.out.println("Título: " + titulo);
-                System.out.println("Descripción: " + descripcion);
-                System.out.println("Duración: " + duracion);
-                System.out.println("Precio: " + precio);
-                System.out.println("Idioma: " + idioma);
-                System.out.println("Imagen: " + imgPath);
-
-                // Aquí puedes agregar la lógica para almacenar los datos en una base de datos o en otro lugar
             }
         });
 
