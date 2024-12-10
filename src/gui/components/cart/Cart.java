@@ -206,10 +206,11 @@ public class Cart extends JFrame {
         lblPromo.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         panelLabel.add(lblPromo);
+        panelLabel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         panelPromocion.add(panelLabel);
         
         JPanel panelInputPromo = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
-        panelInputPromo.setPreferredSize(new Dimension(300,610));
+        panelInputPromo.setPreferredSize(new Dimension(300,460));
         panelInputPromo.setOpaque(false);
         
         JTextField tfPromo = new JTextField();
@@ -276,7 +277,6 @@ public class Cart extends JFrame {
         	
         });
         panelInputPromo.add(tfPromo); panelInputPromo.add(btnPromo);
-        
         panelPromocion.add(panelInputPromo);
         
         JPanel panelEliminar = new JPanel();
@@ -284,8 +284,9 @@ public class Cart extends JFrame {
         btnEliminar.setPreferredSize(new Dimension(404,38));
         btnEliminar.setBorder(BorderFactory.createEmptyBorder());
         btnEliminar.setForeground(Color.white);
-        btnEliminar.setBackground(Color.red);
+        btnEliminar.setBackground(new Color(255, 102, 102));
         btnEliminar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnEliminar.setFont(new Font("Arial",Font.BOLD,18));
         btnEliminar.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -314,7 +315,11 @@ public class Cart extends JFrame {
         });
         JButton btnVolver = new JButton("Volver");
         btnVolver.setPreferredSize(new Dimension(404,38));
+        btnVolver.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
         btnVolver.setBorder(BorderFactory.createEmptyBorder());
+        btnVolver.setFont(new Font("Arial",Font.BOLD,18));
+        btnVolver.setForeground(Color.white);
+        btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnVolver.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -324,14 +329,12 @@ public class Cart extends JFrame {
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				super.mouseEntered(e);
+				btnVolver.setBackground(Pallette.COLOR_HOVER_PRINCIPAL.getColor());
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				super.mouseExited(e);
+				btnVolver.setBackground(Pallette.COLOR_PRINCIPAL.getColor());
 			}
         	
         });
@@ -339,7 +342,7 @@ public class Cart extends JFrame {
         panelEliminar.add(btnEliminar);
         panelEliminar.add(btnVolver);
         panelEliminar.setBackground(Color.white);
-        panelEliminar.setBorder(BorderFactory.createEmptyBorder(0,0,200,0)); 
+        panelEliminar.setBorder(BorderFactory.createEmptyBorder(0,0,100,0)); 
         
         // Añadir panelPagar al panelTotal
         panelTotal.add(panelPagar, BorderLayout.NORTH);
