@@ -43,10 +43,6 @@ public class Register extends JPanel {
         JTextField tfEmail = new JTextField();
         JLabel lblPassword = new JLabel("Contraseña");
         JPasswordField tfPassword = new JPasswordField();
-        JRadioButton rbNormal = new JRadioButton("Estándar");
-        JRadioButton rbFamilia = new JRadioButton("Familia");
-        JRadioButton rbEstudiante = new JRadioButton("Estudiante");
-        JRadioButton rbEmpresa = new JRadioButton("Empresa");
         JButton btnRegister = new JButton("Registrarme");
         JButton btnLogin = new JButton("Volver");
 
@@ -66,26 +62,19 @@ public class Register extends JPanel {
         JPanel panelUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
         panelUsuario.add(lblUsuario);
         panelUsuario.add(tfUsuario);
+        panelUsuario.setBackground(Color.white);
         JPanel panelEmail = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
         panelEmail.add(lblEmail);
         panelEmail.add(tfEmail);
+        panelEmail.setBackground(Color.white);
         JPanel panelPassword = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
         panelPassword.add(lblPassword);
         panelPassword.add(tfPassword);
+        panelPassword.setBackground(Color.white);
         JPanel panelBtn = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
         panelBtn.add(btnRegister);
         panelBtn.add(btnLogin);
-        JPanel panelEleccion = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
-        panelEleccion.add(rbNormal);
-        panelEleccion.add(rbEstudiante);
-        panelEleccion.add(rbFamilia);
-        panelEleccion.add(rbEmpresa);
-
-        ButtonGroup gpRb = new ButtonGroup();
-        gpRb.add(rbNormal);
-        gpRb.add(rbEstudiante);
-        gpRb.add(rbFamilia);
-        gpRb.add(rbEmpresa);
+        panelBtn.setBackground(Color.white);
 
         // Configuración de fuentes
         Font fuenteTitulos = new Font("Arial", Font.BOLD, 40);
@@ -101,10 +90,7 @@ public class Register extends JPanel {
         Font fuenteBotones = new Font("Arial", Font.BOLD, 16);
         btnLogin.setFont(fuenteBotones);
         btnRegister.setFont(fuenteBotones);
-        rbNormal.setFont(fuenteBotones);
-        rbFamilia.setFont(fuenteBotones);
-        rbEstudiante.setFont(fuenteBotones);
-        rbEmpresa.setFont(fuenteBotones);
+
 
         // Añadir al BoxLayout
         panelComponentes.add(Box.createVerticalGlue());
@@ -115,8 +101,6 @@ public class Register extends JPanel {
         panelComponentes.add(panelEmail);
         panelComponentes.add(Box.createVerticalStrut(5));
         panelComponentes.add(panelPassword);
-        panelComponentes.add(Box.createVerticalStrut(5));
-        panelComponentes.add(panelEleccion);
         panelComponentes.add(Box.createVerticalStrut(30));
         panelComponentes.add(panelBtn);
         panelComponentes.add(Box.createVerticalGlue());

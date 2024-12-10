@@ -167,7 +167,7 @@ public class Dashboard extends JFrame {
 
         // Título principal
         JLabel lblMain = new JLabel("Crear Cursos");
-        lblMain.setFont(new Font("Arial", Font.BOLD, 36));
+        lblMain.setFont(new Font("Arial", Font.BOLD, 48));
         lblMain.setBorder(BorderFactory.createEmptyBorder(40, 40, 0, 0));
         panel.add(lblMain, BorderLayout.NORTH);  // Añadimos el título en la parte superior
 
@@ -178,15 +178,17 @@ public class Dashboard extends JFrame {
         // Panel Título
         JPanel panelTitulo = new JPanel();
         JLabel lblTitulo = crearLabel("Título");
-        JTextField tfTitulo = new JTextField(20);
+        JTextField tfTitulo = new JTextField(50);
+        tfTitulo.setFont(new Font("Arial",Font.PLAIN,16));
         panelTitulo.add(lblTitulo);
         panelTitulo.add(tfTitulo);
+        panelInputs.add(Box.createVerticalStrut(30));
         panelInputs.add(panelTitulo);
 
         // Panel Descripción
         JPanel panelDesc = new JPanel();
         JLabel lblDesc = crearLabel("Descripción");
-        JTextArea taDesc = new JTextArea(5, 20);
+        JTextArea taDesc = new JTextArea(5, 50);
         taDesc.setLineWrap(true);
         taDesc.setWrapStyleWord(true);
         JScrollPane scrollDescripcion = new JScrollPane(taDesc);
@@ -197,7 +199,7 @@ public class Dashboard extends JFrame {
         // Panel Duración
         JPanel panelDuracion = new JPanel();
         JLabel lblDuracion = crearLabel("Duración");
-        JTextField tfDuracion = new JTextField(20);
+        JTextField tfDuracion = new JTextField(50);
         panelDuracion.add(lblDuracion);
         panelDuracion.add(tfDuracion);
         panelInputs.add(panelDuracion);
@@ -205,7 +207,7 @@ public class Dashboard extends JFrame {
         // Panel Precio
         JPanel panelPrecio = new JPanel();
         JLabel lblPrecio = crearLabel("Precio");
-        JTextField tfPrecio = new JTextField(20);
+        JTextField tfPrecio = new JTextField(50);
         panelPrecio.add(lblPrecio);
         panelPrecio.add(tfPrecio);
         panelInputs.add(panelPrecio);
@@ -221,7 +223,7 @@ public class Dashboard extends JFrame {
 
         // Panel Imagen
         JPanel panelImgPath = new JPanel();
-        JTextField txtImgPath = new JTextField(20);
+        JTextField txtImgPath = new JTextField(50);
         JButton btnImgPath = new JButton("Seleccionar Imagen");
         panelImgPath.add(txtImgPath);
         panelImgPath.add(btnImgPath);
