@@ -3,6 +3,8 @@ package src.gui.components.course;
 import javax.swing.*;
 
 import src.db.Database;
+import src.domain.Course;
+import src.gui.components.principal.Header;
 import src.utils.Pallette;
 
 import java.awt.*;
@@ -188,6 +190,16 @@ public class CourseDetail extends JFrame {
                 btnAñadir.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
+						if(Header.id == -1) {
+					        JOptionPane.showMessageDialog(null, "Te tienes que logear para poder añadir productos al carrito", "Alerta", JOptionPane.WARNING_MESSAGE);
+						} else  if(Database.comprobarCompra(Header.id,courseId)) {
+					        JOptionPane.showMessageDialog(null, "Ya has comprado este curso anteriormente", "Alerta", JOptionPane.WARNING_MESSAGE);
+						} else if (Database.comprobarCreador(Header.id,courseId)) {
+					        JOptionPane.showMessageDialog(null, "Eres el creador del curso", "Alerta", JOptionPane.WARNING_MESSAGE);
+						}else {
+							Course curso = Database.conseguirCurso(courseId);
+							Header.pedido.add(curso);
+						}
 					}
 
 					@Override

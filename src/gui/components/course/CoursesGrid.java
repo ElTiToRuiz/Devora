@@ -1,60 +1,64 @@
 package src.gui.components.course;
 
-import src.domain.Course;
-import src.gui.components.principal.Filter;
-import src.utils.Pallette;
-import src.db.*;
 import javax.swing.*;
+
+import src.db.Database;
+
 import java.awt.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CoursesGrid extends JPanel {
-    
-	JPanel panelCursos;
-	
+
+    // Hacer panelCursos una variable de instancia (no estático)
+    private static JPanel panelCursos;  // Debería ser estático si vas a acceder a él sin una instancia
+
     public CoursesGrid() {
-        JPanel panelCursos = new JPanel();
+        // Inicializar correctamente el panelCursos
+        panelCursos = new JPanel();
         panelCursos.setLayout(new GridLayout(0, 3, 10, 10)); 
         panelCursos.setBackground(Color.white);
 
+        // Crear un hilo para cargar los cursos desde la base de datos
         Thread t = new Thread(new Runnable() {
             public void run() {
-                // Usamos invokeLater para asegurar que las actualizaciones de la UI se hagan en el hilo principal
+                Database db = Database.getInstance();
+                ArrayList<CourseFront> lista = Database.obtenerCursos();
+
+                // Usamos invokeLater para actualizar la UI en el hilo principal
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        ArrayList<CourseFront> cursosFiltrados = Filter.filterCourses();
-                        for(CourseFront curso : cursosFiltrados) {
-                            panelCursos.add(curso);
-                        }
-                        panelCursos.revalidate();  // Forzar la validación del layout
-                        panelCursos.repaint();     // Forzar el repaint para que se dibuje el panel correctamente
+                        mostrarCursos(lista);  // Actualizar la UI con los cursos obtenidos
                     }
                 });
             }
         });
 
+        // Iniciar el hilo de carga
         t.start();
 
-        //Añadir scroll para los cursos
+        // Añadir scroll para los cursos
         JScrollPane scrollPane = new JScrollPane(panelCursos);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
 
+        // Configurar el layout y agregar el JScrollPane
         this.setLayout(new BorderLayout());
         this.add(scrollPane, BorderLayout.CENTER);
         this.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
     }
 
-    // TEMPORAL
-//    private ArrayList<Course> getAllCourses(){
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        try {
-//            List<Course> courses = objectMapper.readValue(new File("path/to/your/file.json"), new TypeReference<List<Course>>() {});
-//            // Use the courses list as needed
-//            courses.forEach(course -> System.out.println(course.name));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    // Hacer el método mostrarCursos estático para que pueda ser llamado sin una instancia
+    public static void mostrarCursos(ArrayList<CourseFront> cursos) {
+        // Limpiar el panel antes de añadir los nuevos cursos
+        panelCursos.removeAll();
+
+        for (CourseFront curso : cursos) {
+            // Suponiendo que CourseFront extiende JPanel o se puede agregar al panel
+            panelCursos.add(curso);
+        }
+        
+        // Forzar la validación del layout y repaint para redibujar el panel correctamente
+        panelCursos.revalidate();
+        panelCursos.repaint();
+    }
 }
+

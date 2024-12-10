@@ -7,7 +7,7 @@ public class Course {
     public String nombre;
     private String desc;
     private int duracion;
-    private List<String> categories;
+    private String categoria;
     private double price;
     private int clases;
     public String instructor;
@@ -17,12 +17,13 @@ public class Course {
     private int numReseñas;
     private String imgPath;
     
-    public Course(int id,String nombre, String desc, int duracion, List<String> categories, double price,
+    public Course(int id,String nombre, String desc, int duracion, String categoria, double price,
             int clases, String instructor, String language, double rating, int students, int numReseñas, String imgPath) {
+  this.id=id;
   this.nombre = nombre;
   this.desc = desc;
   this.duracion = duracion;
-  this.categories = categories;
+  this.categoria = categoria;
   this.price = price;
   this.clases = clases;
   this.instructor = instructor;
@@ -32,6 +33,14 @@ public class Course {
   this.numReseñas = numReseñas;
   this.imgPath = imgPath;
 }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return nombre;
@@ -57,12 +66,12 @@ public class Course {
 		this.duracion = duration;
 	}
 
-	public List<String> getCategories() {
-		return categories;
+	public String getCategoria() {
+		return categoria;
 	}
 
-	public void setCategories(List<String> categories) {
-		this.categories = categories;
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
 
 	public double getPrice() {
@@ -160,7 +169,7 @@ public class Course {
 				"nombre='" + nombre + '\'' +
 				", desc='" + desc + '\'' +
 				", duracion=" + duracion +
-				", categories=" + categories +
+				", categoria=" + categoria +
 				", price=" + price +
 				", clases=" + clases +
 				", instructor='" + instructor + '\'' +

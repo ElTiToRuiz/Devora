@@ -1,16 +1,22 @@
 package src.gui.components.principal;
 
+import src.db.Database;
 import src.domain.Course;
 import src.gui.components.authentication.AuthView;
 import src.gui.components.authentication.PerfilUsuario;
 import src.gui.components.authentication.ProfileSettings;
 import src.gui.components.cart.Cart;
 import src.gui.components.course.CourseEditorPanel;
+import src.gui.components.course.CourseFront;
+import src.gui.components.course.CoursesGrid;
+import src.utils.Busqueda;
 import src.utils.Pallette;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -19,6 +25,7 @@ public class Header extends JPanel {
     public static boolean isLogged = false;
     private static JPanel panelBotones;
     public static int id = -1;
+    public static ArrayList<Course> pedido = new ArrayList<Course>();
     
     public Header() {
         Header.isLogged = false;
@@ -112,6 +119,38 @@ public class Header extends JPanel {
 			}
         });
         
+        tfBusqueda.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String textoBusqueda = tfBusqueda.getText();
+
+                SwingWorker<ArrayList<CourseFront>, Void> worker = new SwingWorker<ArrayList<CourseFront>, Void>() {
+                    @Override
+                    protected ArrayList<CourseFront> doInBackground() throws Exception {
+                        // Esta parte se ejecuta en un hilo de fondo
+                        ArrayList<CourseFront> cursos = Database.obtenerCursos();
+                        return Busqueda.filtrarCursos(cursos, textoBusqueda, 0, new ArrayList<>());
+                    }
+
+                    @Override
+                    protected void done() {
+                        try {
+                            // Esta parte se ejecuta en el hilo de la interfaz gráfica
+                            ArrayList<CourseFront> resultados = get(); // Obtiene el resultado de doInBackground
+                            CoursesGrid.mostrarCursos(resultados);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                };
+
+
+                // Iniciar el SwingWorker
+                worker.execute();
+            }
+        });
+
+        
         //Agregar logo
         
         ImageIcon iconoLupa = new ImageIcon("src/media/search-icon.png");
@@ -133,7 +172,6 @@ public class Header extends JPanel {
 
         ImageIcon iconoPerfil = new ImageIcon("src/media/user-icon.png");
         ImageIcon iconoCarrito = new ImageIcon("src/media/cart-icon.png");
-        ImageIcon iconoCursos = new ImageIcon("src/media/lapiz.png");
         
         //Reescalar la imagen para que quede bien en el header
         Image img = iconoPerfil.getImage();
@@ -142,17 +180,12 @@ public class Header extends JPanel {
         Image img1 = iconoCarrito.getImage();
         Image iconoCarritoEscalado = img1.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         
-        Image img2 = iconoCursos.getImage();
-        Image iconoCursosEscalado = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        
         //Creación de los labels
         JLabel labelPerfil = new JLabel(new ImageIcon(iconoPerfilEscalado));
         JLabel labelCarrito = new JLabel(new ImageIcon(iconoCarritoEscalado));
-        JLabel labelCursos = new JLabel(new ImageIcon(iconoCursosEscalado));
         
         labelPerfil.setBorder(BorderFactory.createEmptyBorder(10,10,10,20));
         labelCarrito.setBorder(BorderFactory.createEmptyBorder(10,10,10,20));
-        labelCursos.setBorder(BorderFactory.createEmptyBorder(10,10,10,20));
 
         
         //Crear hovers para los labels
@@ -172,12 +205,9 @@ public class Header extends JPanel {
         labelCarrito.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
             	ArrayList<Course> listaCursos = new ArrayList<>();
-            	ArrayList<String> lista = new ArrayList<>();
-            	lista.add("Hola");
-            	lista.add("fdaf");
-            	listaCursos.add(new Course(1,"Prubea","Prubea",22,lista,22.53,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
-            	listaCursos.add(new Course(2,"424hdjahfs","Prubea",22,lista,22.79,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
-            	new Cart(listaCursos);
+            	listaCursos.add(new Course(1,"Prubea","Prubea",22,"hola",22.53,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
+            	listaCursos.add(new Course(2,"424hdjahfs","Prubea",22,"hola",22.79,53,"Paco","Español",4.8,4294,857,"src/media/default.png"));
+            	new Cart(pedido);
 			}
 			public void mouseEntered(MouseEvent e) {
 				labelCarrito.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -186,32 +216,7 @@ public class Header extends JPanel {
             public void mousePressed(MouseEvent e) {}
             public void mouseReleased(MouseEvent e) {}
         });
-        
-        labelCursos.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            	CourseEditorPanel editor = new CourseEditorPanel();
-            	editor.setVisible(true);
-            }
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                labelCursos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {}
-
-            @Override
-            public void mousePressed(MouseEvent e) {}
-
-            @Override
-            public void mouseReleased(MouseEvent e) {}
-        });
-
-            
-        
-        panel.add(labelCursos);
         panel.add(labelCarrito);
         panel.add(labelPerfil);
     }

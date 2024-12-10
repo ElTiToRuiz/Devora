@@ -1,6 +1,8 @@
 package src.gui.components.cart;
 
+import src.db.Database;
 import src.domain.Course;
+import src.gui.components.principal.Header;
 import src.utils.Pallette;
 
 import javax.swing.*;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.SQLException;
 
 public class Cart extends JFrame {
 	
@@ -122,8 +125,30 @@ public class Cart extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				Double saldo = Database.conseguirSaldo(Header.id);
+		        String costeTotal = lblPrecioTotal.getText().replaceAll("[^0-9.,]", ""); //Quitamos el simbolo de €
+				if(saldo < Double.parseDouble(costeTotal)) {
+			        JOptionPane.showMessageDialog(null, "No tienes saldo suficiente", "Alerta", JOptionPane.WARNING_MESSAGE);
+				}else {
+			        JOptionPane.showMessageDialog(null, "Compra realizada", "Alerta", JOptionPane.WARNING_MESSAGE);
+			        Double balanceActual = saldo-Double.parseDouble(costeTotal);
+			        try {
+						Database.actualizarBalance(Header.id, balanceActual);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			        for(Course curso : listaCursos) {
+			        	int idCurso = curso.getId();
+			        	try {
+							Database.registrarCompra(Header.id, idCurso);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+			        }
+				}
+				dispose();
 			}
 
 			@Override

@@ -4,6 +4,7 @@ import src.db.Database;
 import src.domain.Course;
 import src.gui.components.course.CourseFront;
 import src.utils.Pallette;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -14,41 +15,41 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Filter extends JPanel {
-    private List<String> categories;
-    private int rating;
-    private int duracion = 0;
-    private JSlider minPriceSlider;
-    private JSlider maxPriceSlider;
+    private static List<String> categories; // Lista para almacenar las categorías seleccionadas
+    private static int rating; // Valor del rating seleccionado
+    private static int duracion; // Duración mínima seleccionada
+    private static JSlider minPriceSlider;
+    private static JSlider maxPriceSlider;
     private JLabel priceRangeLabel;
 
     public Filter() {
+        this.categories = new ArrayList<>(); // Inicialización de la lista de categorías
         setupPanel();
     }
 
-    public HashMap<String, Object> getAvailableFilters() {
+    public static HashMap<String, Object> getAvailableFilters() {
         HashMap<String, Object> filters = new HashMap<>();
         filters.put("minPrice", minPriceSlider.getValue());
         filters.put("maxPrice", maxPriceSlider.getValue());
-        filters.put("categories", this.categories);
-        filters.put("rating", this.rating);
-        filters.put("duracion", this.duracion);
+        filters.put("categories", categories);
+        filters.put("rating", rating);
+        filters.put("duracion", duracion);
         return filters;
     }
 
-    public static ArrayList<CourseFront> filterCourses() {
-        ArrayList<CourseFront> courses = Database.obtenerCursos();
-        HashMap<String, Object> filters = new Filter().getAvailableFilters();
-        List<String> categories = (List<String>) filters.get("categories");
-        int duracion = (int) filters.get("duracion");
-        int rating = (int) filters.get("rating");
+    public static ArrayList<CourseFront> filterCourses(List<CourseFront> courses) {
+        HashMap<String, Object> filters = getAvailableFilters();
+        List<String> selectedCategories = (List<String>) filters.get("categories");
+        int minDuration = (int) filters.get("duracion");
+        int minRating = (int) filters.get("rating");
         int minPrice = (int) filters.get("minPrice");
         int maxPrice = (int) filters.get("maxPrice");
 
         return (ArrayList<CourseFront>) courses.stream()
                 .filter(course -> course.getPrice() >= minPrice && course.getPrice() <= maxPrice)
-                .filter(course -> categories.isEmpty() || categories.contains(course.getCategorias()))
-                .filter(course -> course.getRating() >= rating)
-                .filter(course -> course.getDuracion() >= duracion)
+                .filter(course -> selectedCategories.isEmpty() || selectedCategories.contains(course.getCategorias()))
+                .filter(course -> course.getRating() >= minRating)
+                .filter(course -> course.getDuracion() >= minDuration)
                 .collect(Collectors.toList());
     }
 
@@ -78,37 +79,35 @@ public class Filter extends JPanel {
     private JPanel createPriceRangePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        priceRangeLabel = new JLabel("Price Range: $0 - $100");
+        priceRangeLabel = new JLabel("Precio: 0€ - 100€");
         panel.add(priceRangeLabel);
         panel.add(Box.createVerticalStrut(10));
 
         JPanel priceSliders = new JPanel();
         priceSliders.setLayout(new BoxLayout(priceSliders, BoxLayout.X_AXIS));
 
-        minPriceSlider = createSlider("Min Price", 0, 100, 0, 10, 10);
-        maxPriceSlider = createSlider("Max Price", 0, 100, 100, 10, 10);
+        minPriceSlider = createSlider("Precio mínimo", 0, 100, 0, 10, 10);
+        maxPriceSlider = createSlider("Precio máximo", 0, 100, 100, 10, 10);
 
-        priceSliders.add(createSliderPanel("Min Price", minPriceSlider));
+        priceSliders.add(createSliderPanel("Precio mínimo", minPriceSlider));
         priceSliders.add(Box.createHorizontalStrut(10));
-        priceSliders.add(createSliderPanel("Max Price", maxPriceSlider));
+        priceSliders.add(createSliderPanel("Precio máximo", maxPriceSlider));
 
         panel.add(priceSliders);
         return panel;
     }
 
     private JPanel createCategoryPanel() {
-        JPanel panel = createVerticalPanelWithLabel("Categories");
-        String[] categories = {"Programación", "Emprendimiento", "Trading", "Psicología", "Cocina",
-                "Diseño", "Música", "Idiomas"};
-        addCheckBoxesToPanel(panel, categories);
+        JPanel panel = createVerticalPanelWithLabel("Categorías");
+        String[] categoriesList = {"Java", "JavaScript", "React", "C++", "C#", "Kotlin", "MERN", "Node.js"};
+        addCheckBoxesToPanel(panel, categoriesList);
         return panel;
     }
 
     private JPanel createRatingPanel() {
         JPanel panel = createVerticalPanelWithLabel("Estrellas");
-        String[] ratings = {"5⭐","4⭐", "3⭐", "2⭐", "1⭐"};
+        String[] ratings = {"5⭐", "4⭐", "3⭐", "2⭐", "1⭐"};
         addCheckBoxesToPanel(panel, ratings);
-
         return panel;
     }
 
@@ -130,13 +129,16 @@ public class Filter extends JPanel {
                 if (item.contains("⭐")) {
                     this.rating = Integer.parseInt(item.split("⭐")[0]);
                 } else {
-                    boolean b = isSelected ? categories.add(item) : categories.remove(item);
+                    if (isSelected) {
+                        categories.add(item);
+                    } else {
+                        categories.remove(item);
+                    }
                 }
             });
             panel.add(checkBox);
         }
     }
-
 
     private JPanel createSliderPanel(String title, JSlider slider) {
         JPanel panel = new JPanel();
@@ -167,7 +169,7 @@ public class Filter extends JPanel {
             if (minPrice > maxPrice) {
                 maxPriceSlider.setValue(minPrice);
             }
-            priceRangeLabel.setText("Price Range: $" + minPrice + " - $" + maxPrice);
+            priceRangeLabel.setText("Precio: " + minPrice + "€ - " + maxPrice + "€");
         }
     }
 
@@ -187,7 +189,7 @@ public class Filter extends JPanel {
         panel.add(Box.createVerticalStrut(20));
         return panel;
     }
-
+    
     public static class FilterHidden extends JPanel {
         public FilterHidden() {
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

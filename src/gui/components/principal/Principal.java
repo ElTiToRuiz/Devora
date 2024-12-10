@@ -53,11 +53,6 @@ public class Principal extends JFrame {
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
         container.setBackground(Pallette.FONDO.getColor());
-        if (showFilter) {
-            container.add(new Filter(), BorderLayout.NORTH);
-        } else {
-            container.add(new Filter.FilterHidden(), BorderLayout.NORTH);
-        }
         container.add(new CoursesGrid(), BorderLayout.CENTER);
         return container;
     }

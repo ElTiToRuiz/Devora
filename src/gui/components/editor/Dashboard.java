@@ -1,12 +1,16 @@
 package src.gui.components.editor;
 
 import java.awt.*;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -26,6 +30,8 @@ import org.jfree.ui.RectangleInsets;
 import org.jfree.*;
 import src.db.*;
 import src.domain.Course;
+import src.gui.components.principal.Header;
+import src.utils.DateUtils;
 import src.utils.Pallette;
 
 public class Dashboard extends JFrame {
@@ -36,7 +42,7 @@ public class Dashboard extends JFrame {
     private JTable tablaCursos;
     private DefaultTableModel tableModel;
     private int id;
-
+    private static Random rand = new Random();
 
     public Dashboard(int id) {
         // Establecer el tamaño del JFrame para que ocupe toda la pantalla
@@ -117,9 +123,12 @@ public class Dashboard extends JFrame {
         panelDatos.setPreferredSize(new Dimension(getWidth(), getHeight() / 3)); // Ocupa 1/3 de la altura
 
         // Crear paneles de información
-        JPanel panelDinero = crearPanelInfo("$45.2K", "Total Generado", "4.35%");
-        JPanel panelEstudiantes = crearPanelInfo("3.456K", "Estudiantes Totales", "0.43%");
-        JPanel panelNumCursos = crearPanelInfo("2.450", "Cursos En venta", "2.59%");
+        Double dineroGenerado = Database.conseguirDineroGenerado(Header.id);
+        JPanel panelDinero = crearPanelInfo(dineroGenerado + "€", "Total Generado", "4.35%");
+        Integer numEstudiantes = Database.conseguirEstudiantes(Header.id);
+        JPanel panelEstudiantes = crearPanelInfo(numEstudiantes.toString(), "Estudiantes Totales", "0.43%");
+        Integer numCursos = Database.conseguirNumCursos(Header.id);
+        JPanel panelNumCursos = crearPanelInfo(numCursos.toString(), "Cursos En venta", "2.59%");
 
         // Agregar paneles al panelDatos
         panelDatos.add(panelDinero);
@@ -131,7 +140,12 @@ public class Dashboard extends JFrame {
         panelStats.setBackground(Color.white);
 
         // Crear un dataset y el gráfico
-        DefaultCategoryDataset dataset = crearDataset();
+        
+        LocalDate startOfWeek = DateUtils.getStartOfWeek();
+        LocalDate endOfWeek = DateUtils.getEndOfWeek();
+        
+        Map<DayOfWeek, Integer> salesData = Database.conseguirVentasSemanales(startOfWeek, endOfWeek);
+        DefaultCategoryDataset dataset = crearDataset(salesData);
         JFreeChart grafico = crearGrafico(dataset);
         ChartPanel chartPanel = new ChartPanel(grafico);
 
@@ -237,7 +251,6 @@ public class Dashboard extends JFrame {
         btnCrearCurso.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Obtener los datos de los campos
                 String titulo = tfTitulo.getText();
                 String descripcion = taDesc.getText();
                 int duracion = Integer.parseInt(tfDuracion.getText());
@@ -246,13 +259,12 @@ public class Dashboard extends JFrame {
                 String imgPath = txtImgPath.getText();
                 
                 try {
-					Database.crearCurso(titulo,descripcion,duracion,precio,15,id,idioma,imgPath);
+					Database.crearCurso(titulo,descripcion,duracion,precio,15,id,idioma,imgPath,1.5 + (5 - 1.5) * rand.nextDouble(),"prueba");
 				} catch (SQLException e1) {
 					System.out.println("Error");
 					e1.printStackTrace();
 				}
                 
-
                 // Aquí puedes almacenar los datos en variables o procesarlos como desees
                 System.out.println("Título: " + titulo);
                 System.out.println("Descripción: " + descripcion);
@@ -299,8 +311,26 @@ public class Dashboard extends JFrame {
         btnCambios.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Aquí agregarás el código para guardar los cambios en la base de datos
-                JOptionPane.showMessageDialog(null, "Cambios guardados exitosamente.");
+            	for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    int idCurso = (int) tableModel.getValueAt(i, 0); 
+                    String titulo = (String) tableModel.getValueAt(i, 1);
+                    String descripcion = (String) tableModel.getValueAt(i, 2);
+                    double precio = (double) tableModel.getValueAt(i, 3);
+                    String idioma = (String) tableModel.getValueAt(i, 4);
+                    int clases = (int) tableModel.getValueAt(i, 5);
+
+                    try {
+                        boolean comprobacion = Database.actualizarCurso(idCurso, titulo, descripcion, precio, idioma, clases);
+                        if (!comprobacion) {
+                            JOptionPane.showMessageDialog(null, "Error al guardar los cambios del curso con ID: " + idCurso);
+                        }
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos.");
+                    }
+                }
+                // Mensaje de éxito
+                JOptionPane.showMessageDialog(null, "Los cambios se han aplicado correctamente.");
             }
         });
 
@@ -316,27 +346,34 @@ public class Dashboard extends JFrame {
         btnEliminar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selectedRow = tablaCursos.getSelectedRow();
-                if (selectedRow != -1) {
-                    // Eliminar el curso de la tabla
-                    tableModel.removeRow(selectedRow);
+                int fila = tablaCursos.getSelectedRow(); 
+
+                if (fila != -1) {
+                    int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar este curso?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE
+                    );
+                    if (confirmacion == JOptionPane.YES_OPTION) {
+                        tableModel.removeRow(fila);
+
+                        int idCurso = (int) tablaCursos.getValueAt(fila, 0);
+
+                        try {
+                            Database.eliminarCurso(idCurso);
+                        } catch (SQLException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione un curso para eliminar.");
                 }
             }
         });
 
-        // Agregar los botones al panel
-        panelBotones.add(Box.createHorizontalStrut(610)); // Espacio entre los botones
+        panelBotones.add(Box.createHorizontalStrut(610));
         panelBotones.add(btnCambios);
         panelBotones.add(Box.createHorizontalStrut(75));
         panelBotones.add(btnEliminar);
         panelBotones.add(Box.createHorizontalStrut(10));
-
-        // Agregar el panel de botones a la parte sur del panel principal
         panel.add(panelBotones, BorderLayout.SOUTH);
-
-        // Establecer fondo blanco para el panel principal
         panel.setBackground(Color.WHITE);
 
         return panel;
@@ -384,21 +421,20 @@ public class Dashboard extends JFrame {
     }
 
     // Método para crear el dataset
-    private DefaultCategoryDataset crearDataset() {
+    private DefaultCategoryDataset crearDataset(Map<DayOfWeek, Integer> salesData) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue(200, "Ventas", "Lunes");
-        dataset.addValue(300, "Ventas", "Martes");
-        dataset.addValue(150, "Ventas", "Miércoles");
-        dataset.addValue(400, "Ventas", "Jueves");
-        dataset.addValue(250, "Ventas", "Viernes");
-        dataset.addValue(100, "Ventas", "Sábado");
-        dataset.addValue(50, "Ventas", "Domingo");
+
+        for (DayOfWeek day : DayOfWeek.values()) {
+            String dayName = day.toString().substring(0, 1).toUpperCase() + day.toString().substring(1).toLowerCase();
+            dataset.addValue(salesData.getOrDefault(day, 0), "Ventas", dayName);
+        }
+
         return dataset;
     }
 
     private JFreeChart crearGrafico(DefaultCategoryDataset dataset) {
         JFreeChart grafico = ChartFactory.createBarChart(
-                "Ventas Últimos 7 Días", // Título del gráfico
+                "Ventas Semanales", // Título del gráfico
                 "Días",                  // Etiqueta del eje X
                 "Ventas ($)",            // Etiqueta del eje Y
                 dataset
@@ -476,9 +512,7 @@ public class Dashboard extends JFrame {
 				}
 				
                 cardLayout.show(panelMain, namePanel);
-
 			}
-            
             
         });
 
@@ -573,26 +607,29 @@ public class Dashboard extends JFrame {
 	        }
 	        
     private JTable crearTabla(int id) {
-    			Database db = Database.getInstance();
-	            String[] columnNames = {"Nombre", "Descripción", "Precio ($)", "Idioma", "Clases"};
-	            ArrayList<Course> cursos = db.obtenerCursosPorInstructor(id);
+	            String[] columnNames = {"Id","Nombre", "Descripción", "Precio (€)", "Idioma", "Clases"};
+	            ArrayList<Course> cursos = Database.obtenerCursosPorInstructor(id);
 
-	            Object[][] data = new Object[cursos.size()][5]; 
+	            Object[][] data = new Object[cursos.size()][6]; 
 
 	            for (int i = 0; i < cursos.size(); i++) {
 	                Course curso = cursos.get(i);
-	                data[i][0] = curso.getName();            
-	                data[i][1] = curso.getDescription();       
-	                data[i][2] = curso.getPrice();            
-	                data[i][3] = curso.getLanguage();            
-	                data[i][4] = curso.getClases();            
+	                data[i][0] = curso.getId();
+	                data[i][1] = curso.getName();            
+	                data[i][2] = curso.getDescription();       
+	                data[i][3] = curso.getPrice();            
+	                data[i][4] = curso.getLanguage();            
+	                data[i][5] = curso.getClases();            
 	            }
 
 	            
 	            tableModel = new DefaultTableModel(data, columnNames) {
 	                @Override
 	                public boolean isCellEditable(int row, int column) {
-	                    return column == 3; 
+	                	if(column == 0) {
+	                		return false;
+	                	}
+	                    return true; 
 	                }
 	            };
 
@@ -607,12 +644,12 @@ public class Dashboard extends JFrame {
 
 	            DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 	            centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-	            table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer); 
-	            table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer); 
+	            table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer); 
+	            table.getColumnModel().getColumn(5).setCellRenderer(centerRenderer); 
 
 	            String[] languages = {"Español", "Inglés", "Francés", "Alemán", "Italiano"};
 	            JComboBox<String> comboBox = new JComboBox<>(languages);
-	            table.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(comboBox));
+	            table.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(comboBox));
 				return table;
 	        }
 
