@@ -116,20 +116,20 @@ public class Dashboard extends JFrame {
     
     private JPanel crearPanelMain() {
         JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());  // Establecer el BorderLayout correctamente
+        panel.setLayout(new BorderLayout()); 
 
         JPanel panelDatos = new JPanel(new GridLayout(1, 3, 20, 20));
         panelDatos.setBackground(Color.white);
         panelDatos.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panelDatos.setPreferredSize(new Dimension(getWidth(), getHeight() / 3)); // Ocupa 1/3 de la altura
+        panelDatos.setPreferredSize(new Dimension(getWidth(), getHeight() / 3)); 
 
         // Crear paneles de información
         Double dineroGenerado = Database.conseguirDineroGenerado(Header.id);
-        JPanel panelDinero = crearPanelInfo(dineroGenerado + "€", "Total Generado", "4.35%");
+        JPanel panelDinero = crearPanelInfo(dineroGenerado + "€", "Total Generado");
         Integer numEstudiantes = Database.conseguirEstudiantes(Header.id);
-        JPanel panelEstudiantes = crearPanelInfo(numEstudiantes.toString(), "Estudiantes Totales", "0.43%");
+        JPanel panelEstudiantes = crearPanelInfo(numEstudiantes.toString(), "Estudiantes Totales");
         Integer numCursos = Database.conseguirNumCursos(Header.id);
-        JPanel panelNumCursos = crearPanelInfo(numCursos.toString(), "Cursos En venta", "2.59%");
+        JPanel panelNumCursos = crearPanelInfo(numCursos.toString(), "Cursos En venta");
 
         // Agregar paneles al panelDatos
         panelDatos.add(panelDinero);
@@ -399,7 +399,7 @@ public class Dashboard extends JFrame {
 
 
     // Método para crear un JPanel con información
-    private JPanel crearPanelInfo(String valor, String titulo, String porcentaje) {
+    private JPanel crearPanelInfo(String valor, String titulo) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createCompoundBorder(
@@ -408,20 +408,17 @@ public class Dashboard extends JFrame {
         ));
 
         JLabel labelValor = new JLabel(valor);
-        labelValor.setFont(new Font("Arial", Font.BOLD, 26));
-        labelValor.setForeground(Pallette.COLOR_PRINCIPAL.getColor());
+        labelValor.setFont(new Font("Arial", Font.BOLD, 72));
+        labelValor.setForeground(Color.black);
 
         JLabel labelTitulo = new JLabel(titulo);
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 30));
         labelTitulo.setForeground(new Color(100, 100, 100));
+        labelValor.setBorder(BorderFactory.createEmptyBorder(0,150,0,0));
 
-        JLabel labelPorcentaje = new JLabel(porcentaje);
-        labelPorcentaje.setFont(new Font("Arial", Font.BOLD, 16));
-        labelPorcentaje.setForeground(new Color(34, 139, 34)); // Verde
-
+        
         panel.add(labelTitulo, BorderLayout.NORTH);
         panel.add(labelValor, BorderLayout.CENTER);
-        panel.add(labelPorcentaje, BorderLayout.SOUTH);
 
         return panel;
     }

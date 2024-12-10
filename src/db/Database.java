@@ -599,7 +599,7 @@ public class Database {
        }
     
     public static Double conseguirDineroGenerado(int id) {
-        String query = "SELECT SUM(D.Total * D.Precio) AS Generado " +
+        String query = "SELECT ROUND(SUM(D.Total * D.Precio), 2) AS Generado " +
                        "FROM ( " +
                        "    SELECT B.id_curso, COUNT(B.id_usuario) AS Total, B.Precio AS Precio " +
                        "    FROM ( " +
